@@ -1,4 +1,4 @@
-var main = new gs.gamestate('main');
+main = new gs.gamestate('main');
 
 // This is where the user writes his app.
 // Redefine the functions below for beautiful awesomness...

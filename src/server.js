@@ -3,6 +3,9 @@ mime = require('mime')
   , io = require('socket.io').listen(app)
   , fs = require('fs');
 
+require("./gamestate.js");
+
+
 /**/
 repl = require('repl');
 rep = repl.start({
