@@ -2,9 +2,11 @@
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-function Robot(position_)
+this.Robot = function(position_)
 {
   this.position = position_; 
+  
+  return this;
 }
 
 //! ----------------------------------------------------------------------------

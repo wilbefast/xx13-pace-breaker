@@ -2,7 +2,7 @@
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-function CivillianRobot()
+this.CivillianRobot = function()
 {
 }
 
@@ -11,4 +11,4 @@ function CivillianRobot()
 //! ----------------------------------------------------------------------------
 
 // inherits from Robot
-CivillianRobot.prototype = new Robot();
+this.CivillianRobot.prototype = new Robot();

@@ -2,7 +2,7 @@
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-function PoliceRobot()
+this.PoliceRobot = function()
 {
 }
 
@@ -11,4 +11,4 @@ function PoliceRobot()
 //! ----------------------------------------------------------------------------
 
 // inherits from Robot
-PoliceRobot.prototype = new Robot();
+this.PoliceRobot.prototype = new Robot();
