@@ -1,4 +1,7 @@
+/** @author William J.D. **/
+
 /*
+HTML5 base code
 Copyright (C) 2013 William James Dyce
 
 This program is free software: you can redistribute it and/or modify
@@ -17,35 +20,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 "use strict";
 
-var sign = function(x)
-{
-  return (x > 0) ? 1 : ((x < 0) ? -1 : 0);
-}
+/* CANVAS STATE VARIABLES */
 
-function rand_between(x, y)
-{
-  return Math.random() * (Math.abs(x-y)) + Math.min(x,y);
-}
+// focus
+canvas.focus = true;
 
-function rand_sign()
-{
-  return (Math.random() < 0.5) ? -1 : 1;
-}
 
-function format_time(t)
+// offset
+var element_offset = function(element)
 {
-  var minutes = Math.floor(t/60);
-    if(minutes < 10) minutes = '0' + minutes;
-  var seconds = Math.floor(t)%60;
-    if(seconds < 10) seconds = '0' + seconds;
-  return "" + minutes + ':' +  seconds;
-}
-
-if (!Array.prototype.forEach) 
-{
-  Array.prototype.forEach = function(f, scope) 
+  var ox = 0, oy = 0;
+  if (element.offsetParent) 
   {
-    for(var i = 0, len = this.length; i < len; ++i) 
-      f.call(scope, this[i], i, this);
+    do 
+    {
+      ox += element.offsetLeft;
+      oy += element.offsetTop;
+    } 
+    while (element = element.offsetParent);
+    
+    return { x: ox, y: oy };
   }
+  else
+    return { x: 0, y: 0 };
+}
+canvas.offset = element_offset(canvas);
+
+
+// position
+
+var random_position = function()
+{
+  return new V2().setXY(Math.random() * canvas.width, 
+                        Math.random() * canvas.height);
 }

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2012 William James Dyce
+Copyright (C) 2013 William James Dyce
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -126,7 +126,6 @@ canvas.onmousedown = function(event)
 {
   // regain focus
   canvas.focus = true;
-  this_tick = (new Date()).getTime();
   
   // reset position
   mouse.pos.setXY(event.offsetX, event.offsetY);
