@@ -1,4 +1,7 @@
+/** @author William J.D. **/
+
 /*
+HTML5 base code
 Copyright (C) 2013 William James Dyce
 
 This program is free software: you can redistribute it and/or modify
@@ -15,37 +18,27 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-"use strict";
+// context
 
-var sign = function(x)
+var context = canvas.getContext('2d');
+
+function drawCircle(x, y, radius, fill)
 {
-  return (x > 0) ? 1 : ((x < 0) ? -1 : 0);
+  context.beginPath();
+  context.arc(x, y, radius, 0 , 2 * Math.PI, false);
+  if(fill) 
+    context.fill();
+  else
+    context.stroke();
+  context.closePath(); 
 }
+context.strokeCircle = function(x, y, radius) { drawCircle(x, y, radius, false); }
+context.fillCircle = function(x, y, radius) { drawCircle(x, y, radius, true); }
 
-function rand_between(x, y)
+context.strokeLine = function(x1, y1, x2, y2)
 {
-  return Math.random() * (Math.abs(x-y)) + Math.min(x,y);
-}
-
-function rand_sign()
-{
-  return (Math.random() < 0.5) ? -1 : 1;
-}
-
-function format_time(t)
-{
-  var minutes = Math.floor(t/60);
-    if(minutes < 10) minutes = '0' + minutes;
-  var seconds = Math.floor(t)%60;
-    if(seconds < 10) seconds = '0' + seconds;
-  return "" + minutes + ':' +  seconds;
-}
-
-if (!Array.prototype.forEach) 
-{
-  Array.prototype.forEach = function(f, scope) 
-  {
-    for(var i = 0, len = this.length; i < len; ++i) 
-      f.call(scope, this[i], i, this);
-  }
+  context.beginPath();
+  context.moveTo(x1, y1);
+  context.lineTo(x2, y2);
+  context.stroke();
 }

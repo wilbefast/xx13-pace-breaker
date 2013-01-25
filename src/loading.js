@@ -2,7 +2,7 @@
 
 /*
 HTML5 base code
-Copyright (C) 2012 William James Dyce
+Copyright (C) 2013 William James Dyce
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

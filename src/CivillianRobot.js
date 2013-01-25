@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2012 William James Dyce, Kevin Bradshaw Jean-Bapiste Subils
+Copyright (C) 2013 William James Dyce, Kevin Bradshaw Jean-Bapiste Subils
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -34,8 +34,13 @@ main.leave = function() {
 */
 main.update = function() {
 	// Simulate
+	var e = poll_input_event();
+  while(e != null) 
+  {
+    console.log(e);
+    e = poll_input_event();
+  }
 	
-
 	// Draw
 	ctx.fillStyle = '#131313';
 	ctx.fillRect(0,0,canvas.width,canvas.height);
