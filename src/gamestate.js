@@ -1,4 +1,4 @@
-var gs = {};
+gs = {};
 gs.current = null;
 gs.next = null;
 gs.switchargs = [];

@@ -6,6 +6,10 @@ socket.on('load',function(data){
     loadScript(data.url);
 });
 
+socket.on('hello',function(data) {
+  console.log('Helloed');
+});
+
 var ctx = $('#canvas')[0].getContext("2d");
 var canvas = document.getElementById('canvas');
 var updateRate = 1000/60;
