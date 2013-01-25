@@ -33,17 +33,16 @@ main.leave = function() {
 *	The contents of your main loop goes here.
 */
 main.update = function() {
+  
 	// Simulate
-	var e = poll_input_event();
-  while(e != null) 
-  {
-    console.log(e);
-    e = poll_input_event();
-  }
+  main.robot.position.addV2(keyboard.direction);
 	
 	// Draw
 	ctx.fillStyle = '#131313';
 	ctx.fillRect(0,0,canvas.width,canvas.height);
+  
+  ctx.fillStyle = 'white';
+  context.fillCircle(main.robot.position.x, main.robot.position.y, 10);
 	
 };
 

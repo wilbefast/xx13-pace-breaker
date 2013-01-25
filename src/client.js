@@ -37,6 +37,7 @@ function loadScript(url, callback)
 loadScript('gamestate.js',function(){
 	loadScript('main.js',function(){
 		gs.switchstate(main);
+    main.robot = new CivillianRobot(new V2(100, 100));
 		setInterval(function(){
 	      gs.update();
 	    },(updateRate));

@@ -19,8 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-this.CivillianRobot = function()
+this.CivillianRobot = function(position_)
 {
+  return Robot(position_);
 }
 
 //! ----------------------------------------------------------------------------
