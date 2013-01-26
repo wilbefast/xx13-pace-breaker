@@ -9,7 +9,7 @@ main = new gs.gamestate('main');
 *	state will need in here
 */
 main.init = function() {
-	
+	G = new game()
 };
 
 /**	Prepares the state for entry
@@ -35,6 +35,7 @@ main.leave = function() {
 */
 main.update = function() {
 	// Simulate
+	G.update()
 	
 	// Draw
 };

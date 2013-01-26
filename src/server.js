@@ -3,8 +3,13 @@ mime = require('mime')
   , io = require('socket.io').listen(app)
   , fs = require('fs');
 
+require("./game.js");
+require("./Robot.js");
+require("./V2.js");
 require("./gamestate.js");
 require("./serverMain.js");
+
+console.log(V2);
 
 var updateRate = 1000/10;
 var dt = 1/updateRate;
@@ -49,6 +54,25 @@ function handler (req, res) {
   });
 }
 
+var x = 0;
+function nextid() {
+  return x++;
+}
+
+connected = [];
+
+
+
 io.sockets.on('connection', function (socket) {
+  // Add a player to the game
+  var r = new Robot(new V2())
+  var id = nextid();
+  connected[id]=socket
+  G.addRobot(id, r);
+  G.robots.forEach(function(bot, id){
+    socket.emit('newBot',{bot: bot, id: id});
+  })
+
+
 	socket.emit("hello");
 });
