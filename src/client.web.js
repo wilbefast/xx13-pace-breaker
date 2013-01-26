@@ -1,5 +1,7 @@
 var is_server = false;
 
+G = new game();
+
 
 var socket = io.connect(location.origin);
 socket.on('load',function(data){

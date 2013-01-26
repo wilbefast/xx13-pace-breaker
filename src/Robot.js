@@ -30,7 +30,13 @@ if(!is_server)
     walk_E : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3),
     walk_N : new Animation(imgGeorge, new V2(32, 32), new V2(0, 96), 3)
   }
-  
+  animGeorge.anim =
+  {
+  	walk_S : new AnimationView(animGeorge.walk_S, new V2(64, 64), 0.005, true),
+  	walk_W : new AnimationView(animGeorge.walk_W, new V2(64, 64), 0.005, true),
+  	walk_E : new AnimationView(animGeorge.walk_E, new V2(64, 64), 0.005, true),
+  	walk_N : new AnimationView(animGeorge.walk_N, new V2(64, 64), 0.005, true)
+  	
 
 }
   
@@ -44,18 +50,21 @@ Robot = function(position_)
   this.position = position_;
   this.movement = new V2();
   
-  this.view  = (!is_server)
-    ? new AnimationView(animGeorge.walk_E, new V2(64, 64), 0.005, true)
-    : false;
-  
+
+	if (!is_server)
+	{
+			this.view = new AnimationView(animGeorge.walk_E, new V2(64, 64), 0.005, true);
+
+	}
+
   return this;
 }
 copyBot = function(bot) {
 	bot.__proto__ = Robot.prototype;
 	bot.position.__proto__ = V2.prototype;
-  bot.movement.__proto__ = V2.prototype;
+    bot.movement.__proto__ = V2.prototype;
 	var b = new Robot(new V2(bot.position.x, bot.position.y));
-  b.movement = bot.movement;
+    b.movement = bot.movement;
 	return b;
 }
 
@@ -89,12 +98,35 @@ Robot.prototype.interface = function(otherRobot) {
 
 Robot.prototype.update = function(delta_t) {
   this.position.addV2(this.movement.scale(dt));
-  if(this.view)
-    this.view.update(delta_t);
+  if (!(this.movement.x == 0 && this.movement.y == 0))
+  {
+    if(this.view)
+      this.view.update(delta_t);
+  }
 };
 
 Robot.prototype.draw = function() {
-  if(this.view)
-    this.view.draw(this.position);
+/**/
+	
+	if (this.movement.y < 0 )
+	{
+		this.view = animGeorge.anim.walk_S;
+	}
+	if (this.movement.y > 0 )
+	{
+		this.view = animGeorge.anim.walk_N;
+	}
+	if (this.movement.x < 0 )
+	{
+		this.view = animGeorge.anim.walk_E;
+	}
+	if (this.movement.x > 0 )
+	{
+		this.view = animGeorge.anim.walk_W;
+	}
+
+/**/	
+	if(this.view)
+		this.view.draw(this.position);
 };
 
