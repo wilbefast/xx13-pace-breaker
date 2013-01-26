@@ -1,5 +1,7 @@
+
 game = function(){
 	this.robots = [];
+  this.STARTING_CIVILLIANS = 20;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -14,7 +16,7 @@ game = function(){
 
 game.prototype.reset = function()
 {
-  for (var i=0; i<20; i++)
+  for (var i=0; i < this.STARTING_CIVILLIANS; i++)
   {
     var spawn_pos = new V2();
     this.level.playable_area.randomWithin(spawn_pos);
