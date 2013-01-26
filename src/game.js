@@ -59,8 +59,8 @@ game.prototype.draw = function() {
 	this.robots.forEach(function(bot){
 		bot.draw();
 	});
-  if (id && G.robots[id]) {
-    context.drawImage(arrowSelector,G.robots[id].position.x-6,G.robots[id].position.y-24);
+  if (selected) {
+    context.drawImage(arrowSelector,selected.position.x-6,selected.position.y-24);
   } else {
     console.log('Trippin, yo')
   }
