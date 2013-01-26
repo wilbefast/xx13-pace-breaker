@@ -15,24 +15,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-"use strict";
-
-var sign = function(x)
+sign = function(x)
 {
   return (x > 0) ? 1 : ((x < 0) ? -1 : 0);
 }
 
-function rand_between(x, y)
+rand_between = function(x, y)
 {
   return Math.random() * (Math.abs(x-y)) + Math.min(x,y);
 }
 
-function rand_sign()
+rand_sign = function()
 {
   return (Math.random() < 0.5) ? -1 : 1;
 }
 
-function format_time(t)
+format_time = function(t)
 {
   var minutes = Math.floor(t/60);
     if(minutes < 10) minutes = '0' + minutes;

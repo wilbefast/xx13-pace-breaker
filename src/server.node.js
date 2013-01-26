@@ -5,12 +5,16 @@ mime = require('mime')
   , io = require('socket.io').listen(app)
   , fs = require('fs');
 
+require("./utility.js");
 require("./game.js");
 require("./V2.js");
+require("./Bank.js")
+require("./Timer.js")
 require("./Robot.js");
 require("./CivillianRobot.js");
 require("./gamestate.js");
 require("./main.node.js");
+
 
 updateRate = 1000/10;
 dt = updateRate;

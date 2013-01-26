@@ -18,17 +18,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-"use strict";
-
 /*** BANK CLASS a numeric value with a maximum capacity to deposit/withdraw ***/
 
-function bound(v, min, max)
+bound = function(v, min, max)
 {
   return ((v > max) ? max : ((v < min) ? min : v));
 }
 
 /// INSTANCE ATTRIBUTES/METHODS
-function Bank(starting_balance, max_balance, min_balance)
+Bank = function(starting_balance, max_balance, min_balance)
 {
   starting_balance = (starting_balance == undefined ? 0.0 : starting_balance);
   max_balance = (max_balance == undefined ? 1.0 : max_balance);
@@ -42,6 +40,8 @@ function Bank(starting_balance, max_balance, min_balance)
     this.max = min_balance;
   }
   this.balance = bound(starting_balance, this.min, this.max);
+  
+  return this;
 }
   
 // query
