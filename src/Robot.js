@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! ----------------------------------------------------------------------------
 if (!is_server)
 {
-  var imgGeorge = load_image('images/george.png');
+  var imgGeorge = load_image('images/sheet_george.png');
   
   var animGeorge =
   {
