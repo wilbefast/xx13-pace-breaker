@@ -26,24 +26,24 @@ boundObject = function(object, rect)
   if(object.position.x - object.radius < rect.x)
   {
     was_snapped = true;
-    object.position.x = rect.x;
+    object.position.x = rect.x + object.radius;
   }
   else if(object.position.x + object.radius > rect.endx())
   {
     was_snapped = true;
-    object.position.x = rect.endx();
+    object.position.x = rect.endx() - object.radius;
   }
   
   // -- vertical
   if(object.position.y - object.radius < rect.y)
   {
     was_snapped = true;
-    object.position.y = rect.y;
+    object.position.y = rect.y + object.radius;
   }
   else if(object.position.y + object.radius > rect.endy())
   {
     was_snapped = true;
-    object.position.y = rect.endy();
+    object.position.y = rect.endy() - object.radius;
   }
   
   return was_snapped;
