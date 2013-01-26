@@ -44,6 +44,8 @@ Robot = function(position_)
   return this;
 }
 
+
+/*
 copyBot = function(bot) {
 	bot.__proto__ = Robot.prototype;
 	bot.position.__proto__ = V2.prototype;
@@ -52,6 +54,7 @@ copyBot = function(bot) {
     b.movement = bot.movement;
 	return b;
 }
+*/
 
 //! ----------------------------------------------------------------------------
 //! PROTOTYPE
