@@ -48,8 +48,5 @@ CivillianRobot.prototype.update = function(delta_t)
     this.move(rand_sign(), rand_sign());
   
   // update position
-  this.position.setXY(this.position.x + this.movement.x*dt, 
-                      this.position.y + this.movement.y*dt);
-
-  //Robot.prototype.update.call(this);
+  Robot.prototype.update.call(this);
 };
