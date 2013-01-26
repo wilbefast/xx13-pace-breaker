@@ -69,13 +69,18 @@ connected = [];
 
 setInterval(function(){
   connected.forEach(function(sock, id){
+    // vol 0
     G.robots.forEach(function(bot, dd){
+      // 
       sock.emit('move', {
         pos: {x:bot.position.x, y:bot.position.y},
         mov: {x:bot.movement.x, y:bot.movement.y},
         id: dd
       });
     });
+
+    sock.emit('heartbeat',{vol: 1});
+
   });
 },100);
 

@@ -20,7 +20,7 @@ socket.on('you',function(data) {
 });
 
 socket.on('leave',function(data){
-  G.robots[data.id] = undefined;
+  delete G.robots[data.id];
 });
 
 socket.on('hearbeat',function(data){
