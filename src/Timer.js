@@ -50,6 +50,11 @@ Timer.prototype.unset = function()
 { 
   this.time.setEmpty(); 
 }
+
+Timer.prototype.randomTime = function()
+{
+  this.time.setRandomBalance();
+}
   
 // update
 Timer.prototype.update = function(delta_t)

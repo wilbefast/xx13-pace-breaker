@@ -68,8 +68,6 @@ function nextid() {
 connected = [];
 
 setInterval(function(){
-
-
   connected.forEach(function(sock, id){
     // vol 0
     G.robots.forEach(function(bot, dd){

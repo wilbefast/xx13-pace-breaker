@@ -55,6 +55,9 @@ CivillianRobot.prototype.update = function(delta_t)
     {
       // move ? 
       this.move(rand_bool() ? 0 : rand_sign(), rand_bool() ? 0 : rand_sign());
+      
+      // randomise move time
+      this.change_direction_timer.randomTime();
     }
   }
   

@@ -90,9 +90,14 @@ Bank.prototype.deposit = function(amount)
   return amount;
 }
 
+Bank.prototype.setRandomBalance = function()
+{
+  this.balance = this.min + Math.random()*(this.max - this.min);
+}
+
 Bank.prototype.setBalance = function(amount)
 {
-  balance = this.amount;
+  this.balance = this.amount;
 }
 
 Bank.prototype.setFull = function()

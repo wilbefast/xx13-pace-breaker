@@ -12,6 +12,16 @@ game = function(){
 		this.map = load_image("images/map.png");
 }
 
+game.prototype.reset = function()
+{
+  for (var i=0; i<20; i++)
+  {
+    var spawn_pos = new V2();
+    this.level.playable_area.randomWithin(spawn_pos);
+    G.addRobot(botid(),new CivillianRobot(spawn_pos));
+  }
+}
+
 game.prototype.addRobot = function(id,robot) {
 	this.robots[id]=robot;
 };
