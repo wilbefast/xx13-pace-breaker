@@ -104,23 +104,25 @@ Robot.prototype.update = function(delta_t) {
 
 Robot.prototype.draw = function() {
 /**/
+
+  if (this.movement.x < 0)
+  {
+    this.view.setAnimation(animGeorge.walk_W);
+  }
+  else if (this.movement.x > 0)
+  {
+    this.view.setAnimation(animGeorge.walk_E);
+  }
 	
-	if (this.movement.y < 0 && this.view.anim != animGeorge.walk_N)
+	else if (this.movement.y < 0)
 	{
-		this.view.setAnimation(animGeorge.walk_N);
+    this.view.setAnimation(animGeorge.walk_N);
 	}
-	if (this.movement.y > 0 && this.view.anim != animGeorge.walk_S)
+	else if (this.movement.y > 0 && this.view.anim != animGeorge.walk_S)
 	{
 		this.view.setAnimation(animGeorge.walk_S);
 	}
-	if (this.movement.x < 0 && this.view.anim != animGeorge.walk_W)
-	{
-		this.view.setAnimation(animGeorge.walk_W);
-	}
-	if (this.movement.x > 0 && this.view.anim != animGeorge.walk_E)
-	{
-		this.view.setAnimation(animGeorge.walk_E);
-	}
+	
 
 /**/	
 	if(this.view)
