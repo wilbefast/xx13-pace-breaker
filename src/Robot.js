@@ -122,7 +122,7 @@ Robot.prototype.draw = function() {
 	{
     this.view.setAnimation(animGeorge.walk_N);
 	}
-	else if (this.movement.y > 0 && this.view.anim != animGeorge.walk_S)
+	else if (this.movement.y > 0)
 	{
 		this.view.setAnimation(animGeorge.walk_S);
 	}
