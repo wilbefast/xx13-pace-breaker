@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! ----------------------------------------------------------------------------
 if(!is_server)
 {
+  var imgElectrocute = load_image('images/electrocution.png');
+  
   var imgGeorge = load_image('images/sheet_george.png');
   
   var animGeorge =
@@ -126,7 +128,6 @@ Robot.prototype.draw = function() {
 	{
 		this.view.setAnimation(animGeorge.walk_S);
 	}
-	
 
 /**/	
 	if(this.view)
