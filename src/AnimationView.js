@@ -19,11 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-var NO_FLAGS = 0;         // 0b00000000
-var REVERSE_AT_END = 1;   // 0b00000001
-var FLIP_HORIZONTAL = 2;  // 0b00000010
-var FLIP_HORIZONTAL = 4;  // 0b00000100
-
 function AnimationView(_anim, _size, _speed, _flags)
 {
   this.anim = _anim;
