@@ -8,9 +8,10 @@ game.prototype.addRobot = function(id,robot) {
 };
 
 game.prototype.update = function(delta_t) {
-	this.robots.forEach(function(bot){
+	for (bid in this.robots){
+		bot = this.robots[bid];
 		bot.update(delta_t);
-	});
+	}
 };
 
 game.prototype.draw = function() {

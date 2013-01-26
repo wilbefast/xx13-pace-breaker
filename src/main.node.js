@@ -10,6 +10,10 @@ main = new gs.gamestate('main');
 */
 main.init = function() {
 	G = new game()
+	_botid = 0;
+	botid = function(){
+		return _botid++;
+	}
 };
 
 /**	Prepares the state for entry
@@ -18,6 +22,9 @@ main.init = function() {
 *	Useful to prepare the environment.
 */
 main.enter = function(previous) {
+	for (var i=0; i<10; i++){
+		G.addRobot(botid(),new CivillianRobot(new V2(Math.random()*800,Math.random()*40)));
+	}
 };
 
 /**	Prepare the state for departure
