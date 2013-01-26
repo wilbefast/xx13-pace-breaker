@@ -33,8 +33,8 @@ main.leave = function() {
 *
 *	The contents of your main loop goes here.
 */
-main.update = function() {
-  
+main.update = function() 
+{
 	// Simulate
 	if (id>=0) {
       G.robots[id].position.addV2(keyboard.direction);
@@ -45,7 +45,7 @@ main.update = function() {
 	context.fillStyle = '#131313';
 	context.fillRect(0,0,canvas.width,canvas.height);
 	G.draw();
-};
+}
 
 /**	Called when events happen
 *

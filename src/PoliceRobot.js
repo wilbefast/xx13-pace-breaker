@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-this.PoliceRobot = function(position_)
+PoliceRobot = function(position_)
 {
   return Robot(position_);
 }
@@ -29,4 +29,4 @@ this.PoliceRobot = function(position_)
 //! ----------------------------------------------------------------------------
 
 // inherits from Robot
-this.PoliceRobot.prototype = new Robot();
+PoliceRobot.prototype = new Robot();
