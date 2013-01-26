@@ -51,10 +51,12 @@ Animation.prototype.getNFrames = function()
 
 Animation.prototype.draw = function(subimage, dest)
 { 
-    context.drawImage(this.img, 
-            // source
-            (~~subimage) * this.size.x + this.offset.x, this.offset.y,  
-            this.size.x, this.size.y,
-            // destination
-            dest.x, dest.y, dest.w, dest.h);
+  //context.drawImage(this.img, 0,0,100,100);
+
+  context.drawImage(this.img, 
+          // source
+          (~~subimage) * this.size.x + this.offset.x, this.offset.y,  
+          this.size.x, this.size.y,
+          // destination
+          dest.x, dest.y, dest.w, dest.h);
 }

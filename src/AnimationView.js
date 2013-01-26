@@ -78,9 +78,9 @@ AnimationView.prototype.getSpeed = function()
   return this.speed; 
 }
 
-AnimationView.prototype.animate = function()
+AnimationView.prototype.animate = function(delta_t)
 {
-  var next = this.subimage + this.speed;
+  var next = this.subimage + this.speed*delta_t;
   
   // check for frame to stop at
   if((this.stop_next != -1) && (~~next == this.stop_next))
@@ -102,22 +102,22 @@ AnimationView.prototype.animate = function()
 
 AnimationView.prototype.draw = function(pos)
 { 
-  this.dest.setXYWH(this.pos.x + this.offset.x - this.size.x/2, 
-                    this.pos.y + this.offset.y - this.size.y/2, 
+  this.dest.setXYWH(pos.x + this.offset.x - this.size.x/2, 
+                    pos.y + this.offset.y - this.size.y/2, 
                     this.size.x, 
                     this.size.y);
   
   // center destination box on position given in parameter
-  this.anim.draw(~~this.subimage, dest);
+  this.anim.draw(~~this.subimage, this.dest);
 }
 
 AnimationView.prototype.draw_notcentered = function(pos)
 {
-  this.dest.setXYWH(this.pos.x + this.offset.x, this.pos.y + this.offset.y, 
+  this.dest.setXYWH(pos.x + this.offset.x, pos.y + this.offset.y, 
                     this.size.x, this.size.y);
   
   // don't center destination box
-  anim.draw(~~this.subimage, dest);
+  anim.draw(~~this.subimage, this.dest);
 }
 
 AnimationView.prototype.randomSubimage = function()
