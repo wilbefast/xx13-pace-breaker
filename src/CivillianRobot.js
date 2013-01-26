@@ -59,24 +59,36 @@ CivillianRobot.prototype.perceiveObstacle = function(side)
   this.change_direction_timer.randomTime();
 }
 
+CivillianRobot.prototype.stop = function()
+{
+  console.log("want to stop");
+  // stop
+  this.move(0, 0);
+}
+
+CivillianRobot.prototype.wander = function()
+{
+  console.log("want to wander");
+  // move in random direction
+  this.move(rand_bool() ? 0 : rand_sign(), 
+            rand_bool() ? 0 : rand_sign());
+  
+  // randomise move time
+  this.change_direction_timer.randomTime();
+}
+
+CivillianRobot.prototype.gotoInteraction = function()
+{
+  console.log("want to interact");
+  this.move(0, 0);
+}
+
 CivillianRobot.prototype.update = function(delta_t) 
 {
   // change direction periodically
   if(this.change_direction_timer.update(dt))
   {
-    if(rand_bool())
-    {
-      // stop
-      this.move(0, 0);
-    }
-    else
-    {
-      // move
-      this.move(rand_bool() ? 0 : rand_sign(), rand_bool() ? 0 : rand_sign());
-      
-      // randomise move time
-      this.change_direction_timer.randomTime();
-    }
+    rand_choice([this.stop, this.wander, this.gotoInteraction], this);
   }
   
   // update position
