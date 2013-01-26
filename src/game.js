@@ -1,6 +1,13 @@
 game = function(){
 	this.robots = [];
-	this.level = {}; // Replace with "new level()" when THAT's done
+  
+  // Replace with "new level()" when THAT's done
+	this.level = 
+	{
+    playable_area : new Rect(36, 68, 724, 364)
+  }; 
+  
+  
 	if (!is_server)
 		this.map = load_image("images/map.png");
 }
@@ -10,9 +17,26 @@ game.prototype.addRobot = function(id,robot) {
 };
 
 game.prototype.update = function(delta_t) {
-	for (bid in this.robots){
+	for (bid in this.robots)
+  {
 		bot = this.robots[bid];
+    
+    // update the robots
 		bot.update(delta_t);
+    
+    // snap the robots inside the map
+    
+    // -- horizontal
+    if(bot.position.x < this.level.playable_area.x)
+      bot.position.x = this.level.playable_area.x;
+    else if(bot.position.x > this.level.playable_area.endx())
+      bot.position.x = this.level.playable_area.endx();
+    
+    // -- vertical
+    if(bot.position.y < this.level.playable_area.y)
+      bot.position.y = this.level.playable_area.y;
+    else if(bot.position.y > this.level.playable_area.endy())
+      bot.position.y = this.level.playable_area.endy();
 	}
 };
 

@@ -15,10 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-"use strict";
-
 /// INSTANCE ATTRIBUTES/METHODS
-function Rect(x_, y_, w_, h_)
+Rect = function(x_, y_, w_, h_)
 {
   this.x = (x_ || 0);
   this.y = (y_ || 0);

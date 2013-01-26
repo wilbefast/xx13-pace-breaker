@@ -8,6 +8,7 @@ mime = require('mime')
 require("./utility.js");
 require("./game.js");
 require("./V2.js");
+require("./Rect.js");
 require("./Bank.js")
 require("./Timer.js")
 require("./Robot.js");
