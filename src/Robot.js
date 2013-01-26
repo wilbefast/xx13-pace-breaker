@@ -67,7 +67,7 @@ Robot.prototype.init = function(position_)
   this.animdirection = new V2(0,1);
   this.view = (is_server) 
         ? false 
-        :  new AnimationView(animGeorge.walk_E, new V2(32, 32), 0.005, true);
+        :  new AnimationView(animGeorge.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
 }
 
 Robot.prototype.move = function(hori, vert) {
