@@ -11,10 +11,8 @@ require("./V2.js");
 require("./gamestate.js");
 require("./main.node.js");
 
-console.log(V2);
-
-var updateRate = 1000/10;
-var dt = 1/updateRate;
+updateRate = 1000/10;
+dt = updateRate;
 
 gs.switchstate(main);
 setInterval(function(){ gs.update(); },(updateRate));
@@ -66,7 +64,11 @@ connected = [];
 setInterval(function(){
   connected.forEach(function(sock, id){
     G.robots.forEach(function(bot, dd){
-      sock.emit('move',{pos: bot.position, id: dd});
+      sock.emit('move', {
+        pos: {x:bot.position.x, y:bot.position.y},
+        mov: {x:bot.movement.x, y:bot.movement.y},
+        id: dd
+      });
     });
   });
 },100);
@@ -75,7 +77,7 @@ setInterval(function(){
 
 io.sockets.on('connection', function (socket) {
   // Add a player to the game
-  var r = new Robot(new V2())
+  var r = new Robot(new V2(100,100))
   var id = nextid();
   connected.forEach(function(sock){
     sock.emit('newBot',{bot: r, id: id});
@@ -89,7 +91,7 @@ io.sockets.on('connection', function (socket) {
 
   socket.on("move", function(data){
     socket.get('id', function(err, dd){
-      G.robots[dd].position = new V2(data.position.x, data.position.y);
+      G.robots[dd].move(data.x, data.y);
     });
   });
   socket.emit('you', {id: id});

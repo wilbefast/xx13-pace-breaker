@@ -35,8 +35,7 @@ main.leave = function() {
 */
 main.update = function() {
 	// Simulate
-	G.update()
-	
+	G.update();
 	// Draw
 };
 
