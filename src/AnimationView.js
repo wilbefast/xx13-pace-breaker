@@ -56,6 +56,8 @@ AnimationView.prototype.getSubimage = function()
 
 AnimationView.prototype.setAnimation = function(_anim)
 {
+  if(this.anim == _anim)
+    return;
   this.anim = _anim;
   this.subimage = 0.0;
   this.stop_next = -1;

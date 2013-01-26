@@ -20,32 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-randomMove = function() {
-	
-}
-
 CivillianRobot = function(position_)
 {
-	var o = new Robot(position_);
-	var d = Math.random()
+	this.init(position_);
 
-	o.update = function() {
-		// body...
-		var dx = Math.random()*10-5;
-		var dy = Math.random()*10-5;
-		this.move(dx,dy);
-		//console.log('hi');
-
-		this.position.setXY(this.position.x+this.movement.x*dt, this.position.y+this.movement.y*dt);
-
-
-		//Robot.prototype.update();
-
-	};
-
-
-
-  return o;
+  return this;
 }
 
 //! ----------------------------------------------------------------------------
