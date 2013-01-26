@@ -82,7 +82,7 @@ function getObjectAt(pos, obj_array, condition)
   for (i in obj_array)
   {
     var object = obj_array[i];
-    if(collidesPoint(object, pos) && (!condition || condition(object)))
+    if(object && collidesPoint(object, pos) && (!condition || condition(object)))
       return object;   
   }
   return null;

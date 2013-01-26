@@ -20,6 +20,11 @@ sign = function(x)
   return (x > 0) ? 1 : ((x < 0) ? -1 : 0);
 }
 
+rand_function = function(choices, context)
+{
+  return choices[(choices.length - 1) * Math.random()].call(context);
+}
+
 rand_bool = function()
 {
   return (Math.random() < 0.5);
