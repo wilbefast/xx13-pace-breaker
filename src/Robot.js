@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-this.Robot = function(position_)
+Robot = function(position_)
 {
   this.position = position_; 
   

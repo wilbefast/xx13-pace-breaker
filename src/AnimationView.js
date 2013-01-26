@@ -78,7 +78,7 @@ AnimationView.prototype.getSpeed = function()
   return this.speed; 
 }
 
-AnimationView.prototype.animate = function(delta_t)
+AnimationView.prototype.update = function(delta_t)
 {
   var next = this.subimage + this.speed*delta_t;
   

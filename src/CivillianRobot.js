@@ -15,18 +15,55 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+//! ----------------------------------------------------------------------------
+//! CLASS -- ATTRIBUTES 
+//! ----------------------------------------------------------------------------
+var CivillianRobot_img 
+  = load_image('images/robot.png');
+var CivillianRobot_dance 
+  = new Animation(CivillianRobot_img, new V2(32, 32), new V2(0, 0), 4);
+
+
 //! ----------------------------------------------------------------------------
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-this.CivillianRobot = function(position_)
+CivillianRobot = function(position_)
 {
-  return Robot(position_);
+  var o = new Robot(position_);
+  
+  o.animview = new AnimationView(CivillianRobot_dance, new V2(64, 64), 0.1);
+  
+  
+  //! FIXME
+  o.draw = function()
+  {
+    o.animview.draw(this.position);
+  }
+  
+  //! FIXME
+  o.update = function(delta_t)
+  {
+    this.animview.update(delta_t);
+  }
+  
+  return o;
 }
 
 //! ----------------------------------------------------------------------------
-//! PROTOTYPE
+//! PROTOTYPE -- FUNCTIONS 
 //! ----------------------------------------------------------------------------
 
 // inherits from Robot
-this.CivillianRobot.prototype = new Robot();
+CivillianRobot.prototype = new Robot();
+
+CivillianRobot.prototype.draw = function()
+{
+  this.animview.draw(this.position);
+}
+
+CivillianRobot.prototype.update = function(delta_t)
+{
+  this.animview.update(delta_t);
+}
