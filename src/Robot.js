@@ -180,5 +180,5 @@ Robot.prototype.collision = function(other)
   this.position.addV2(manifold);
   
   // react to collision if applicable
-  this.perceiveObstacle(manifold.reverse().mapToXY(Math.round));
+  //this.perceiveObstacle(manifold.reverse().mapToXY(Math.round));
 }
