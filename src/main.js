@@ -9,6 +9,16 @@ main = new gs.gamestate('main');
 *	state will need in here
 */
 main.init = function() {
+  
+  
+  
+  main.img = new Image();
+  main.img.src = "images/robot.png"
+  
+  main.anim = new Animation(main.img, new V2(32, 32), new V2(0, 0), 4);
+  
+  main.animview = new AnimationView(main.anim, new V2(128, 128), 0.0);
+  main.animview.setSpeed(0.1);
 };
 
 /**	Prepares the state for entry
@@ -41,8 +51,11 @@ main.update = function() {
 	ctx.fillStyle = '#131313';
 	ctx.fillRect(0,0,canvas.width,canvas.height);
   
-  ctx.fillStyle = 'white';
-  context.fillCircle(main.robot.position.x, main.robot.position.y, 10);
+  main.animview.draw(main.robot.position);
+  main.animview.animate(1);
+  
+  //ctx.fillStyle = 'white';
+  //context.fillCircle(main.robot.position.x, main.robot.position.y, 10);
 	
 };
 
