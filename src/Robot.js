@@ -45,7 +45,7 @@ Robot = function(position_)
   this.movement = new V2();
   
   this.view  = (!is_server)
-    ? new AnimationView(animGeorge.walk_E, new V2(32, 32), 0.005)
+    ? new AnimationView(animGeorge.walk_E, new V2(64, 64), 0.005, true)
     : false;
   
   return this;
