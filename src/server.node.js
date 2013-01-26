@@ -6,8 +6,9 @@ mime = require('mime')
   , fs = require('fs');
 
 require("./game.js");
-require("./Robot.js");
 require("./V2.js");
+require("./Robot.js");
+require("./CivillianRobot.js");
 require("./gamestate.js");
 require("./main.node.js");
 
