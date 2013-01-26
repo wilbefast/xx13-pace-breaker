@@ -1,8 +1,8 @@
 game = function(){
 	this.robots = [];
 	this.level = {}; // Replace with "new level()" when THAT's done
-	this.map = new Image();
-	this.map.src = "images/map.png"
+	if (!is_server)
+		this.map = load_image("images/map.png");
 }
 
 game.prototype.addRobot = function(id,robot) {
