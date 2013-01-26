@@ -53,12 +53,16 @@ game.prototype.update = function(delta_t) {
 
 game.prototype.draw = function() {
 	context.drawImage(this.map,0,0);
-  if (id && G.robots[id]) {
-    context.drawImage(meSelector,G.robots[id].position.x,G.robots[id].position.y);
+  if (G.robots[id]) {
+    context.drawImage(meSelector,G.robots[id].position.x-16,G.robots[id].position.y+4);
   } else {
-    console.log('Trippin, yo')
   }
 	this.robots.forEach(function(bot){
 		bot.draw();
 	});
+  if (selected) {
+    context.drawImage(arrowSelector,selected.position.x-6,selected.position.y-24);
+  } else {
+    console.log('Trippin, yo')
+  }
 };

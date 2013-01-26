@@ -21,8 +21,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! ----------------------------------------------------------------------------
 if(!is_server)
 {
+  var imgTron = load_image('images/sheet_tron.png');
   var imgGeorge = load_image('images/sheet_george.png');
   var imgMarie = load_image('images/sheet_marie_antoinette.png');
+
+  var animTron =
+  {
+    walk_N : new Animation(imgTron, new V2(32, 32), new V2(0, 0), 3),
+    walk_E : new Animation(imgTron, new V2(32, 32), new V2(0, 32), 3),
+    walk_W : new Animation(imgTron, new V2(32, 32), new V2(0, 32), 3, 
+                           FLIP_HORIZONTAL),
+    walk_S : new Animation(imgTron, new V2(32, 32), new V2(0, 64), 3)
+  }
   
   var animGeorge =
   {
@@ -41,6 +51,9 @@ if(!is_server)
                            FLIP_HORIZONTAL),
     walk_S : new Animation(imgMarie, new V2(32, 32), new V2(0, 64), 3)
   }
+
+  anims = [animMarie, animGeorge, animTron];
+
 }
   
 
@@ -75,11 +88,8 @@ Robot.prototype.init = function(position_)
   this.radius = 8;
   this.radius2 = this.radius * this.radius;
   this.male = Math.random()<0.5;
-  if (this.male) {
-    this.animset = animGeorge;
-  } else {
-    this.animset = animMarie;
-  }
+  if (!is_server)
+    this.animset = anims[Math.floor(Math.random()*anims.length)];
   this.position = position_;
   this.movement = new V2();
   this.animdirection = new V2(0,1);

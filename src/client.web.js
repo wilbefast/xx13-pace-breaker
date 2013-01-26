@@ -1,7 +1,8 @@
 var is_server = false;
 
 
-var meSelector = load_image("images/cercle.png");
+var meSelector = load_image("images/cercle.png")
+var arrowSelector = load_image("images/fleche.png")
 
 G = new game();
 
@@ -59,8 +60,8 @@ setInterval(function(){
     var dy = keyboard.direction.y;
     if (id>=0) {
       socket.emit('move', {
-        x: dx,
-        y: dy
+        x: Math.round(dx),
+        y: Math.round(dy)
       });
     }
   },100);

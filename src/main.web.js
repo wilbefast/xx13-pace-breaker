@@ -9,6 +9,7 @@ main = new gs.gamestate('main');
 *	state will need in here
 */
 main.init = function() {
+	selected = {position: new V2()};
 	
 };
 
@@ -35,9 +36,16 @@ main.leave = function() {
 */
 main.update = function() 
 {
-  
-  //! FIXME 
-  var delta_t = 1000/60;
+	//! FIXME 
+	var delta_t = 1000/60;
+
+	var selectme = getObjectAt(mouse.pos, G.robots);
+
+	if (selectme) {
+		selected = selectme;
+	}
+
+
   
   
 	// Simulate

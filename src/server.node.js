@@ -74,8 +74,8 @@ setInterval(function(){
     G.robots.forEach(function(bot, dd){
       // 
       sock.emit('move', {
-        pos: {x:bot.position.x, y:bot.position.y},
-        mov: {x:bot.movement.x, y:bot.movement.y},
+        pos: {x:Math.round(bot.position.x), y:Math.round(bot.position.y)},
+        mov: {x:Math.round(bot.movement.x*10), y:Math.round(bot.movement.y*10)},
         id: dd
       });
     });
