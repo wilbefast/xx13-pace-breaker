@@ -10,6 +10,12 @@ socket.on('hello',function(data) {
   console.log('Helloed');
 });
 
+socket.on('newBot',function(data) {
+  var b = data.bot;
+  b.__proto__ = Robot.prototype;
+  G.addRobot(data.id, b);
+})
+
 var updateRate = 1000/60;
 var dt = 1/updateRate;
 

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2013 William James Dyce, Kevin Bradshaw Jean-Bapiste Subils
+Copyright (C) 2013 William James Dyce, Kevin Bradshaw and Jean-Bapiste Subils
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Robot = function(position_)
 {
-  this.position = position_; 
+  this.position = position_;
   
   return this;
 }
@@ -29,3 +29,20 @@ Robot = function(position_)
 //! ----------------------------------------------------------------------------
 //! PROTOTYPE
 //! ----------------------------------------------------------------------------
+
+Robot.prototype.toString = function() {
+	return "dull-looking robot";
+}
+
+Robot.prototype.interface = function(otherRobot) {
+	console.log('Ello, '+otherRobot);
+};
+
+Robot.prototype.update = function() {
+	//console.log("I'm WORKING!");
+};
+
+Robot.prototype.draw = function() {
+	context.fillStyle = 'white';
+	context.fillCircle(this.position.x, this.position.y, 10);
+};
