@@ -1,3 +1,4 @@
 audio_rush/*.wav
 
 *.orig
+src/.DS_Store
