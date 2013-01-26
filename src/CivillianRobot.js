@@ -45,8 +45,9 @@ CivillianRobot.prototype.perceiveObstacle = function(side)
 {
   if(rand_bool())
   {
+    side.reverse();
     // move away from collision
-    this.move(side.reverse());
+    this.move(side.x, side.y);
   }
   else
   {

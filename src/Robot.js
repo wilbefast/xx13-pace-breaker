@@ -141,7 +141,6 @@ Robot.prototype.update = function(delta_t) {
 };
 
 Robot.prototype.draw = function() {
-/**/
   var anix = this.animdirection.x;
 
   var aniy = this.animdirection.y;
@@ -170,10 +169,7 @@ Robot.prototype.draw = function() {
     this.view.setSubimage(1);
   }
 	
-
-/**/	
-	if(this.view)
-		this.view.draw(this.position);
+  this.view.draw(this.position);
 };
 
 Robot.prototype.collision = function(other)

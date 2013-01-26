@@ -31,6 +31,11 @@ V2 = function(_x, _y)
 //! PROTOTYPE
 //! ----------------------------------------------------------------------------
 
+V2.prototype.toString = function()
+{
+  return '(' + this.x + ',' + this.y + ')';
+}
+
 V2.prototype.norm = function()
 {
   if(this.x == 0)

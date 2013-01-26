@@ -49,6 +49,11 @@ boundObject = function(object, rect)
   return manifold;
 }
 
+function insideBox(unit, box)
+{
+  return box.collides(new Rect(unit.pos.x - unit.hradius, unit.pos.y - unit.hradius, unit.radius, unit.radius));
+}
+
 collidesPoint = function(object, point)
 {
   return (object.position.dist2(point) < object.radius2);
