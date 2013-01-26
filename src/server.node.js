@@ -68,9 +68,8 @@ function nextid() {
 connected = [];
 
 setInterval(function(){
-  G.robots.forEach(function(bot, dd){
-    connected.forEach(function(sock, id){
-
+  connected.forEach(function(sock, id){
+    G.robots.forEach(function(bot, dd){
       sock.emit('move', {
         pos: {x:bot.position.x, y:bot.position.y},
         mov: {x:bot.movement.x, y:bot.movement.y},
