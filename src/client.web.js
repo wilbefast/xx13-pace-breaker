@@ -21,17 +21,10 @@ socket.on('you',function(data) {
 
 socket.on('move',function(data) {
   var bot = G.robots[data.id];
-  var dx = ( ((data.pos.x - bot.position.x)/5) + data.mov.x)/2;
-  var dy = ( ((data.pos.y - bot.position.y)/5) + data.mov.y)/2;
-  var n = 1//Math.sqrt(dx*dx + dy*dy)/4;
-  if (n==0) {
-    bot.movement.setXY(0, 0);
-  } else {
-    bot.movement.setXY(dx/Math.max(n), dy/Math.max(n));
-  }
-
-  //G.robots[data.id].position.setXY(data.pos.x, data.pos.y);
-  //G.robots[data.id].move(data.mov.x,data.mov.y);
+  var dx = ( ((data.pos.x - bot.position.x)/5) + data.mov.x)*2;
+  var dy = ( ((data.pos.y - bot.position.y)/5) + data.mov.y)*2;
+  bot.movement.setXY(dx, dy);
+  bot.animdirection.setXY(data.mov.x,data.mov.y);
 });
 
 socket.on('newBot',function(data) {
@@ -40,7 +33,7 @@ socket.on('newBot',function(data) {
 })
 
 var updateRate = 1000/60;
-var dt = updateRate/10;
+var dt = updateRate/60;
 
 
 gs.switchstate(main);

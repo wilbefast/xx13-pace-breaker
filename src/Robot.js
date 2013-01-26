@@ -64,6 +64,7 @@ Robot.prototype.init = function(position_)
 {
   this.position = position_;
   this.movement = new V2();
+  this.animdirection = new V2(0,1);
   this.view = (is_server) 
         ? false 
         :  new AnimationView(animGeorge.walk_E, new V2(32, 32), 0.005, true);
@@ -108,24 +109,33 @@ Robot.prototype.update = function(delta_t) {
 
 Robot.prototype.draw = function() {
 /**/
+  var anix = this.animdirection.x;
 
-  if (this.movement.x < 0)
+  var aniy = this.animdirection.y;
+
+  this.view.setSpeed(0.005);
+  if (anix < 0)
   {
     this.view.setAnimation(animGeorge.walk_W);
   }
-  else if (this.movement.x > 0)
+  else if (anix > 0)
   {
     this.view.setAnimation(animGeorge.walk_E);
   }
 	
-	else if (this.movement.y < 0)
+	else if (aniy < 0)
 	{
     this.view.setAnimation(animGeorge.walk_N);
 	}
-	else if (this.movement.y > 0 && this.view.anim != animGeorge.walk_S)
+	else if (aniy > 0 )
 	{
 		this.view.setAnimation(animGeorge.walk_S);
 	}
+  else
+  {
+    this.view.setSpeed(0);
+    this.view.setSubimage(1);
+  }
 	
 
 /**/	
