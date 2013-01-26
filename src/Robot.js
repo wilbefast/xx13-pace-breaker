@@ -62,6 +62,8 @@ copyBot = function(bot) {
 
 Robot.prototype.init = function(position_)
 {
+  this.radius = 8;
+  this.radius2 = this.radius * this.radius;
   this.position = position_;
   this.movement = new V2();
   this.animdirection = new V2(0,1);
@@ -148,3 +150,9 @@ Robot.prototype.draw = function() {
 		this.view.draw(this.position);
 };
 
+Robot.prototype.collision = function(other)
+{
+  var manifold = new V2().setFromTo(other.position, this.position);
+  manifold.normalise();
+  this.position.addV2(manifold);
+}
