@@ -27,26 +27,24 @@ game.prototype.addRobot = function(id,robot) {
 };
 
 game.prototype.update = function(delta_t) {
+  
 	for (bid in this.robots)
   {
-		bot = this.robots[bid];
+		var bot = this.robots[bid];
     
     // update the robots
 		bot.update(delta_t);
     
+    // collide the robots
+    for (other_bid in this.robots)
+    {
+      var other_bot = this.robots[other_bid];
+      generateCollision(bot, other_bot);
+    }
+    
     // snap the robots inside the map
-    
-    // -- horizontal
-    if(bot.position.x < this.level.playable_area.x)
-      bot.position.x = this.level.playable_area.x;
-    else if(bot.position.x > this.level.playable_area.endx())
-      bot.position.x = this.level.playable_area.endx();
-    
-    // -- vertical
-    if(bot.position.y < this.level.playable_area.y)
-      bot.position.y = this.level.playable_area.y;
-    else if(bot.position.y > this.level.playable_area.endy())
-      bot.position.y = this.level.playable_area.endy();
+    if(boundObject(bot, this.level.playable_area))
+      bot.stop();
 	}
 };
 

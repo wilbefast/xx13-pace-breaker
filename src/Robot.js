@@ -72,6 +72,8 @@ copyBot = function(bot) {
 
 Robot.prototype.init = function(position_)
 {
+  this.radius = 8;
+  this.radius2 = this.radius * this.radius;
   this.male = Math.random()<0.5;
   if (this.male) {
     this.animset = animGeorge;
@@ -109,6 +111,11 @@ Robot.prototype.toString = function() {
 Robot.prototype.interface = function(otherRobot) {
 	console.log('Ello, ' + otherRobot);
 };
+
+Robot.prototype.stop = function()
+{
+  // overriden by civillians!
+}
 
 Robot.prototype.update = function(delta_t) {
   //if (is_server)
@@ -159,3 +166,9 @@ Robot.prototype.draw = function() {
 		this.view.draw(this.position);
 };
 
+Robot.prototype.collision = function(other)
+{
+  var manifold = new V2().setFromTo(other.position, this.position);
+  manifold.normalise();
+  this.position.addV2(manifold);
+}

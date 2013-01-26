@@ -6,6 +6,7 @@ mime = require('mime')
   , fs = require('fs');
 
 require("./utility.js");
+require("./objects.js");
 require("./game.js");
 require("./V2.js");
 require("./Rect.js");
