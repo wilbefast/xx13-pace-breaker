@@ -117,8 +117,8 @@ AnimationView.prototype.update = function(delta_t)
 
 AnimationView.prototype.draw = function(pos)
 { 
-  this.dest.setXYWH(pos.x + this.offset.x - this.size.x/2, 
-                    pos.y + this.offset.y - this.size.y/2, 
+  this.dest.setXYWH(Math.floor(pos.x) + this.offset.x - this.size.x/2, 
+                    Math.floor(pos.y) + this.offset.y - this.size.y/2, 
                     this.size.x, 
                     this.size.y);
   
