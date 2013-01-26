@@ -19,12 +19,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-function AnimationView(_anim, _size, _speed, _reverse_at_end)
+function AnimationView(_anim, _size, _speed, _flags)
 {
   this.anim = _anim;
   this.size = _size;
-  this.speed = _speed;
-  this.reverseAtEnd = (_reverse_at_end || false);
+  this.speed = (_speed || 0.0);
+  this.flags = (_flags || NO_FLAGS);
   
   this.subimage = 0.0;
   this.stop_next = -1;
@@ -98,7 +98,7 @@ AnimationView.prototype.update = function(delta_t)
     this.subimage = next;
   else
   {
-    if(this.reverseAtEnd)
+    if(this.flags & REVERSE_AT_END)
     {
       // reverse animation direction
       this.subimage = (this.speed > 0) ? this.anim.getNFrames()-1 : 0.0;

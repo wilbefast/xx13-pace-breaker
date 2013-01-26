@@ -15,17 +15,27 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//! ----------------------------------------------------------------------------
+//! CONSTANTS
+//! ----------------------------------------------------------------------------
+
+var NO_FLAGS = 0;         // 0b00000000
+var REVERSE_AT_END = 1;   // 0b00000001
+var FLIP_HORIZONTAL = 2;  // 0b00000010
+var FLIP_HORIZONTAL = 4;  // 0b00000100
+
 
 //! ----------------------------------------------------------------------------
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-function Animation(_img, _size, _offset, _n_frames)
+function Animation(_img, _size, _offset, _n_frames, _flags)
 {
   this.img = _img;
   this.size = _size;
   this.offset = (_offset || new V2(0, 0));
   this.n_frames = (_n_frames || 1);
+  this.flags = (_flags || NO_FLAGS);
   
   return this;
 }
@@ -46,13 +56,11 @@ Animation.prototype.doesMirrorLoop = function()
 
 Animation.prototype.getNFrames = function()
 {
-    return this.n_frames;
+  return this.n_frames;
 }
 
 Animation.prototype.draw = function(subimage, dest)
 { 
-  //context.drawImage(this.img, 0,0,100,100);
-
   context.drawImage(this.img, 
           // source
           (~~subimage) * this.size.x + this.offset.x, this.offset.y,  
