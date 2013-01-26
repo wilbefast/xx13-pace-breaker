@@ -85,6 +85,12 @@ setInterval(function(){
   });
 },100);
 
+setInterval(function(){
+  connected.forEach(function(sock, id){
+    sock.emit('ping');
+  });
+},1000);
+
 
 
 io.sockets.on('connection', function (socket) {
@@ -92,13 +98,13 @@ io.sockets.on('connection', function (socket) {
   var r = new Robot(new V2(100,100))
   var id = nextid();
   connected.forEach(function(sock){
-    sock.emit('newBot',{bot: r, id: id});
+    sock.emit('newBot',{bot: r.position, id: id});
   });
   connected[id]=socket;
   socket.set('id',id);
   G.addRobot(id, r);
   G.robots.forEach(function(bot, id){
-    socket.emit('newBot',{bot: bot, id: id});
+    socket.emit('newBot',{bot: bot.position, id: id});
   })
 
   socket.on('disconnect',function(){

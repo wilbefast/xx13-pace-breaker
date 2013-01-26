@@ -77,12 +77,12 @@ generateCollision = function(a, b)
 }
 
 // get nearest object
-function getNearest(pos, obj_array, condition) //! 'condition' is optional
+function getNearest(pos, objects, condition) //! 'condition' is optional
 {
   for(i in objects)
   {
-    var object = obj_array[i];
-    if(object && isNearer())
+    var object = objects[i];
+    if(object)// && isNearer())
       return object;   
   }
   return null;

@@ -39,7 +39,7 @@ main.update = function()
 	//! FIXME 
 	var delta_t = 1000/60;
 
-	var selectme = getObjectAt(mouse.pos, G.robots);
+	var selectme = getNearest(G.robots[id], G.robots);
 
 	if (selectme) {
 		selected = selectme;
