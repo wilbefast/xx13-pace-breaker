@@ -4,6 +4,13 @@ mime = require('mime')
   , fs = require('fs');
 
 require("./gamestate.js");
+require("./serverMain.js");
+
+var updateRate = 1000/10;
+var dt = 1/updateRate;
+
+gs.switchstate(main);
+setInterval(function(){ gs.update(); },(updateRate));
 
 
 /**/

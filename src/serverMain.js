@@ -9,16 +9,7 @@ main = new gs.gamestate('main');
 *	state will need in here
 */
 main.init = function() {
-  this.robot = new CivillianRobot(new V2(100, 100));
-  
-  
-  main.img = new Image();
-  main.img.src = "images/robot.png"
-  
-  main.anim = new Animation(main.img, new V2(32, 32), new V2(0, 0), 4);
-  
-  main.animview = new AnimationView(main.anim, new V2(128, 128), 0.0);
-  main.animview.setSpeed(0.1);
+	
 };
 
 /**	Prepares the state for entry
@@ -43,19 +34,9 @@ main.leave = function() {
 *	The contents of your main loop goes here.
 */
 main.update = function() {
-  
 	// Simulate
-  main.robot.position.addV2(keyboard.direction);
 	
-  if(context)
-  {
 	// Draw
-	context.fillStyle = '#131313';
-	context.fillRect(0,0,canvas.width,canvas.height);
-  
-  	main.animview.draw(main.robot.position);
-  	main.animview.animate(1);
-  }
 };
 
 /**	Called when events happen
