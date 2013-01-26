@@ -19,9 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! ----------------------------------------------------------------------------
 //! CLASS -- ATTRIBUTES 
 //! ----------------------------------------------------------------------------
-if(!is_server)
+if (!is_server)
 {
-  var imgGeorge = load_image('images/george.png');
+  var imgGeorge = load_image('images/sheet_george.png');
   
   var animGeorge =
   {
@@ -36,7 +36,8 @@ if(!is_server)
   	walk_W : new AnimationView(animGeorge.walk_W, new V2(64, 64), 0.005, true),
   	walk_E : new AnimationView(animGeorge.walk_E, new V2(64, 64), 0.005, true),
   	walk_N : new AnimationView(animGeorge.walk_N, new V2(64, 64), 0.005, true)
-  }	
+  }
+  	
 
 }
   
@@ -59,6 +60,7 @@ Robot = function(position_)
 
   return this;
 }
+
 copyBot = function(bot) {
 	bot.__proto__ = Robot.prototype;
 	bot.position.__proto__ = V2.prototype;
@@ -94,16 +96,22 @@ Robot.prototype.toString = function() {
 
 Robot.prototype.interface = function(otherRobot) {
 	console.log('Ello, ' + otherRobot);
-};
+}
 
 Robot.prototype.update = function(delta_t) {
-  this.position.addV2(this.movement.scale(dt));
+  //if (is_server)
+  {
+    this.position.setXY(this.position.x+this.movement.x*dt, this.position.y+this.movement.y*dt);
+  }
+
   if (!(this.movement.x == 0 && this.movement.y == 0))
   {
-    if(this.view)
+    if(this.view) {
       this.view.update(delta_t);
+    }
   }
-};
+
+}
 
 Robot.prototype.draw = function() {
 /**/
@@ -128,5 +136,4 @@ Robot.prototype.draw = function() {
 /**/	
 	if(this.view)
 		this.view.draw(this.position);
-};
-
+}
