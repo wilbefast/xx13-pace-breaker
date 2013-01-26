@@ -75,7 +75,7 @@ setInterval(function(){
 
 io.sockets.on('connection', function (socket) {
   // Add a player to the game
-  var r = new Robot(new V2())
+  var r = new Robot(new V2(100,100))
   var id = nextid();
   connected.forEach(function(sock){
     sock.emit('newBot',{bot: r, id: id});

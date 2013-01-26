@@ -42,6 +42,7 @@ if(!is_server)
 Robot = function(position_)
 {
   this.position = position_;
+  this.movement = new V2();
   
   this.view  = (!is_server)
     ? new AnimationView(animGeorge.walk_E, new V2(32, 32), 0.005)
@@ -52,13 +53,19 @@ Robot = function(position_)
 copyBot = function(bot) {
 	bot.__proto__ = Robot.prototype;
 	bot.position.__proto__ = V2.prototype;
+  bot.movement.__proto__ = V2.prototype;
 	var b = new Robot(new V2(bot.position.x, bot.position.y));
+  b.movement = bot.movement;
 	return b;
 }
 
 //! ----------------------------------------------------------------------------
 //! PROTOTYPE
 //! ----------------------------------------------------------------------------
+
+Robot.prototype.move = function(vert, hori) {
+  this.movement.setXY(vert,hori);
+};
 
 Robot.prototype.toString = function() {
 	return "dull-looking robot";
@@ -69,6 +76,7 @@ Robot.prototype.interface = function(otherRobot) {
 };
 
 Robot.prototype.update = function(delta_t) {
+  this.position.addV2(this.movement);
   if(this.view)
     this.view.update(delta_t);
 };

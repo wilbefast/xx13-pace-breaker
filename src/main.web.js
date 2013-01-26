@@ -42,7 +42,9 @@ main.update = function()
   
 	// Simulate
 	if (id>=0) {
-      G.robots[id].position.addV2(keyboard.direction);
+		var dx = keyboard.direction.x;
+		var dy = keyboard.direction.y;
+    	G.robots[id].move(dx,dy)
     }
   	G.update(delta_t);
 	
