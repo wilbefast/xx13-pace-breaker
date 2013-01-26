@@ -38,7 +38,7 @@ CivillianRobot.prototype.init = function(position_)
 {
   Robot.prototype.init.call(this, position_);
   
-  this.change_direction_timer = new Timer(2000);
+  this.change_direction_timer = new Timer(1500);
 }
 
 CivillianRobot.prototype.update = function(delta_t) 
@@ -46,7 +46,16 @@ CivillianRobot.prototype.update = function(delta_t)
   // change direction periodically
   if(this.change_direction_timer.update(dt))
   {
-    this.move(rand_sign(), rand_sign());
+    if(rand_bool())
+    {
+      // stop ?
+      this.move(0, 0);
+    }
+    else
+    {
+      // move ? 
+      this.move(rand_bool() ? 0 : rand_sign(), rand_bool() ? 0 : rand_sign());
+    }
   }
   
   // update position

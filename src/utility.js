@@ -20,6 +20,11 @@ sign = function(x)
   return (x > 0) ? 1 : ((x < 0) ? -1 : 0);
 }
 
+rand_bool = function()
+{
+  return (Math.random() < 0.5);
+}
+
 rand_between = function(x, y)
 {
   return Math.random() * (Math.abs(x-y)) + Math.min(x,y);
