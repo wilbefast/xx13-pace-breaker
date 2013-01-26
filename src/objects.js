@@ -79,7 +79,7 @@ generateCollision = function(a, b)
 // get an object at a position
 function getObjectAt(pos, obj_array, condition)
 {
-  for(var i = 0; i < obj_array.length; i++)
+  for (i in obj_array)
   {
     var object = obj_array[i];
     if(collidesPoint(object, pos) && (!condition || condition(object)))
