@@ -68,7 +68,7 @@ areColliding = function(a, b)
 // generate a collision between two objects if applicable
 generateCollision = function(a, b)
 {
-  if(a != null && b != null && a != b && areColliding(a, b))
+  if(areColliding(a, b))
   {
     // generate collision
     a.collision(b);
@@ -77,19 +77,18 @@ generateCollision = function(a, b)
 }
 
 // get nearest object
-function getNearest(pos, obj_array, condition) //! 'condition' is optional
+generateNearest = function(a, b)
 {
-  for(i in objects)
+  var dist2 = a.position.dist2(b.position);
+  if(dist2 < a.nearest_dist2)
   {
-    var object = obj_array[i];
-    if(object && isNearer())
-      return object;   
+    a.nearest = b;
+    a.nearest_dist2 = dist2;
   }
-  return null;
 }
 
 // get an object at a position
-function getObjectAt(pos, objects, condition) //! 'condition' is optional
+getObjectAt = function(pos, objects, condition) //! 'condition' is optional
 {
   for(i in objects)
   {

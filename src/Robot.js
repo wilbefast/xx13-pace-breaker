@@ -169,6 +169,9 @@ Robot.prototype.draw = function() {
     //this.view.setSpeed(0);
     this.view.setSubimage(1);
   }
+  
+  if(nearest)
+    context.strokeLine(this.position.x, this.position.y, this.nearest.position.x, this.nearest.position.y);
 	
   this.view.draw(this.position);
 };

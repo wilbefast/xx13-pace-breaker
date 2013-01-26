@@ -37,11 +37,23 @@ game.prototype.update = function(delta_t) {
     // update the robots
 		bot.update(delta_t);
     
-    // collide the robots
+    // reset nearest
+    bot.nearest = null;
+    bot.nearest_dist2 = Infinity;
+    
+    // pair functions
     for (other_bid in this.robots)
     {
+      // don't check self
       var other_bot = this.robots[other_bid];
+      if(other_bot == bot)
+        continue;
+      
+      // get bot collisions
       generateCollision(bot, other_bot);
+      
+      // get bot nearest peers
+      generateNearest(bot, other_bot);
     }
     
     // snap the robots inside the map
