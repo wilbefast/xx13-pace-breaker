@@ -35,18 +35,34 @@ game.prototype.update = function(delta_t) {
 		bot.update(delta_t);
     
     // snap the robots inside the map
+    var was_snapped = false;
     
     // -- horizontal
     if(bot.position.x < this.level.playable_area.x)
+    {
+      was_snapped = true;
       bot.position.x = this.level.playable_area.x;
+    }
     else if(bot.position.x > this.level.playable_area.endx())
+    {
+      was_snapped = true;
       bot.position.x = this.level.playable_area.endx();
+    }
     
     // -- vertical
     if(bot.position.y < this.level.playable_area.y)
+    {
+      was_snapped = true;
       bot.position.y = this.level.playable_area.y;
+    }
     else if(bot.position.y > this.level.playable_area.endy())
+    {
+      was_snapped = true;
       bot.position.y = this.level.playable_area.endy();
+    }
+    
+    if(was_snapped)
+      bot.stop();
 	}
 };
 

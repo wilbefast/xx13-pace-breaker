@@ -94,6 +94,11 @@ Robot.prototype.interface = function(otherRobot) {
 	console.log('Ello, ' + otherRobot);
 };
 
+Robot.prototype.stop = function()
+{
+  // overriden by civillians!
+}
+
 Robot.prototype.update = function(delta_t) {
   //if (is_server)
   {

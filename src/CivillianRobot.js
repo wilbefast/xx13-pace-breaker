@@ -41,24 +41,29 @@ CivillianRobot.prototype.init = function(position_)
   this.change_direction_timer = new Timer(1500);
 }
 
+CivillianRobot.prototype.stop = function()
+{
+  if(rand_bool())
+  {
+    // stop ?
+    this.move(0, 0);
+  }
+  else
+  {
+    // move ? 
+    this.move(rand_bool() ? 0 : rand_sign(), rand_bool() ? 0 : rand_sign());
+    
+    // randomise move time
+    this.change_direction_timer.randomTime();
+  }
+}
+
 CivillianRobot.prototype.update = function(delta_t) 
 {
   // change direction periodically
   if(this.change_direction_timer.update(dt))
   {
-    if(rand_bool())
-    {
-      // stop ?
-      this.move(0, 0);
-    }
-    else
-    {
-      // move ? 
-      this.move(rand_bool() ? 0 : rand_sign(), rand_bool() ? 0 : rand_sign());
-      
-      // randomise move time
-      this.change_direction_timer.randomTime();
-    }
+    this.stop();
   }
   
   // update position
