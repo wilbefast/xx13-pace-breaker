@@ -113,7 +113,7 @@ Robot.prototype.draw = function() {
 
   var aniy = this.animdirection.y;
 
-  this.view.setSpeed(0.005);
+  //this.view.setSpeed(0.005);
   if (anix < 0)
   {
     this.view.setAnimation(animGeorge.walk_W);
@@ -133,7 +133,7 @@ Robot.prototype.draw = function() {
 	}
   else
   {
-    this.view.setSpeed(0);
+    //this.view.setSpeed(0);
     this.view.setSubimage(1);
   }
 	
