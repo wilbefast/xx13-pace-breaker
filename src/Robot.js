@@ -15,6 +15,26 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+//! ----------------------------------------------------------------------------
+//! CLASS -- ATTRIBUTES 
+//! ----------------------------------------------------------------------------
+if(!is_server)
+{
+  var imgGeorge = load_image('images/george.png');
+  
+  var animGeorge =
+  {
+    walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 0), 3),
+    walk_W : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3),
+    walk_E : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3),
+    walk_N : new Animation(imgGeorge, new V2(32, 32), new V2(0, 96), 3)
+  }
+  
+
+}
+  
+
 //! ----------------------------------------------------------------------------
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
@@ -22,6 +42,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Robot = function(position_)
 {
   this.position = position_;
+  
+  this.view  = (!is_server)
+    ? new AnimationView(animGeorge.walk_E, new V2(32, 32), 0.005)
+    : false;
   
   return this;
 }
@@ -41,14 +65,16 @@ Robot.prototype.toString = function() {
 }
 
 Robot.prototype.interface = function(otherRobot) {
-	console.log('Ello, '+otherRobot);
+	console.log('Ello, ' + otherRobot);
 };
 
-Robot.prototype.update = function() {
-	//console.log("I'm WORKING!");
+Robot.prototype.update = function(delta_t) {
+  if(this.view)
+    this.view.update(delta_t);
 };
 
 Robot.prototype.draw = function() {
-	context.fillStyle = 'white';
-	context.fillCircle(this.position.x, this.position.y, 10);
+  if(this.view)
+    this.view.draw(this.position);
 };
+

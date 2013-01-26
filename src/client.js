@@ -1,3 +1,6 @@
+var is_server = false;
+
+
 var socket = io.connect(location.origin);
 socket.on('load',function(data){
   if (data.callback)

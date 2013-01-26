@@ -7,9 +7,9 @@ game.prototype.addRobot = function(id,robot) {
 	this.robots[id]=robot;
 };
 
-game.prototype.update = function() {
+game.prototype.update = function(delta_t) {
 	this.robots.forEach(function(bot){
-		bot.update();
+		bot.update(delta_t);
 	});
 };
 

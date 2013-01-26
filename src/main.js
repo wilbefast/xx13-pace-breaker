@@ -35,11 +35,16 @@ main.leave = function() {
 */
 main.update = function() 
 {
+  
+  //! FIXME 
+  var delta_t = 1000/60;
+  
+  
 	// Simulate
 	if (id>=0) {
       G.robots[id].position.addV2(keyboard.direction);
     }
-  	G.update();
+  	G.update(delta_t);
 	
 	// Draw
 	context.fillStyle = '#131313';

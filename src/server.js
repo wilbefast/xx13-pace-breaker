@@ -1,3 +1,5 @@
+is_server = true;
+
 mime = require('mime')
   , app = require('http').createServer(handler)
   , io = require('socket.io').listen(app)
