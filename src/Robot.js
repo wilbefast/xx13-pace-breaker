@@ -40,18 +40,12 @@ if(!is_server)
 
 Robot = function(position_)
 {
-  this.position = position_;
-  this.movement = new V2();
-  
-
-	if (!is_server)
-	{
-    this.view = new AnimationView(animGeorge.walk_E, new V2(32, 32), 0.005, true);
-	}
-
+  this.init(position_);
   return this;
 }
 
+
+/*
 copyBot = function(bot) {
 	bot.__proto__ = Robot.prototype;
 	bot.position.__proto__ = V2.prototype;
@@ -60,10 +54,20 @@ copyBot = function(bot) {
     b.movement = bot.movement;
 	return b;
 }
+*/
 
 //! ----------------------------------------------------------------------------
 //! PROTOTYPE
 //! ----------------------------------------------------------------------------
+
+Robot.prototype.init = function(position_)
+{
+  this.position = position_;
+  this.movement = new V2();
+  this.view = (is_server) 
+        ? false 
+        :  new AnimationView(animGeorge.walk_E, new V2(32, 32), 0.005, true);
+}
 
 Robot.prototype.move = function(hori, vert) {
   var dx = 0;

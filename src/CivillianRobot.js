@@ -22,25 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 CivillianRobot = function(position_)
 {
-	var o = new Robot(position_);
+	this.init(position_);
 
-	o.update = function() {
-		// body...
-		var dx = Math.random()*10-5;
-		var dy = Math.random()*10-5;
-		this.move(dx,dy);
-		//console.log('hi');
-
-		this.position.setXY(this.position.x+this.movement.x*dt, this.position.y+this.movement.y*dt);
-
-
-		//Robot.prototype.update();
-
-	};
-
-
-
-  return o;
+  return this;
 }
 
 //! ----------------------------------------------------------------------------
@@ -49,3 +33,23 @@ CivillianRobot = function(position_)
 
 // inherits from Robot
 CivillianRobot.prototype = new Robot();
+
+CivillianRobot.prototype.init = function(position_)
+{
+  Robot.prototype.init.call(this, position_);
+  
+  this.change_direction_timer = new Timer(2000);
+}
+
+CivillianRobot.prototype.update = function(delta_t) 
+{
+  // change direction periodically
+  if(this.change_direction_timer.update(dt))
+    this.move(rand_sign(), rand_sign());
+  
+  // update position
+  this.position.setXY(this.position.x + this.movement.x*dt, 
+                      this.position.y + this.movement.y*dt);
+
+  //Robot.prototype.update.call(this);
+};
