@@ -45,7 +45,9 @@ CivillianRobot.prototype.update = function(delta_t)
 {
   // change direction periodically
   if(this.change_direction_timer.update(dt))
+  {
     this.move(rand_sign(), rand_sign());
+  }
   
   // update position
   Robot.prototype.update.call(this);

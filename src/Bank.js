@@ -39,6 +39,11 @@ Bank = function(starting_balance, max_balance, min_balance)
     this.min = max_balance;
     this.max = min_balance;
   }
+  else
+  {
+    this.min = min_balance;
+    this.max = max_balance;
+  }
   this.balance = bound(starting_balance, this.min, this.max);
   
   return this;
