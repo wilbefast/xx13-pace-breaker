@@ -89,7 +89,8 @@ Robot.prototype.init = function(position_)
   this.radius2 = this.radius * this.radius;
   this.male = Math.random()<0.5;
   if (!is_server)
-    this.animset = anims[Math.floor(Math.random()*anims.length)];
+    this.animset = rand_in(anims);
+  
   this.position = position_;
   this.movement = new V2();
   this.animdirection = new V2(0,1);

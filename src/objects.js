@@ -76,12 +76,24 @@ generateCollision = function(a, b)
   }
 }
 
-// get an object at a position
-function getObjectAt(pos, obj_array, condition)
+// get nearest object
+function getNearest(pos, obj_array, condition) //! 'condition' is optional
 {
-  for(var i = 0; i < obj_array.length; i++)
+  for(i in objects)
   {
     var object = obj_array[i];
+    if(object && isNearer())
+      return object;   
+  }
+  return null;
+}
+
+// get an object at a position
+function getObjectAt(pos, objects, condition) //! 'condition' is optional
+{
+  for(i in objects)
+  {
+    var object = objects[i];
     if(object && collidesPoint(object, pos) && (!condition || condition(object)))
       return object;   
   }
