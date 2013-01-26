@@ -9,7 +9,7 @@ require("./game.js");
 require("./Robot.js");
 require("./V2.js");
 require("./gamestate.js");
-require("./serverMain.js");
+require("./main.node.js");
 
 console.log(V2);
 
