@@ -112,9 +112,9 @@ Robot.prototype.interface = function(otherRobot) {
 	console.log('Ello, ' + otherRobot);
 };
 
-Robot.prototype.stop = function()
+Robot.prototype.perceiveObstacle = function(side)
 {
-  // overriden by civillians!
+  // overriden by ai!
 }
 
 Robot.prototype.update = function(delta_t) {
@@ -168,7 +168,11 @@ Robot.prototype.draw = function() {
 
 Robot.prototype.collision = function(other)
 {
+  // move out of contact
   var manifold = new V2().setFromTo(other.position, this.position);
   manifold.normalise();
   this.position.addV2(manifold);
+  
+  // react to collision if applicable
+  this.perceiveObstacle(manifold.reverse().mapToXY(Math.round));
 }

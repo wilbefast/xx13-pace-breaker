@@ -20,33 +20,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 boundObject = function(object, rect)
 {
-  var was_snapped = false;
+  var manifold = new V2();
   
   // -- horizontal
   if(object.position.x - object.radius < rect.x)
   {
-    was_snapped = true;
+    manifold.x = -1;
     object.position.x = rect.x + object.radius;
   }
   else if(object.position.x + object.radius > rect.endx())
   {
-    was_snapped = true;
+    manifold.x = 1;
     object.position.x = rect.endx() - object.radius;
   }
   
   // -- vertical
   if(object.position.y - object.radius < rect.y)
   {
-    was_snapped = true;
+    manifold.x = -1;
     object.position.y = rect.y + object.radius;
   }
   else if(object.position.y + object.radius > rect.endy())
   {
-    was_snapped = true;
+    manifold.x = 1;
     object.position.y = rect.endy() - object.radius;
   }
   
-  return was_snapped;
+  return manifold;
+}
+
+collidesPoint = function(object, point)
+{
+  return (object.position.dist2(point) < object.radius2);
 }
 
 // check for a collision
@@ -64,4 +69,16 @@ generateCollision = function(a, b)
     a.collision(b);
     b.collision(a);
   }
+}
+
+// get an object at a position
+function getObjectAt(pos, obj_array, condition)
+{
+  for(var i = 0; i < obj_array.length; i++)
+  {
+    var object = obj_array[i];
+    if(collidesPoint(object, pos) && (!condition || condition(object)))
+      return object;   
+  }
+  return null;
 }
