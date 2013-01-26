@@ -25,10 +25,10 @@ if(!is_server)
   
   var animGeorge =
   {
-    walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 0), 3),
+    walk_N : new Animation(imgGeorge, new V2(32, 32), new V2(0, 0), 3),
     walk_E : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3),
     walk_W : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3),
-    walk_N : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3)
+    walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3)
   }
 }
   
@@ -50,6 +50,7 @@ Robot = function(position_)
 
   return this;
 }
+
 copyBot = function(bot) {
 	bot.__proto__ = Robot.prototype;
 	bot.position.__proto__ = V2.prototype;
@@ -88,7 +89,11 @@ Robot.prototype.interface = function(otherRobot) {
 };
 
 Robot.prototype.update = function(delta_t) {
-  this.position.addV2(this.movement.scale(dt));
+  //if (is_server)
+  {
+    this.position.setXY(this.position.x+this.movement.x*dt, this.position.y+this.movement.y*dt);
+  }
+
   if (!(this.movement.x == 0 && this.movement.y == 0))
   {
     if(this.view)
