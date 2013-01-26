@@ -20,9 +20,9 @@ socket.on('you',function(data) {
 });
 
 socket.on('move',function(data) {
-  //G.robots[data.id].position.setXY(data.pos.x, data.pos.y);
+  G.robots[data.id].position.setXY(data.pos.x, data.pos.y);
   G.robots[data.id].move(data.mov.x,data.mov.y);  
-})
+});
 
 socket.on('newBot',function(data) {
   console.log(data)
