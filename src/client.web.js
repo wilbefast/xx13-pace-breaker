@@ -60,8 +60,8 @@ setInterval(function(){
     var dy = keyboard.direction.y;
     if (id>=0) {
       socket.emit('move', {
-        x: dx,
-        y: dy
+        x: Math.round(dx),
+        y: Math.round(dy)
       });
     }
   },100);
