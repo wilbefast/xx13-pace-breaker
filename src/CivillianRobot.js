@@ -34,23 +34,22 @@ CivillianRobot = function(position_)
 // inherits from Robot
 CivillianRobot.prototype = new Robot();
 
-CivillianRobot.init = function(position_)
+CivillianRobot.prototype.init = function(position_)
 {
-  Robot.init.call(this, position_);
+  Robot.prototype.init.call(this, position_);
   
-  
+  this.change_direction_timer = new Timer(2000);
 }
 
-CivillianRobot.prototype.update = function() 
+CivillianRobot.prototype.update = function(delta_t) 
 {
-  // body...
-  var dx = Math.random()*10-5;
-  var dy = Math.random()*10-5;
-  this.move(dx,dy);
-
+  // change direction periodically
+  if(this.change_direction_timer.update(dt))
+    this.move(rand_sign(), rand_sign());
+  
+  // update position
   this.position.setXY(this.position.x + this.movement.x*dt, 
                       this.position.y + this.movement.y*dt);
-
 
   //Robot.prototype.update.call(this);
 };

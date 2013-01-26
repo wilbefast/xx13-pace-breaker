@@ -18,15 +18,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-"use strict";
-
 /*** TIMER CLASS, for things which count down to zero ***/
 
 /// INSTANCE ATTRIBUTES/METHODS
-function Timer(starting_time, max_time, init_auto_reset)
+Timer = function(max_time, auto_reset_)
 {
-  this.time = new Bank(starting_time, max_time, -1.0),
-  this.auto_reset = (init_auto_reset == undefined ? false : init_auto_reset);
+  this.time = new Bank(Math.random()*max_time, max_time, -1.0),
+  this.auto_reset = auto_reset_ ? auto_reset_ : false;
+  
+  return this;
 }
 
 // query
