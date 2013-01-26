@@ -1,5 +1,8 @@
 var is_server = false;
 
+
+var meSelector = load_image("images/cercle.ong")
+
 G = new game();
 
 

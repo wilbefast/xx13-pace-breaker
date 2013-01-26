@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 if(!is_server)
 {
   var imgGeorge = load_image('images/sheet_george.png');
+  var imgMarie = load_image('images/sheet_marie_antoinette.png');
   
   var animGeorge =
   {
@@ -30,6 +31,15 @@ if(!is_server)
     walk_W : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3, 
                            FLIP_HORIZONTAL),
     walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3)
+  }
+
+  var animMarie =
+  {
+    walk_N : new Animation(imgMarie, new V2(32, 32), new V2(0, 0), 3),
+    walk_E : new Animation(imgMarie, new V2(32, 32), new V2(0, 32), 3),
+    walk_W : new Animation(imgMarie, new V2(32, 32), new V2(0, 32), 3, 
+                           FLIP_HORIZONTAL),
+    walk_S : new Animation(imgMarie, new V2(32, 32), new V2(0, 64), 3)
   }
 }
   
@@ -62,12 +72,18 @@ copyBot = function(bot) {
 
 Robot.prototype.init = function(position_)
 {
+  this.male = Math.random()<0.5;
+  if (this.male) {
+    this.animset = animGeorge;
+  } else {
+    this.animset = animMarie;
+  }
   this.position = position_;
   this.movement = new V2();
   this.animdirection = new V2(0,1);
   this.view = (is_server) 
         ? false 
-        :  new AnimationView(animGeorge.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
+        :  new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
 }
 
 Robot.prototype.move = function(hori, vert) {
@@ -116,20 +132,20 @@ Robot.prototype.draw = function() {
   //this.view.setSpeed(0.005);
   if (anix < 0)
   {
-    this.view.setAnimation(animGeorge.walk_W);
+    this.view.setAnimation(this.animset.walk_W);
   }
   else if (anix > 0)
   {
-    this.view.setAnimation(animGeorge.walk_E);
+    this.view.setAnimation(this.animset.walk_E);
   }
 	
 	else if (aniy < 0)
 	{
-    this.view.setAnimation(animGeorge.walk_N);
+    this.view.setAnimation(this.animset.walk_N);
 	}
 	else if (aniy > 0 )
 	{
-		this.view.setAnimation(animGeorge.walk_S);
+		this.view.setAnimation(this.animset.walk_S);
 	}
   else
   {
