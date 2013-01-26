@@ -22,9 +22,7 @@ main.init = function() {
 *	Useful to prepare the environment.
 */
 main.enter = function(previous) {
-	for (var i=0; i<20; i++){
-		G.addRobot(botid(),new CivillianRobot(new V2(Math.random()*800,Math.random()*40)));
-	}
+  G.reset();
 };
 
 /**	Prepare the state for departure

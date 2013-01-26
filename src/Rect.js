@@ -114,6 +114,12 @@ Rect.prototype.draw = function(fill)
   return this;
 }
 
+Rect.prototype.randomWithin = function(result)
+{
+  result.x = this.x + Math.random()*this.w;
+  result.y = this.y + Math.random()*this.h;
+}
+
 Rect.prototype.collapse = function()
 {
   this.x = this.y = this.w = this.h = 0;
