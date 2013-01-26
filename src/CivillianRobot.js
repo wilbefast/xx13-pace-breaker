@@ -20,9 +20,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
+randomMove = function() {
+	
+}
+
 CivillianRobot = function(position_)
 {
 	var o = new Robot(position_);
+	var d = Math.random()
 
 	o.update = function() {
 		// body...
