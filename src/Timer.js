@@ -59,7 +59,7 @@ Timer.prototype.update = function(delta_t)
     return false;
   
   // count down the timer
-  this.time.withdraw(delta_t)
+  this.time.withdraw(delta_t);
   
   // otherwise, if time has run out
   if(!this.isSet())
