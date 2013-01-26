@@ -36,7 +36,7 @@ if(!is_server)
   	walk_W : new AnimationView(animGeorge.walk_W, new V2(64, 64), 0.005, true),
   	walk_E : new AnimationView(animGeorge.walk_E, new V2(64, 64), 0.005, true),
   	walk_N : new AnimationView(animGeorge.walk_N, new V2(64, 64), 0.005, true)
-  	
+  }	
 
 }
   
