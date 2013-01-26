@@ -63,8 +63,20 @@ copyBot = function(bot) {
 //! PROTOTYPE
 //! ----------------------------------------------------------------------------
 
-Robot.prototype.move = function(vert, hori) {
-  this.movement.setXY(vert,hori);
+Robot.prototype.move = function(hori, vert) {
+  var dx = 0;
+  if (hori>0) {
+    dx = 1;
+  } else if (hori<0) {
+    dx = -1
+  }
+  var dy = 0;
+  if (vert>0) {
+    dy = 1;
+  } else if (vert<0) {
+    dy = -1
+  }
+  this.movement.setXY(dx/10,dy/10);
 };
 
 Robot.prototype.toString = function() {
@@ -76,7 +88,7 @@ Robot.prototype.interface = function(otherRobot) {
 };
 
 Robot.prototype.update = function(delta_t) {
-  this.position.addV2(this.movement);
+  this.position.addV2(this.movement.scale(dt));
   if(this.view)
     this.view.update(delta_t);
 };
