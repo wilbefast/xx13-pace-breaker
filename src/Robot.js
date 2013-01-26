@@ -21,23 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! ----------------------------------------------------------------------------
 if(!is_server)
 {
-  var imgGeorge = load_image('images/george.png');
+  var imgGeorge = load_image('images/sheet_george.png');
   
   var animGeorge =
   {
     walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 0), 3),
-    walk_W : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3),
-    walk_E : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3),
-    walk_N : new Animation(imgGeorge, new V2(32, 32), new V2(0, 96), 3)
+    walk_EW : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3),
+    walk_N : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3)
   }
-  animGeorge.anim =
-  {
-  	walk_S : new AnimationView(animGeorge.walk_S, new V2(64, 64), 0.005, true),
-  	walk_W : new AnimationView(animGeorge.walk_W, new V2(64, 64), 0.005, true),
-  	walk_E : new AnimationView(animGeorge.walk_E, new V2(64, 64), 0.005, true),
-  	walk_N : new AnimationView(animGeorge.walk_N, new V2(64, 64), 0.005, true)
-  	
-
 }
   
 
@@ -53,8 +44,7 @@ Robot = function(position_)
 
 	if (!is_server)
 	{
-			this.view = new AnimationView(animGeorge.walk_E, new V2(64, 64), 0.005, true);
-
+    this.view = new AnimationView(animGeorge.walk_EW, new V2(32, 32), 0.005, true);
 	}
 
   return this;
@@ -90,7 +80,7 @@ Robot.prototype.move = function(hori, vert) {
 
 Robot.prototype.toString = function() {
 	return "dull-looking robot";
-}
+};
 
 Robot.prototype.interface = function(otherRobot) {
 	console.log('Ello, ' + otherRobot);
@@ -108,21 +98,21 @@ Robot.prototype.update = function(delta_t) {
 Robot.prototype.draw = function() {
 /**/
 	
-	if (this.movement.y < 0 )
+	if (this.movement.y < 0 && this.view.anim != animGeorge.walk_S)
 	{
-		this.view = animGeorge.anim.walk_S;
+		this.view.setAnimation(animGeorge.walk_S);
 	}
-	if (this.movement.y > 0 )
+	if (this.movement.y > 0 && this.view.anim != animGeorge.walk_N)
 	{
-		this.view = animGeorge.anim.walk_N;
+		this.view.setAnimation(animGeorge.walk_N);
 	}
-	if (this.movement.x < 0 )
+	if (this.movement.x < 0 && this.view.anim != animGeorge.walk_EW)
 	{
-		this.view = animGeorge.anim.walk_E;
+		this.view.setAnimation(animGeorge.walk_EW);
 	}
-	if (this.movement.x > 0 )
+	if (this.movement.x > 0 && this.view.anim != animGeorge.walk_EW)
 	{
-		this.view = animGeorge.anim.walk_W;
+		this.view.setAnimation(animGeorge.walk_EW);
 	}
 
 /**/	
