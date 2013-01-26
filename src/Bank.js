@@ -34,7 +34,8 @@ function Bank(starting_balance, max_balance, min_balance)
   max_balance = (max_balance == undefined ? 1.0 : max_balance);
   min_balance = (min_balance == undefined ? 0.0 : min_balance);
   
-  var min = this.min_balance, this.max = max_balance;
+  var min = this.min_balance, 
+      max = max_balance;
   if(min > max)
   {
     this.min = max_balance;

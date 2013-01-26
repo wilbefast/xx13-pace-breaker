@@ -34,6 +34,13 @@ CivillianRobot = function(position_)
 // inherits from Robot
 CivillianRobot.prototype = new Robot();
 
+CivillianRobot.init = function(position_)
+{
+  Robot.init.call(this, position_);
+  
+  
+}
+
 CivillianRobot.prototype.update = function() 
 {
   // body...
