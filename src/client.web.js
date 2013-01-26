@@ -19,12 +19,22 @@ socket.on('you',function(data) {
   id = data.id;
 });
 
+socket.on('leave',function(data){
+  G.robots[data.id] = undefined;
+});
+
+socket.on('hearbeat',function(data){
+  console.log(data.vol);
+});
+
 socket.on('move',function(data) {
   var bot = G.robots[data.id];
-  var dx = ( ((data.pos.x - bot.position.x)/5) + data.mov.x)*2;
-  var dy = ( ((data.pos.y - bot.position.y)/5) + data.mov.y)*2;
-  bot.movement.setXY(dx, dy);
-  bot.animdirection.setXY(data.mov.x,data.mov.y);
+  if (bot) {
+    var dx = ( ((data.pos.x - bot.position.x)/5) + data.mov.x)*2;
+    var dy = ( ((data.pos.y - bot.position.y)/5) + data.mov.y)*2;
+    bot.movement.setXY(dx, dy);
+    bot.animdirection.setXY(data.mov.x,data.mov.y);
+  }
 });
 
 socket.on('newBot',function(data) {

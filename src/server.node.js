@@ -68,8 +68,9 @@ function nextid() {
 connected = [];
 
 setInterval(function(){
-  connected.forEach(function(sock, id){
-    G.robots.forEach(function(bot, dd){
+  G.robots.forEach(function(bot, dd){
+    connected.forEach(function(sock, id){
+
       sock.emit('move', {
         pos: {x:bot.position.x, y:bot.position.y},
         mov: {x:bot.movement.x, y:bot.movement.y},
@@ -93,6 +94,14 @@ io.sockets.on('connection', function (socket) {
   G.addRobot(id, r);
   G.robots.forEach(function(bot, id){
     socket.emit('newBot',{bot: bot, id: id});
+  })
+
+  socket.on('disconnect',function(){
+    socket.get('id', function(err, dd){
+      connected.forEach(function(sock){
+        sock.emit('leave',{id: dd});
+      });
+    });
   })
 
   socket.on("move", function(data){
