@@ -27,7 +27,8 @@ if(!is_server)
   {
     walk_N : new Animation(imgGeorge, new V2(32, 32), new V2(0, 0), 3),
     walk_E : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3),
-    walk_W : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3),
+    walk_W : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3, 
+                           FLIP_HORIZONTAL),
     walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3)
   }
 }
@@ -104,21 +105,21 @@ Robot.prototype.update = function(delta_t) {
 Robot.prototype.draw = function() {
 /**/
 	
-	if (this.movement.y < 0 && this.view.anim != animGeorge.walk_S)
-	{
-		this.view.setAnimation(animGeorge.walk_S);
-	}
-	if (this.movement.y > 0 && this.view.anim != animGeorge.walk_N)
+	if (this.movement.y < 0 && this.view.anim != animGeorge.walk_N)
 	{
 		this.view.setAnimation(animGeorge.walk_N);
 	}
-	if (this.movement.x < 0 && this.view.anim != animGeorge.walk_E)
+	if (this.movement.y > 0 && this.view.anim != animGeorge.walk_S)
 	{
-		this.view.setAnimation(animGeorge.walk_E);
+		this.view.setAnimation(animGeorge.walk_S);
 	}
-	if (this.movement.x > 0 && this.view.anim != animGeorge.walk_W)
+	if (this.movement.x < 0 && this.view.anim != animGeorge.walk_W)
 	{
 		this.view.setAnimation(animGeorge.walk_W);
+	}
+	if (this.movement.x > 0 && this.view.anim != animGeorge.walk_E)
+	{
+		this.view.setAnimation(animGeorge.walk_E);
 	}
 
 /**/	

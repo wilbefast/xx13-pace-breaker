@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 var NO_FLAGS = 0;         // 0b00000000
 var REVERSE_AT_END = 1;   // 0b00000001
 var FLIP_HORIZONTAL = 2;  // 0b00000010
-var FLIP_HORIZONTAL = 4;  // 0b00000100
+var FLIP_VERTICAL = 4;  // 0b00000100
 
 
 //! ----------------------------------------------------------------------------
@@ -36,6 +36,9 @@ function Animation(_img, _size, _offset, _n_frames, _flags)
   this.offset = (_offset || new V2(0, 0));
   this.n_frames = (_n_frames || 1);
   this.flags = (_flags || NO_FLAGS);
+  
+  this.flipx = (this.flags & FLIP_HORIZONTAL) ? -1 : 1;
+  this.flipy = (this.flags & FLIP_VERTICAL) ? -1 : 1;
   
   return this;
 }
@@ -61,10 +64,23 @@ Animation.prototype.getNFrames = function()
 
 Animation.prototype.draw = function(subimage, dest)
 { 
+  // flip
+  if(this.flags & FLIP_HORIZONTAL)
+    context.scale(-1, 1);
+  if(this.flags & FLIP_VERTICAL)
+    context.scale(1, -1);
+  
+  // draw
   context.drawImage(this.img, 
-          // source
-          (~~subimage) * this.size.x + this.offset.x, this.offset.y,  
-          this.size.x, this.size.y,
-          // destination
-          dest.x, dest.y, dest.w, dest.h);
+    // source
+    (~~subimage) * this.size.x + this.offset.x, this.offset.y,  
+    this.size.x, this.size.y,
+    // destination
+    this.flipx*dest.x, this.flipy*dest.y, this.flipx*dest.w, this.flipy*dest.h);
+  
+  // unflip
+  if(this.flags & FLIP_HORIZONTAL)
+    context.scale(-1, 1);
+  if(this.flags & FLIP_VERTICAL)
+    context.scale(1, -1);
 }
