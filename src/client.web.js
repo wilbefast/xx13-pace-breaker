@@ -31,6 +31,10 @@ socket.on('hearbeat',function(data){
   console.log(data.vol);
 });
 
+socket.on('ping',function(data){
+  socket.emit('pong',{id: id});
+});
+
 socket.on('move',function(data) {
   var bot = G.robots[data.id];
   if (bot) {
@@ -42,7 +46,7 @@ socket.on('move',function(data) {
 });
 
 socket.on('newBot',function(data) {
-  var b = new Robot(new V2(data.bot.position.x,data.bot.position.y));
+  var b = new Robot(new V2(data.bot.x,data.bot.y));
   G.addRobot(data.id, b);
 })
 
