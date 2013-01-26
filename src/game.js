@@ -43,8 +43,9 @@ game.prototype.update = function(delta_t) {
     }
     
     // snap the robots inside the map
-    if(boundObject(bot, this.level.playable_area))
-      bot.stop();
+    var borderCollision = boundObject(bot, this.level.playable_area);
+    if(!borderCollision.isNull())
+      bot.perceiveObstacle(borderCollision);
 	}
 };
 

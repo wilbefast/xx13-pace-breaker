@@ -41,21 +41,21 @@ CivillianRobot.prototype.init = function(position_)
   this.change_direction_timer = new Timer(1500);
 }
 
-CivillianRobot.prototype.stop = function()
+CivillianRobot.prototype.perceiveObstacle = function(side)
 {
   if(rand_bool())
   {
-    // stop ?
-    this.move(0, 0);
+    // move away from collision
+    this.move(side.reverse());
   }
   else
   {
-    // move ? 
-    this.move(rand_bool() ? 0 : rand_sign(), rand_bool() ? 0 : rand_sign());
-    
-    // randomise move time
-    this.change_direction_timer.randomTime();
+    // stop
+    this.move(0, 0);
   }
+  
+  // randomise move time
+  this.change_direction_timer.randomTime();
 }
 
 CivillianRobot.prototype.update = function(delta_t) 
@@ -63,7 +63,19 @@ CivillianRobot.prototype.update = function(delta_t)
   // change direction periodically
   if(this.change_direction_timer.update(dt))
   {
-    this.stop();
+    if(rand_bool())
+    {
+      // stop
+      this.move(0, 0);
+    }
+    else
+    {
+      // move
+      this.move(rand_bool() ? 0 : rand_sign(), rand_bool() ? 0 : rand_sign());
+      
+      // randomise move time
+      this.change_direction_timer.randomTime();
+    }
   }
   
   // update position
