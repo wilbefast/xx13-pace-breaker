@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CLASS -- ATTRIBUTES 
 //! ----------------------------------------------------------------------------
 var CivillianRobot_img 
-  = load_image('images/robot.png');
+  = load_image('images/george.png');
 var CivillianRobot_dance 
   = new Animation(CivillianRobot_img, new V2(32, 32), new V2(0, 0), 4);
 
