@@ -36,7 +36,9 @@ main.leave = function() {
 main.update = function() {
   
 	// Simulate
-  	//main.robot.position.addV2(keyboard.direction);
+	if (id>=0) {
+      G.robots[id].position.addV2(keyboard.direction);
+    }
   	G.update();
 	
 	// Draw

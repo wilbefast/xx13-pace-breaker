@@ -61,18 +61,36 @@ function nextid() {
 
 connected = [];
 
+setInterval(function(){
+  connected.forEach(function(sock, id){
+    G.robots.forEach(function(bot, dd){
+      sock.emit('move',{pos: bot.position, id: dd});
+    });
+  });
+},100);
+
 
 
 io.sockets.on('connection', function (socket) {
   // Add a player to the game
   var r = new Robot(new V2())
   var id = nextid();
-  connected[id]=socket
+  connected.forEach(function(sock){
+    sock.emit('newBot',{bot: r, id: id});
+  });
+  connected[id]=socket;
+  socket.set('id',id);
   G.addRobot(id, r);
   G.robots.forEach(function(bot, id){
     socket.emit('newBot',{bot: bot, id: id});
   })
 
+  socket.on("move", function(data){
+    socket.get('id', function(err, dd){
+      G.robots[dd].position = new V2(data.position.x, data.position.y);
+    });
+  });
+  socket.emit('you', {id: id});
 
 	socket.emit("hello");
 });

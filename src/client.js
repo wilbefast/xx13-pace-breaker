@@ -9,10 +9,20 @@ socket.on('load',function(data){
 socket.on('hello',function(data) {
   console.log('Helloed');
 });
+id = -1;
+socket.on('you',function(data) {
+  id = data.id;
+});
+
+socket.on('move',function(data) {
+  if (data.id!=id) {
+    G.robots[data.id].position.setXY(data.pos.x, data.pos.y);
+  }
+})
 
 socket.on('newBot',function(data) {
-  var b = data.bot;
-  b.__proto__ = Robot.prototype;
+  console.log(data)
+  var b = new Robot(new V2(data.bot.position.x,data.bot.position.y));
   G.addRobot(data.id, b);
 })
 
@@ -24,3 +34,9 @@ gs.switchstate(main);
 setInterval(function(){
     gs.update();
   },(updateRate));
+
+setInterval(function(){
+    if (id>=0) {
+      socket.emit('move',G.robots[id])
+    }
+  },100);

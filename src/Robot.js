@@ -25,6 +25,12 @@ Robot = function(position_)
   
   return this;
 }
+copyBot = function(bot) {
+	bot.__proto__ = Robot.prototype;
+	bot.position.__proto__ = V2.prototype;
+	var b = new Robot(new V2(bot.position.x, bot.position.y));
+	return b;
+}
 
 //! ----------------------------------------------------------------------------
 //! PROTOTYPE
