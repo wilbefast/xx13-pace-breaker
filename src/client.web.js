@@ -1,7 +1,8 @@
 var is_server = false;
 
 
-var meSelector = load_image("images/cercle.ong")
+var meSelector = load_image("images/cercle.png")
+var arrowSelector = load_image("images/fleche.png")
 
 G = new game();
 

@@ -35,9 +35,8 @@ main.leave = function() {
 */
 main.update = function() 
 {
-  
-  //! FIXME 
-  var delta_t = 1000/60;
+	//! FIXME 
+	var delta_t = 1000/60;
   
   
 	// Simulate
