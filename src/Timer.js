@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Timer = function(max_time, auto_reset_)
 {
   this.time = new Bank(Math.random()*max_time, max_time, -1.0),
-  this.auto_reset = auto_reset_ ? auto_reset_ : false;
+  this.auto_reset = (auto_reset_ != undefined) ? auto_reset_ : true;
   
   return this;
 }
