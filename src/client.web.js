@@ -20,8 +20,9 @@ socket.on('you',function(data) {
 });
 
 socket.on('move',function(data) {
-  if (data.id!=id) {
+  if (id!=data.id) {
     G.robots[data.id].position.setXY(data.pos.x, data.pos.y);
+    G.robots[data.id].move(data.mov.x,data.mov.y);
   }
 })
 
@@ -32,7 +33,7 @@ socket.on('newBot',function(data) {
 })
 
 var updateRate = 1000/60;
-var dt = 1/updateRate;
+var dt = updateRate;
 
 
 gs.switchstate(main);
@@ -42,6 +43,9 @@ setInterval(function(){
 
 setInterval(function(){
     if (id>=0) {
-      socket.emit('move',G.robots[id])
+      socket.emit('move', {
+        x: G.robots[id].movement.x,
+        y: G.robots[id].movement.y
+      });
     }
   },100);
