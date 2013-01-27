@@ -1,57 +1,67 @@
 var is_server = false;
 
-
 var meSelector = load_image("images/cercle.png")
 var arrowSelector = load_image("images/fleche.png")
 
 G = new game();
 
-//var coeur = load_audio("Battements_coeur.ogg");
-
 var socket = io.connect(location.origin);
-socket.on('load',function(data){
+socket.on('load',function(data)
+{
   if (data.callback)
     loadScript(data.url, data.callback);
   else
     loadScript(data.url);
 });
 
-id = -1;
-socket.on('you',function(data) {
-  id = data.id;
+local_id = -1;
+socket.on('you', function(data) 
+{
+  local_id = data.id;
 });
 
 
-$('body').bind('beforeunload',function(){
+$('body').bind('beforeunload',function()
+{
   alert("Cool");
   socket.send("leaving");
 });
 
-socket.on('leave',function(data){
+socket.on('leave',function(data)
+{
   delete G.robots[data.id];
 });
 
-socket.on('heartbeat',function(data){
-  //console.log("Volume: "+data.vol)
-  var samp = (G.robots[id].animset==animFlic?0:1); // If I'm a cop
+socket.on('heartbeat',function(data)
+{
+  var samp = (G.robots[local_id].animset == animFlic ? 0 : 1); // If I'm a cop
   
-  changeVolume(VolumeSample.gainNode[samp],data.vol/100); 	
+  if(window.VolumeSample)
+  {
+    changeVolume(VolumeSample.gainNode[samp],data.vol/100); 	
+  }
 
 });
 
-socket.on('ping',function(data){
-  socket.emit('pong',{id: id});
+socket.on('ping',function(data)
+{
+  socket.emit('pong',{id: local_id});
 });
 
-socket.on('gameover',function(data){
-  if (data.elim) {
+socket.on('gameover',function(data)
+{
+  if (data.elim) 
+  {
     alert("The humans hacked "+data.score+" robots before being killed by the cops!");
-  } else {
+  } 
+  else 
+  {
     alert("The humans hacked "+data.score+" robots but the cops messed up! Human score is 100!");
   }
 });
 
-socket.on('update',function(data) {
+socket.on('update',function(data) 
+{
   var bot = G.robots[data.id];
 
   if (bot) 
@@ -62,34 +72,25 @@ socket.on('update',function(data) {
     bot.movement.setXY(dx, dy);
     bot.animdirection.setXY(data.mov.x,data.mov.y);
     bot.dead = data.dead;
-    //if (bot.dead)
-      //console.log(bot.dead);
-    
-    //console.log("SERVER SAYS " + data.id + " -> " + data.interact);
     
     // interaction
     bot.forceInteractPeer((data.interact == -1) ? null : G.robots[data.interact]);
-    
-    //console.log("SERVER SAYS -- NOW WE HAVE " + bot.id + " -> " +
-      //  ((bot.interactPeer) ? bot.interactPeer.id : bot.interactPeer));
   }
 });
 
-socket.on('newBot',function(data) {
-  var b = (data.vis==4?
-                new PoliceRobot(new V2(data.bot.x,data.bot.y)):
-                new Robot(new V2(data.bot.x,data.bot.y),data.vis));
+socket.on('newBot',function(data)
+{
+  var b = ((data.vis == 4) 
+            ? new PoliceRobot(new V2(data.bot.x, data.bot.y))
+            : new Robot(new V2(data.bot.x, data.bot.y), data.vis));
   G.addRobot(data.id, b);
 })
 
 var updateRate = 1000/60;
 var dt = updateRate/60;
-var IWantToInteractWith = -1;
 
 gs.switchstate(main);
-setInterval(function(){
-    gs.update();
-  },(updateRate));
+setInterval(function() { gs.update(); }, (updateRate));
 
 setInterval(function()
 {
@@ -97,28 +98,26 @@ setInterval(function()
   var dy = keyboard.direction.y;
   
   //! SEND INTERACTION REQUEST
-  if (keyboard.action) 
-  {
-    if (IWantToInteractWith == -1 && selected)
-    {
-      IWantToInteractWith = selected.id;
-    }
-    else
-      IWantToInteractWith = -1;
-  }
-  else 
-  {
-    IWantToInteractWith = -1;
-  }
+  var request_interact_id = -1, 
+      current_interact = G.robots[local_id].interactPeer;
+  
+  // keep same interaction target ?
+  if(keyboard.action && current_interact != null)
+    request_interact_id = current_interact.id;
+  
+  // acquire a new interaction target ?
+  else if(keyboard.action && selected)
+    request_interact_id = selected.id
+ 
   
   //! SEND MOVEMENT REQUEST
-  if (id >= 0) 
+  if (local_id >= 0) 
   {
     socket.emit('update', 
     {
       x: Math.round(dx),
       y: Math.round(dy),
-      intid: IWantToInteractWith
+      intid: request_interact_id
     });
   }
 },100);

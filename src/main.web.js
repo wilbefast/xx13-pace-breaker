@@ -39,7 +39,7 @@ main.update = function()
 	//! FIXME 
 	var delta_t = 1000/60;
 
-  var local_bot = G.robots[id];
+  var local_bot = G.robots[local_id];
   if(local_bot)
   {
     // select a nearby bot

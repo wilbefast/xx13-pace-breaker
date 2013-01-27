@@ -190,8 +190,7 @@ function finishedLoading(bufferList) {
       VolumeSample.gainNode[i].connect(AudioContext.destination);
       changeVolume(VolumeSample.gainNode[i],0);  
   }
-  var samp = (G.robots[id].animset==animFlic?0:1); // If I'm a cop
-  console.log(samp)
+  var samp = (G.robots[local_id].animset == animFlic ? 0 : 1); // If I'm a cop
   VolumeSample.source[samp].noteOn(0); // warrning car ne VolumeSample n'est pas creer la première fois
   VolumeSample.source[samp].loop = true;
 }

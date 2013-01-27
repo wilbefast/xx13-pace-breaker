@@ -149,25 +149,18 @@ Robot.prototype.init = function(position_, visual)
   this.robotTeam = true;
 
   // collision
-  this.radius = 8;
+  this.radius = 16;
   this.radius2 = this.radius * this.radius;
-
-  if (!is_server) {
-    if (visual) {
-      this.animset = anims[visual];
-    } else {
-      this.animset = anims[0];
-    }
-  } else {
-    if (visual) {
-      this.visual = visual;
-    } else {
-      this.visual = Math.round((3 - 1) * Math.random())
-    }
-  }
   
+  // skin
+  if(!visual) 
+    visual = (is_server) ? Math.round(2 * Math.random()) : 0;
+  if(!is_server)
+    this.animset = anims[visual];
+     
   // interactions
   this.interactPeer = null;
+  this.interactPeer_dir = new V2();
   
   // nearest peer
   this.nearest = 
@@ -212,7 +205,7 @@ Robot.prototype.move = function(hori, vert) {
 
 Robot.prototype.toString = function() 
 {
-	return ("robot(" + this.id /*+ "->" + (this.interactPeer ? this.interactPeer.id : "")*/ + ")");
+	return ("robot(" + this.id + ")");
 };
 
 //! ----------------------------------------------------------------------------
@@ -244,20 +237,27 @@ Robot.prototype.cancelInteract = function()
 Robot.prototype.startInteract = function()
 {
   // override if needed
-  if (this.interactPeer.humanControlled) {
-    if (this.interactPeer.robotTeam && this.robotTeam) { //Cop kills robot
-      console.log('You cop dumbass');
+  if (this.interactPeer.humanControlled) 
+  {
+    if (this.interactPeer.robotTeam && this.robotTeam)
+    { 
+      // Cop kills robot
       this.interactPeer.dead = true;
-    } else {
+    } 
+    else
+    {
       this.killed = true;
     }
-    //console.log("Oh ma gad!")
   }
 }
 
 Robot.prototype.forceInteractPeer = function(newPeer)
 {
   //! NB -- not safe, can lead to incoherence
+  
+  // ignore if same peer
+  if(this.interactPeer == newPeer)
+    return;
   
   // unlink from previous
   if(this.interactPeer != null)
@@ -273,6 +273,7 @@ Robot.prototype.forceInteractPeer = function(newPeer)
     // link to new
     this.interactPeer = newPeer;
     this.interactPeer_dist2 = this.position.dist2(newPeer.position);
+    this.interactPeer_dir.setFromTo(this.position, newPeer.position).normalise();
     
     // inform ai of connection
     this.startInteract();
@@ -370,10 +371,20 @@ Robot.prototype.draw = function()
   context.strokeStyle = 'lime';
   if(this.interactPeer)
   {
-    context.strokeLine(this.position.x, 
-                         this.position.y, 
-                         this.interactPeer.position.x, 
-                         this.interactPeer.position.y);
+    // draw a circle around each
+    context.strokeCircle(this.position.x, this.position.y, this.radius);
+    
+    // only one of the two need draw the connection
+    if(this.id > this.interactPeer.id)
+    {
+      var offx = this.interactPeer_dir.x * this.radius,
+          offy = this.interactPeer_dir.y * this.radius;
+      
+      context.strokeLine(this.position.x + offx, 
+                          this.position.y + offy, 
+                          this.interactPeer.position.x - offx, 
+                          this.interactPeer.position.y - offy);
+    }
   }
   
   

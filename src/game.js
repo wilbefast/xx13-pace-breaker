@@ -1,5 +1,5 @@
 //! ----------------------------------------------------------------------------
-//! UTILITY FUNCTION 
+//! UTILITY FUNCTIONS
 //! ----------------------------------------------------------------------------
 canHearHeartbeat = function(subject, object)
 {
@@ -15,10 +15,6 @@ canHearMusic = function(subject, object)
 
 canInteractWith = function(subject, object)
 {
-  // CIVILLIANS can interact with CIVILLIANS
-  // HUMANS can interact with CIVILLIANS
-  // POLICE can interact with CIVILLIANS and HUMANS
-  
   // NOBODY can interact with the dead
   if(subject.dead || object.dead)
     return false;
@@ -56,7 +52,7 @@ canInteractWith = function(subject, object)
 
 game = function(){
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 20;
+  this.STARTING_CIVILLIANS = 1;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -73,27 +69,24 @@ game.prototype.reset = function()
 {
   G.robots = [];
   connected = [];
-  //console.log("-----GAME HAS BEEN RESET-----");
+  var spawn_pos = new V2();
   for (var i=0; i < this.STARTING_CIVILLIANS; i++)
   {
-    var spawn_pos = new V2();
     this.level.playable_area.randomWithin(spawn_pos);
     var r = G.addRobot(nextid(), new CivillianRobot(spawn_pos));
-
   }
 
 }
 
-game.prototype.addRobot = function(id, robot) {
+game.prototype.addRobot = function(id, robot)
+{
 	this.robots[id]=robot;
   robot.id = id;
-  //console.log(robot.id + " robotTeam? " + robot.robotTeam + 
-    //            " humanControlled? " + robot.humanControlled);
   return robot;
 };
 
-game.prototype.update = function(delta_t) {
-  
+game.prototype.update = function(delta_t) 
+{
 	for (bid in this.robots)
   {
 		var bot = this.robots[bid];
@@ -127,14 +120,10 @@ game.prototype.update = function(delta_t) {
       generateCollision(bot, other_bot);
       
       // get bot nearest peers -- FOR INTERACTIONS
-      //! FIXME if(!is_server)
-      {
-        generateNearest(bot, other_bot, bot.nearest, canInteractWith);
-      }
+      generateNearest(bot, other_bot, bot.nearest, canInteractWith);
       
       // get nearest human -- FOR HEARBEATS
       if(is_server)
-      //! FIXME else
       {
         generateNearest(bot, other_bot, bot.nearestHuman, canHearHeartbeat);
         generateNearest(bot, other_bot, bot.nearestCop, canHearMusic);
@@ -148,28 +137,27 @@ game.prototype.update = function(delta_t) {
     var borderCollision = boundObject(bot, this.level.playable_area);
     if(!borderCollision.isNull())
       bot.perceiveObstacle(borderCollision);
-    
-    //if(bot.interactPeer)
-      //console.log(bot.id + " -> " + bot.interactPeer.id + " && " 
-      //  + bot.interactPeer.id + " -> " + bot.interactPeer.interactPeer.id);
-    //else
-      //console.log(bot.id + " -> " + bot.interactPeer);
 	}
 }
 
-game.prototype.draw = function() {
-
+game.prototype.draw = function()
+{
+  // draw the background
 	context.drawImage(this.map,0,0);
-  if (G.robots[id]) {
-    context.drawImage(meSelector,G.robots[id].position.x-16,G.robots[id].position.y+4);
-  } else {
+  
+  // draw a circle around the controlled robot
+  if (G.robots[local_id]) 
+  {
+    context.drawImage(meSelector, G.robots[local_id].position.x - 16,
+                                  G.robots[local_id].position.y + 4);
   }
-	this.robots.forEach(function(bot){
-		bot.draw();
-	});
-  if (selected) {
+  
+  // draw each robot
+	this.robots.forEach(function(bot) { bot.draw(); });
+  
+  // draw the targeter
+  if (selected) 
+  {
     context.drawImage(arrowSelector,selected.position.x-6,selected.position.y-24);
-  } else {
-    console.log('Trippin, yo')
-  }
+  } 
 };

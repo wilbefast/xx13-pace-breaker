@@ -38,25 +38,36 @@ main.leave = function() {
 *
 *	The contents of your main loop goes here.
 */
-main.update = function() {
+main.update = function() 
+{
+  
 	// Simulate
 	G.update();
 
-	if (gameOn) {
+	if (gameOn) 
+  {
 		var humansLeft = 0;
 		var robotsLeft = 0;
-		for (bot in G.robots) {
+		for (bot in G.robots) 
+    {
 			r = G.robots[bot];
-			if (r.humanControlled && !r.dead) {
-				if (r.robotTeam) {
+			if (r.humanControlled && !r.dead) 
+      {
+				if (r.robotTeam) 
+        {
 					robotsLeft++;
-				} else {
+				} 
+				else 
+        {
 					humansLeft++;
 				}
 			}
 		}
-		console.log(humansLeft,robotsLeft);
-		if (humansLeft==0 || robotsLeft==0) {
+		
+		//! FIXME Game end conditions
+		/**
+		if (humansLeft == 0 || robotsLeft == 0) 
+    {
 			var elim = humansLeft==0;
 			connected.forEach(function(sock, id)
   			{
@@ -65,6 +76,7 @@ main.update = function() {
   			});
   			G.reset();
 		}
+		/**/
 	}
 
 

@@ -108,13 +108,21 @@ setInterval(function(){
   gameOn = nbPlayers > 1;
 },100);
 
-
-setInterval(function(){
-  connected.forEach(function(sock, id){
-    sock.get('challenge',function(err,data){
-      if (data && data){
+//! ----------------------------------------------------------------------------
+//! 'CHALLENGE' EVERY 2 SECONDS (BOOT IF NON-RESPONSIVE)
+//! ----------------------------------------------------------------------------
+setInterval(function()
+{
+  connected.forEach(function(sock, id)
+  {
+    sock.get('challenge',function(err,data)
+    {
+      if (data && data)
+      {
         sock.disconnect()
-      } else {
+      } 
+      else 
+      {
         sock.emit('ping');
         sock.set('challenge',true)
       }
@@ -125,11 +133,14 @@ setInterval(function(){
 
 score = 0
 
+//! ----------------------------------------------------------------------------
+//! ADD NEW PLAYER TO THE GAME ON CONNECTION
+//! ----------------------------------------------------------------------------
 
-io.sockets.on('connection', function (socket) {
-  socket.set('challenge',false)
+io.sockets.on('connection', function (socket) 
+{
+  socket.set('challenge', false)
   
-
   // generate unique id
   var id = nextid();
   
@@ -138,7 +149,7 @@ io.sockets.on('connection', function (socket) {
   G.level.playable_area.randomWithin(pos);
   
   // create robot
-  var robotTeam = (id % 2 == 0);
+  var robotTeam = false; //FIXME (id % 2 == 0);
   var r = robotTeam ? new PoliceRobot(pos): new Robot(pos);
   r.humanControlled = true;
   r.robotTeam = robotTeam;
@@ -191,7 +202,7 @@ io.sockets.on('connection', function (socket) {
           if (r && !(r.humanControlled && r.robotTeam))
           {
             var d = v.dist2(r.position);
-            if (d < MAX_INTERACT_DISTANCE2) 
+            if (d < MAX_INTERACT_DISTANCE2 && d > r.radius2 * 2) 
             {
               bot.tryInteractPeer(r);
             }
