@@ -162,7 +162,8 @@ canvas.onmouseup = function(event)
 canvas.onmousemove = function(event)
 {
   // reset position
-  mouse.pos.setXY(event.pageX - canvas.offset.x, event.pageY - canvas.offset.y);
+  //-- mouse.pos.setXY(event.pageX - canvas.offset.x, event.pageY - canvas.offset.y);
+  mouse.pos.setXY(event.offsetX, event.offsetY);
   // don't act on elements below
   event.stopPropagation();
 }

@@ -1,5 +1,9 @@
 var is_server = false;
 
+
+var meSelector = load_image("images/cercle.png")
+var arrowSelector = load_image("images/fleche.png")
+
 G = new game();
 
 //var coeur = load_audio("Battements_coeur.ogg");
@@ -20,6 +24,12 @@ socket.on('you',function(data) {
   id = data.id;
 });
 
+
+$('body').bind('beforeunload',function(){
+  alert("Cool");
+  socket.send("leaving");
+});
+
 socket.on('leave',function(data){
   delete G.robots[data.id];
 });
@@ -29,6 +39,10 @@ socket.on('heartbeat',function(data){
 	VolumeSample.source[0].loop = true;
 	changeVolume(VolumeSample.gainNode[0],data.vol); 	
 //	window.source1.setValueAtTime(data.vol,AudioContext.currentTime);
+});
+
+socket.on('ping',function(data){
+  socket.emit('pong',{id: id});
 });
 
 socket.on('move',function(data) {
@@ -42,7 +56,7 @@ socket.on('move',function(data) {
 });
 
 socket.on('newBot',function(data) {
-  var b = new Robot(new V2(data.bot.position.x,data.bot.position.y));
+  var b = new Robot(new V2(data.bot.x,data.bot.y));
   G.addRobot(data.id, b);
 })
 
@@ -60,8 +74,8 @@ setInterval(function(){
     var dy = keyboard.direction.y;
     if (id>=0) {
       socket.emit('move', {
-        x: dx,
-        y: dy
+        x: Math.round(dx),
+        y: Math.round(dy)
       });
     }
   },100);

@@ -21,7 +21,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! ----------------------------------------------------------------------------
 if(!is_server)
 {
+  var imgTron = load_image('images/sheet_tron.png');
   var imgGeorge = load_image('images/sheet_george.png');
+  var imgMarie = load_image('images/sheet_marie_antoinette.png');
+
+  var animTron =
+  {
+    walk_N : new Animation(imgTron, new V2(32, 32), new V2(0, 0), 3),
+    walk_E : new Animation(imgTron, new V2(32, 32), new V2(0, 32), 3),
+    walk_W : new Animation(imgTron, new V2(32, 32), new V2(0, 32), 3, 
+                           FLIP_HORIZONTAL),
+    walk_S : new Animation(imgTron, new V2(32, 32), new V2(0, 64), 3)
+  }
   
   var animGeorge =
   {
@@ -31,6 +42,18 @@ if(!is_server)
                            FLIP_HORIZONTAL),
     walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3)
   }
+
+  var animMarie =
+  {
+    walk_N : new Animation(imgMarie, new V2(32, 32), new V2(0, 0), 3),
+    walk_E : new Animation(imgMarie, new V2(32, 32), new V2(0, 32), 3),
+    walk_W : new Animation(imgMarie, new V2(32, 32), new V2(0, 32), 3, 
+                           FLIP_HORIZONTAL),
+    walk_S : new Animation(imgMarie, new V2(32, 32), new V2(0, 64), 3)
+  }
+
+  anims = [animMarie, animGeorge, animTron];
+
 }
   
 
@@ -62,12 +85,33 @@ copyBot = function(bot) {
 
 Robot.prototype.init = function(position_)
 {
+  // collision
+  this.radius = 8;
+  this.radius2 = this.radius * this.radius;
+  
+  // interactions
+  this.interactPeer = null;
+  
+  // nearest peer
+  this.nearest = null;
+  this.nearest_dist2 = Infinity;
+  this.to_nearest = new V2();
+  
+  // skin ?
+  this.male = rand_bool();
+  
+  // position and speed
   this.position = position_;
   this.movement = new V2();
-  this.animdirection = new V2(0,1);
-  this.view = (is_server) 
-        ? false 
-        :  new AnimationView(animGeorge.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
+  
+  // view
+  if (!is_server)
+  {
+    this.animset = rand_in(anims);
+    this.animdirection = new V2(0,1);
+    this.view 
+      = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
+  }
 }
 
 Robot.prototype.move = function(hori, vert) {
@@ -90,9 +134,31 @@ Robot.prototype.toString = function() {
 	return "dull-looking robot";
 };
 
+//! ----------------------------------------------------------------------------
+//! ROBOT CONVERSATIONS
+//! ----------------------------------------------------------------------------
+
 Robot.prototype.interface = function(otherRobot) {
 	console.log('Ello, ' + otherRobot);
 };
+
+Robot.prototype.consentToInteract = function(otherRobot) {
+  // override to refuse interactions
+  this.interactPeer = otherRobot;
+  
+  return true;
+}
+
+Robot.prototype.cancelInteract = function(otherRobot) {
+  this.interactPeer = null;
+}
+
+//! ----------------------------------------------------------------------------
+
+Robot.prototype.perceiveObstacle = function(side)
+{
+  // overriden by ai!
+}
 
 Robot.prototype.update = function(delta_t) {
   //if (is_server)
@@ -108,7 +174,6 @@ Robot.prototype.update = function(delta_t) {
 };
 
 Robot.prototype.draw = function() {
-/**/
   var anix = this.animdirection.x;
 
   var aniy = this.animdirection.y;
@@ -116,20 +181,20 @@ Robot.prototype.draw = function() {
   //this.view.setSpeed(0.005);
   if (anix < 0)
   {
-    this.view.setAnimation(animGeorge.walk_W);
+    this.view.setAnimation(this.animset.walk_W);
   }
   else if (anix > 0)
   {
-    this.view.setAnimation(animGeorge.walk_E);
+    this.view.setAnimation(this.animset.walk_E);
   }
 	
 	else if (aniy < 0)
 	{
-    this.view.setAnimation(animGeorge.walk_N);
+    this.view.setAnimation(this.animset.walk_N);
 	}
 	else if (aniy > 0 )
 	{
-		this.view.setAnimation(animGeorge.walk_S);
+		this.view.setAnimation(this.animset.walk_S);
 	}
   else
   {
@@ -137,9 +202,24 @@ Robot.prototype.draw = function() {
     this.view.setSubimage(1);
   }
 	
-
-/**/	
-	if(this.view)
-		this.view.draw(this.position);
+  this.view.draw(this.position);
+  
+  if(this.interactPeer)
+  {
+    context.strokeLine(this.position.x, 
+                         this.position.y, 
+                         this.interactPeer.position.x, 
+                         this.interactPeer.position.y);
+  }
 };
 
+Robot.prototype.collision = function(other)
+{
+  // move out of contact
+  var manifold = new V2().setFromTo(other.position, this.position);
+  manifold.normalise();
+  this.position.addV2(manifold);
+  
+  // react to collision if applicable
+  //this.perceiveObstacle(manifold.reverse().mapToXY(Math.round));
+}

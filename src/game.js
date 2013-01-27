@@ -1,5 +1,7 @@
+
 game = function(){
 	this.robots = [];
+  this.STARTING_CIVILLIANS = 3;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -14,11 +16,11 @@ game = function(){
 
 game.prototype.reset = function()
 {
-  for (var i=0; i<2; i++)
+  for (var i=0; i < this.STARTING_CIVILLIANS; i++)
   {
     var spawn_pos = new V2();
     this.level.playable_area.randomWithin(spawn_pos);
-    G.addRobot(botid(),new CivillianRobot(spawn_pos));
+    G.addRobot(nextid(),new CivillianRobot(spawn_pos));
   }
 }
 
@@ -27,32 +29,47 @@ game.prototype.addRobot = function(id,robot) {
 };
 
 game.prototype.update = function(delta_t) {
+  
 	for (bid in this.robots)
   {
-		bot = this.robots[bid];
+		var bot = this.robots[bid];
     
     // update the robots
 		bot.update(delta_t);
     
+    // reset nearest
+    bot.nearest = null;
+    bot.nearest_dist2 = Infinity;
+    
+    // pair functions
+    for (other_bid in this.robots)
+    {
+      // don't check self
+      var other_bot = this.robots[other_bid];
+      if(other_bot == bot)
+        continue;
+      
+      // get bot collisions
+      generateCollision(bot, other_bot);
+      
+      // get bot nearest peers
+      generateNearest(bot, other_bot);
+    }
+    
     // snap the robots inside the map
-    
-    // -- horizontal
-    if(bot.position.x < this.level.playable_area.x)
-      bot.position.x = this.level.playable_area.x;
-    else if(bot.position.x > this.level.playable_area.endx())
-      bot.position.x = this.level.playable_area.endx();
-    
-    // -- vertical
-    if(bot.position.y < this.level.playable_area.y)
-      bot.position.y = this.level.playable_area.y;
-    else if(bot.position.y > this.level.playable_area.endy())
-      bot.position.y = this.level.playable_area.endy();
+    var borderCollision = boundObject(bot, this.level.playable_area);
+    if(!borderCollision.isNull())
+      bot.perceiveObstacle(borderCollision);
 	}
 };
 
 game.prototype.draw = function() {
 
 	context.drawImage(this.map,0,0);
+  if (G.robots[id]) {
+    context.drawImage(meSelector,G.robots[id].position.x-16,G.robots[id].position.y+4);
+  } else {
+  }
 	this.robots.forEach(function(bot){
 		bot.draw();
 	});

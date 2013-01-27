@@ -6,6 +6,7 @@ mime = require('mime')
   , fs = require('fs');
 
 require("./utility.js");
+require("./objects.js");
 require("./game.js");
 require("./V2.js");
 require("./Rect.js");
@@ -61,7 +62,7 @@ function handler (req, res) {
 }
 
 var x = 0;
-function nextid() {
+nextid = function() {
   return x++;
 }
 
@@ -80,8 +81,8 @@ setInterval(function(){
       					+ Math.pow(Math.abs(G.robots[id].position.y-bot.position.y),2)));
       	}
       sock.emit('move', {
-        pos: {x:bot.position.x, y:bot.position.y},
-        mov: {x:bot.movement.x, y:bot.movement.y},
+        pos: {x:Math.round(bot.position.x), y:Math.round(bot.position.y)},
+        mov: {x:Math.round(bot.movement.x*10), y:Math.round(bot.movement.y*10)},
         id: dd
       });
       
@@ -92,23 +93,48 @@ setInterval(function(){
   });
 },100);
 
+setInterval(function(){
+  connected.forEach(function(sock, id){
+    sock.get('challenge',function(err,data){
+      if (data && data){
+        sock.disconnect()
+      } else {
+        sock.emit('ping');
+        sock.set('challenge',true)
+      }
+    })
+
+  });
+},2000);
+
 
 
 io.sockets.on('connection', function (socket) {
+  socket.set('challenge',false)
   // Add a player to the game
   var r = new Robot(new V2(100,100))
   var id = nextid();
   connected.forEach(function(sock){
-    sock.emit('newBot',{bot: r, id: id});
+    sock.emit('newBot',{bot: r.position, id: id});
   });
   connected[id]=socket;
   socket.set('id',id);
   G.addRobot(id, r);
   G.robots.forEach(function(bot, id){
-    socket.emit('newBot',{bot: bot, id: id});
+    socket.emit('newBot',{bot: bot.position, id: id});
+  })
+
+
+  socket.on('pong',function(data){
+    if (data.id==id){
+      socket.set('challenge',false);
+    } else {
+      socket.disconnect();
+    }
   })
 
   socket.on('disconnect',function(){
+    delete G.robots[id];
     socket.get('id', function(err, dd){
       connected.forEach(function(sock){
         sock.emit('leave',{id: dd});

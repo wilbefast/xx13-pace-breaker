@@ -31,6 +31,11 @@ V2 = function(_x, _y)
 //! PROTOTYPE
 //! ----------------------------------------------------------------------------
 
+V2.prototype.toString = function()
+{
+  return '(' + this.x + ',' + this.y + ')';
+}
+
 V2.prototype.norm = function()
 {
   if(this.x == 0)
@@ -152,6 +157,14 @@ V2.prototype.inverse = function()
   return this;
 }
 
+V2.prototype.reverse = function()
+{
+  this.x = -this.x;
+  this.y = -this.y;
+  return this;
+}
+
+
 V2.prototype.addNorm = function(amount)
 {
   this.setNorm(norm + amount);
@@ -208,4 +221,16 @@ V2.prototype.dist = function(other)
 V2.prototype.isColine = function(other)
 {
   return (this.dot(other) == this.norm() * other.norm());
+}
+
+V2.prototype.isNull = function()
+{
+  return (this.x == 0 && this.y == 0);
+}
+
+V2.prototype.mapToXY = function(f)
+{
+  this.x = f(this.x);
+  this.y = f(this.y);
+  return this;
 }
