@@ -85,18 +85,25 @@ copyBot = function(bot) {
 
 Robot.prototype.init = function(position_)
 {
+  // collision
   this.radius = 8;
   this.radius2 = this.radius * this.radius;
-  this.male = Math.random()<0.5;
-  if (!is_server)
-    this.animset = rand_in(anims);
   
+  // skin ?
+  this.male = rand_bool();
+  
+  // position and speed
   this.position = position_;
   this.movement = new V2();
-  this.animdirection = new V2(0,1);
-  this.view = (is_server) 
-        ? false 
-        :  new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
+  
+  // view
+  if (!is_server)
+  {
+    this.animset = rand_in(anims);
+    this.animdirection = new V2(0,1);
+    this.view 
+      = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
+  }
 }
 
 Robot.prototype.move = function(hori, vert) {

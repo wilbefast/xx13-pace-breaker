@@ -77,14 +77,15 @@ CivillianRobot.prototype.wander = function()
 
 CivillianRobot.prototype.gotoInteraction = function()
 {
-  this.move(0, 0);
+  
+  this.
 }
 
 CivillianRobot.prototype.update = function(delta_t) 
 {
   // change direction periodically
   if(this.change_direction_timer.update(dt))
-  {
+  { 
     rand_call([this.stop, this.wander, this.gotoInteraction], this);
   }
   
