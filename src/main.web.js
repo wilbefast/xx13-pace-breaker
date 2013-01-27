@@ -42,7 +42,7 @@ main.update = function()
   if(G.robots[id])
   {
   
-	var selectme = G.robots[id].nearest;
+	var selectme = G.robots[id].nearest.bot;
 
 	if (selectme) {
 		selected = selectme;

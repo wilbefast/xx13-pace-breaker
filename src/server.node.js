@@ -158,18 +158,28 @@ io.sockets.on('connection', function (socket) {
     });
   })
 
-  socket.on("update", function(data){
-    socket.get('id', function(err, dd){
+  socket.on("update", function(data)
+  {
+    socket.get('id', function(err, dd)
+    {
+      // SET MOVEMENT
       G.robots[dd].move(data.x, data.y);
-      if (data.inter){
+      
+      // SET INTERACTION (if applicable)
+      if (data.inter) // if the interaction key being pressed ?
+      {
         var v = new V2().setV2(G.robots[dd].position);
         var r = G.robots[data.intid];
-        if (!(r.humanControlled && r.robotTeam)){
+        if (r && !(r.humanControlled && r.robotTeam))
+        {
           var d = v.dist2(r.position);
-          if (d<MAX_INTERACT_DISTANCE2) {
+          if (d < MAX_INTERACT_DISTANCE2) 
+          {
             G.robots[dd].tryInteractPeer(r);
           }
-        } else {
+        } 
+        else 
+        {
           G.robots[dd].tryInteractPeer(null);
         }
       }
