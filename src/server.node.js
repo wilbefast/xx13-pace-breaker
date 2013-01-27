@@ -87,10 +87,14 @@ setInterval(function(){
       
     });
     
-    
-    var distance = (G.robots[id]?Math.sqrt(G.robots[id].nearest_dist2):Infinity);
-    var vol = 1 - Math.min(1, Math.max(0,((distance - 20)/20)));
-      sock.emit('heartbeat',{vol: vol});
+    if (G.robots[id] && G.robots[id].humanPlayer && G.robots[id].robotTeam)
+    {
+    	var distance = (G.robots[id]?Math.sqrt(G.robots[id].nearestHUMAN_dist2):Infinity);
+//    	console.log(distance); // quand distance est aux alentours de 20-30 mettre vol à 1 (~collision)
+	    var vol = 1 - Math.min(1, Math.max(0,((distance - 20)/150))); // coeficient pour le volume à ajuster en fonction marche pas pour l'instant
+	    console.log("vol dans serveur"+vol);
+		sock.emit('heartbeat',{vol: vol}); // ne met pas à jour heartbeat il y a pas un truc speciale pour envoyer au bon ?
+	}
 
   });
 },100);
@@ -120,6 +124,8 @@ io.sockets.on('connection', function (socket) {
   var r = (id%2==0?
               new PoliceRobot(pos):
               new Robot(pos));
+  r.humanPlayer = true;
+  r.robotTeam = id%2!=0
   connected.forEach(function(sock){
     sock.emit('newBot',{bot: r.position, id: id, vis: r.visual});
   });

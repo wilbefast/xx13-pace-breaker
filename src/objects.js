@@ -88,6 +88,18 @@ generateNearest = function(a, b)
   }
 }
 
+//set nearestHUMAN_dist2 variable BECAREFUL SEND AN HUMAN
+generateNearestHUMAN = function(a, b)
+{
+  var dist2 = a.position.dist2(b.position);
+  a.nearestHUMAN_dist2 = Infinity;
+  if(dist2 < a.nearestHUMAN_dist2)
+  {
+    a.nearestHUMAN = b;
+    a.nearestHUMAN_dist2 = dist2;
+  }
+}
+
 // get an object at a position
 getObjectAt = function(pos, objects, condition) //! 'condition' is optional
 {

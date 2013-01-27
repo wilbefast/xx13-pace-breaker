@@ -1,7 +1,7 @@
 
 game = function(){
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 50;
+  this.STARTING_CIVILLIANS = 3;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -16,7 +16,11 @@ game = function(){
 
 game.prototype.reset = function()
 {
+<<<<<<< HEAD
+  for (var i=0; i<2; i++)
+=======
   for (var i=0; i < this.STARTING_CIVILLIANS; i++)
+>>>>>>> c2215aced3b742563cfc9ff6a6c36c70e894c03e
   {
     var spawn_pos = new V2();
     this.level.playable_area.randomWithin(spawn_pos);
@@ -26,7 +30,6 @@ game.prototype.reset = function()
 
 game.prototype.addRobot = function(id,robot) {
 	this.robots[id]=robot;
-  robot.id = id;
 };
 
 game.prototype.update = function(delta_t) {
@@ -55,15 +58,6 @@ game.prototype.update = function(delta_t) {
       
       // get bot nearest peers
       generateNearest(bot, other_bot);
-      
-      if (bot.humanPlayer && other_bot.humanPlayer && bot.robotTeam)
-
-      //get nearest human
-      if(bot.humanPlayer && other_bot.humanPlayer && bot.robotTeam && !other_bot.robotTeam)
-      {
-      // rentre bien dans cette boucle
-      	generateNearestHUMAN(bot, other_bot); // bot.nearestHUMAN_dist2 is still undefined ...
-      }
     }
     
     // snap the robots inside the map
@@ -74,7 +68,6 @@ game.prototype.update = function(delta_t) {
 };
 
 game.prototype.draw = function() {
-
 	context.drawImage(this.map,0,0);
   if (G.robots[id]) {
     context.drawImage(meSelector,G.robots[id].position.x-16,G.robots[id].position.y+4);

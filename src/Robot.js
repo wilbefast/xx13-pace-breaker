@@ -107,6 +107,8 @@ copyBot = function(bot) {
 
 Robot.prototype.init = function(position_, visual)
 {
+  this.humanPlayer = false; //error here it's not this instead of r ?????????????????????,
+  this.robotTeam = true; // Same thing man
   // collision
   this.radius = 8;
   this.radius2 = this.radius * this.radius;
@@ -133,6 +135,9 @@ Robot.prototype.init = function(position_, visual)
   this.nearest_dist2 = Infinity;
   this.to_nearest = new V2();
   
+  // nearestHUMAN peer
+  this.nearestHUMAN = null;
+  this.nearestHUMAN_dist2 = Infinity;
   
   // position and speed
   this.position = position_;
