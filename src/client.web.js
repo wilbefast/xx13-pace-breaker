@@ -56,8 +56,13 @@ socket.on('update',function(data) {
     bot.movement.setXY(dx, dy);
     bot.animdirection.setXY(data.mov.x,data.mov.y);
     
+    //console.log("SERVER SAYS " + data.id + " -> " + data.interact);
+    
     // interaction
-    bot.tryInteractPeer((data.interact == -1) ? null : G.robots[data.interact]);
+    bot.forceInteractPeer((data.interact == -1) ? null : G.robots[data.interact]);
+    
+    //console.log("SERVER SAYS -- NOW WE HAVE " + bot.id + " -> " +
+      //  ((bot.interactPeer) ? bot.interactPeer.id : bot.interactPeer));
   }
 });
 

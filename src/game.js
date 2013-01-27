@@ -23,7 +23,7 @@ canInteractWith = function(subject, object)
 
 game = function(){
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 2;
+  this.STARTING_CIVILLIANS = 20;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -38,7 +38,7 @@ game = function(){
 
 game.prototype.reset = function()
 {
-  console.log("-----GAME HAS BEEN RESET-----");
+  //console.log("-----GAME HAS BEEN RESET-----");
   for (var i=0; i < this.STARTING_CIVILLIANS; i++)
   {
     var spawn_pos = new V2();
@@ -51,8 +51,8 @@ game.prototype.reset = function()
 game.prototype.addRobot = function(id, robot) {
 	this.robots[id]=robot;
   robot.id = id;
-  console.log(robot.id + " robotTeam? " + robot.robotTeam + 
-                " humanControlled? " + robot.humanControlled);
+  //console.log(robot.id + " robotTeam? " + robot.robotTeam + 
+    //            " humanControlled? " + robot.humanControlled);
   return robot;
 };
 
@@ -104,14 +104,7 @@ game.prototype.update = function(delta_t) {
     var borderCollision = boundObject(bot, this.level.playable_area);
     if(!borderCollision.isNull())
       bot.perceiveObstacle(borderCollision);
-    
-    if(bot.interactPeer)
-      console.log(bot.id + " -> " + bot.interactPeer.id + " && " 
-        + bot.interactPeer.id + " -> " + bot.interactPeer.interactPeer.id);
-    else
-      console.log(bot.id + " -> " + bot.interactPeer);
 	}
-	console.log();
 };
 
 game.prototype.draw = function() {
