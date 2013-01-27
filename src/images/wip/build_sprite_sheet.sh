@@ -14,7 +14,7 @@ do
 done
 
 # build sprite sheet
-montage _$1*.png -geometry 32x32+0+0 -tile 3x3 sheet_$1.png
+montage _$1*.png -geometry 32x32+0+0 -tile 3x4 sheet_$1.png
 
 # remove temporary files
 rm _$1*.png
