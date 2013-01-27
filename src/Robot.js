@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTANTS
 //! ----------------------------------------------------------------------------
 
-MAX_INTERACT_DISTANCE2 = Infinity; // 96*96;
+MAX_INTERACT_DISTANCE2 = 96*96;
 
 //! ----------------------------------------------------------------------------
 //! CLASS -- ATTRIBUTES 
@@ -220,22 +220,29 @@ Robot.prototype.startInteract = function()
   // override if needed
 }
 
-var forceInteraction = function(a, b)
+Robot.prototype.forceInteractPeer = function(newPeer)
 {
-  //! NB -- this is private because it is not safe, can lead to incoherence
+  //! NB -- not safe, can lead to incoherence
   
-  // link both
-  a.interactPeer = b;
-  b.interactPeer = a;
-  a.interactPeer_dist2 = b.interactPeer_dist2 = a.position.dist2(b.position);
+  // unlink from previous
+  if(this.interactPeer != null)
+    this.interactPeer.cancelInteract();
   
-  // inform the bots that they are connected
-  a.startInteract();
-  b.startInteract();
-  
-  // stop both from moving
-  a.move(0, 0);
-  b.move(0, 0);
+  // cancel if passed a null
+  if(newPeer == null)
+    this.cancelInteract();
+  else
+  {
+    // link to new
+    this.interactPeer = newPeer;
+    this.interactPeer_dist2 = this.position.dist2(newPeer.position);
+    
+    // inform ai of connection
+    this.startInteract();
+    
+    // stop from moving
+    this.move(0, 0);
+  }
 }
 
 Robot.prototype.tryInteractPeer = function(newPeer)
@@ -248,13 +255,6 @@ Robot.prototype.tryInteractPeer = function(newPeer)
   {
     //console.log(this.id + ' is already interacting with ' + ((newPeer != null) ? newPeer.id : newPeer));
     return false;
-  }
-  
-  // unlink from previous peer
-  if(this.interactPeer != null)
-  {
-    //console.log(this.id + ' told ' + this.interactPeer.id + ' to break connection');
-    this.interactPeer.cancelInteract();
   }
   
   // cancel if passed a null
@@ -276,7 +276,8 @@ Robot.prototype.tryInteractPeer = function(newPeer)
   //console.log(this.id + ' is now connected to ' + ((newPeer != null) ? newPeer.id : newPeer));
   
   // link successful
-  forceInteraction(this, newPeer);
+  this.forceInteractPeer(newPeer);
+  newPeer.forceInteractPeer(this);
   return true;
 }
 
@@ -314,6 +315,22 @@ Robot.prototype.update = function(delta_t)
 
 Robot.prototype.draw = function() 
 {
+    
+  //! FIXME MAKE PRETTIER
+  context.lineWidth = 3.0;
+  context.strokeStyle = 'lime';
+  if(this.interactPeer)
+  {
+    context.strokeLine(this.position.x, 
+                         this.position.y, 
+                         this.interactPeer.position.x, 
+                         this.interactPeer.position.y);
+  }
+  
+  
+  
+  
+  
   var anix = this.animdirection.x;
   var aniy = this.animdirection.y;
 
@@ -345,17 +362,9 @@ Robot.prototype.draw = function()
   this.view.draw(this.position);
   
   
-  //! FIXME DO PRETTIER SHIZ
-  if(this.interactPeer)
-  {
-    context.strokeLine(this.position.x, 
-                         this.position.y, 
-                         this.interactPeer.position.x, 
-                         this.interactPeer.position.y);
-  }
   
-  //! FIXME REMOVE DEBUG INFORMATION
-  context.strokeText(this.id+"", this.position.x + 32, this.position.y);
+  //! FIXME -- DEBUG STUFF
+  //context.strokeText(this.id+"", this.position.x + 32, this.position.y);
 };
 
 Robot.prototype.collision = function(other)

@@ -39,14 +39,19 @@ main.update = function()
 	//! FIXME 
 	var delta_t = 1000/60;
 
-  if(G.robots[id])
+  var local_bot = G.robots[id];
+  if(local_bot)
   {
-  
-	var selectme = G.robots[id].nearest.bot;
-
-	if (selectme) {
-		selected = selectme;
+    // select a nearby bot
+    if(local_bot.nearest.dist2 <= MAX_INTERACT_DISTANCE2)
+    {
+      // 'nearest.dist2' is set to Infinity whenever 'nearest.bot' is null 
+      // hence selected must be non-null
+      selected = local_bot.nearest.bot;
     }
+    else
+      // select nobody is nobody is close enough
+      selected = null;
   }
 
 
