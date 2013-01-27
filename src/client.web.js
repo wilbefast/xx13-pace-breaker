@@ -3,7 +3,6 @@ var is_server = false;
 
 var meSelector = load_image("images/cercle.png")
 var arrowSelector = load_image("images/fleche.png")
-var IWantToInteractWith = -1
 
 G = new game();
 
@@ -73,29 +72,39 @@ socket.on('newBot',function(data) {
 
 var updateRate = 1000/60;
 var dt = updateRate/60;
-
+var IWantToInteractWith = -1;
 
 gs.switchstate(main);
 setInterval(function(){
     gs.update();
   },(updateRate));
 
-setInterval(function(){
-    var dx = keyboard.direction.x;
-    var dy = keyboard.direction.y;
-    if (keyboard.action) {
-      if (IWantToInteractWith==-1){
-        IWantToInteractWith = selected.id;
-      }
-    } else {
-      IWantToInteractWith = -1;
+setInterval(function()
+{
+  var dx = keyboard.direction.x;
+  var dy = keyboard.direction.y;
+  
+  //! SEND INTERACTION REQUEST
+  if (keyboard.action) 
+  {
+    if (IWantToInteractWith == -1)
+    {
+      IWantToInteractWith = selected.id;
     }
-    if (id>=0) {
-      socket.emit('update', {
-        x: Math.round(dx),
-        y: Math.round(dy),
-        inter: IWantToInteractWith!=-1,
-        intid: IWantToInteractWith
-      });
-    }
-  },100);
+  }
+  else 
+  {
+    IWantToInteractWith = -1;
+  }
+  
+  //! SEND MOVEMENT REQUEST
+  if (id >= 0) 
+  {
+    socket.emit('update', 
+    {
+      x: Math.round(dx),
+      y: Math.round(dy),
+      intid: IWantToInteractWith
+    });
+  }
+},100);

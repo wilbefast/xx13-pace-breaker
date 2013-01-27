@@ -19,6 +19,10 @@ canInteractWith = function(subject, object)
   // HUMANS can interact with CIVILLIANS
   // POLICE can interact with CIVILLIANS and HUMANS
   
+  // NOBODY can interact with people already interacting
+  if(object.interactPeer)
+    return false;
+  
   // NOBODY can interact with cops
   if(object.humanControlled && object.robotTeam)
     return false;
