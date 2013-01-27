@@ -16,12 +16,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //! ----------------------------------------------------------------------------
-//! CONSTANTS
-//! ----------------------------------------------------------------------------
-
-var MAX_INTERACT_DISTANCE2 = 96*96;
-
-//! ----------------------------------------------------------------------------
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
@@ -86,12 +80,6 @@ Robot.prototype.consentToInteract = function(otherRobot)
   return true;
 }
 
-CivillianRobot.prototype.cancelInteract = function(otherRobot)
-{
-  this.interactPeer = null;
-  this.startWander();
-}
-
 //! ----------------------------------------------------------------------------
 //! FINITE STATE MACHINE -- ENTER
 //! ----------------------------------------------------------------------------
@@ -114,19 +102,17 @@ CivillianRobot.prototype.startWander = function()
 
 CivillianRobot.prototype.startInteract = function()
 {
-  // check if close enough
-  if(this.nearest_dist2 > MAX_INTERACT_DISTANCE2)
+  // check if close enough and peer accepts
+  if(this.nearest_dist2 <= MAX_INTERACT_DISTANCE2 
+  || this.tryInteractPeer(this.nearest))
   {
-    this.startWander();
-  }
-  
-  // set state
-  else if(this.tryInteractPeer(this.nearest))
-  {
-    this.move(0, 0);
     this.interact_timer.reset();
     this.state = this.doInteract;
   }
+  
+  // otherwise go back to wandering
+  else
+    this.startWander();
 }
 
 //! ----------------------------------------------------------------------------

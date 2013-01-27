@@ -16,6 +16,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //! ----------------------------------------------------------------------------
+//! CONSTANTS
+//! ----------------------------------------------------------------------------
+
+MAX_INTERACT_DISTANCE2 = 96*96;
+
+//! ----------------------------------------------------------------------------
 //! CLASS -- ATTRIBUTES 
 //! ----------------------------------------------------------------------------
 if(!is_server)
@@ -147,18 +153,39 @@ Robot.prototype.consentToInteract = function(otherRobot)
   return false;
 }
 
+Robot.prototype.cancelInteract = function()
+{
+  this.interactPeer = null;
+  this.interactPeer_dist2 = Infinity;
+}
+
 Robot.prototype.tryInteractPeer = function(newPeer)
 {
+  // skip if already interacting with this peer
+  if(this.interactPeer == newPeer)
+    return true;
+  
   // unlink from previous peer
   if(this.interactPeer != null)
-    this.interactPeer.interactPeer = null;
-    
-  // request interaction
-  else if(newPeer != null && !newPeer.consentToInteract(this))
+    this.interactPeer.cancelInteract();
+  
+  // cancel if passed a null
+  if(newPeer == null)
+  {
+    this.cancelInteract();
     return false;
+  } 
+  // request interaction
+  else if(newPeer.consentToInteract(this))
+  {
+    this.cancelInteract();
+    return false;
+  }
 
   // link successful
   this.interactPeer = newPeer;
+  this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
+  this.move(0,0);
   return true;
 }
 
@@ -169,14 +196,26 @@ Robot.prototype.perceiveObstacle = function(side)
   // overriden by ai!
 }
 
-Robot.prototype.update = function(delta_t) {
-  //if (is_server)
+Robot.prototype.update = function(delta_t) 
+{
+  // update position
+  this.position.setXY(this.position.x + this.movement.x * dt, 
+                      this.position.y + this.movement.y * dt);
+  
+  // update peer distance
+  if(this.interactPeer != null)
   {
-    this.position.setXY(this.position.x+this.movement.x*dt, this.position.y+this.movement.y*dt);
+    this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
+    
+    // cancel if too far away
+    if(this.interactPeer_dist2 > MAX_INTERACT_DISTANCE2)
+      this.tryInteractPeer(null);
   }
-
-  if (!(this.movement.x == 0 && this.movement.y == 0))
+  
+  // ... if moving
+  if (this.movement.x != 0 || this.movement.y != 0)
   {
+    // update animation
     if(this.view)
       this.view.update(delta_t);
   }

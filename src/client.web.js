@@ -53,7 +53,7 @@ socket.on('move',function(data) {
     bot.animdirection.setXY(data.mov.x,data.mov.y);
     
     // interaction
-    bot.interactPeer = (data.interact == -1) ? null : G.robots[data.interact];
+    bot.tryInteractPeer((data.interact == -1) ? null : G.robots[data.interact]);
   }
 });
 
