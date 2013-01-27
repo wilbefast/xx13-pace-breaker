@@ -128,6 +128,7 @@ Robot.prototype.initSecret = function()
 
 Robot.prototype.init = function(position_, visual)
 {
+  this.killed = false;
   this.humanControlled = false;
   this.robotTeam = true;
 
@@ -207,7 +208,7 @@ Robot.prototype.interface = function(otherRobot)
 Robot.prototype.consentToInteract = function(otherRobot) 
 {
   // override to accept interactions
-  return false;
+  return (otherRobot.humanControlled && otherRobot.robotTeam);
 }
 
 Robot.prototype.cancelInteract = function()
@@ -219,6 +220,10 @@ Robot.prototype.cancelInteract = function()
 Robot.prototype.startInteract = function()
 {
   // override if needed
+  if (this.interactPeer.humanControlled) {
+    console.log("Oh ma gad!")
+    this.killed = true;
+  }
 }
 
 Robot.prototype.forceInteractPeer = function(newPeer)
@@ -352,7 +357,11 @@ Robot.prototype.draw = function()
   }
   
 	// draw the sprite 
-  this.view.draw(this.position);
+  if (!this.killed) {
+    this.view.draw(this.position);
+  } else {
+    context.fillRect(this.position.x,this.position.y,10,10);
+  }
   
   
   

@@ -16,11 +16,13 @@ require("./Robot.js");
 require("./CivillianRobot.js");
 require("./PoliceRobot.js");
 require("./gamestate.js");
+//require("./lobby.node.js");
 require("./main.node.js");
 
 
 updateRate = 1000/10;
 dt = updateRate;
+round = 1;
 
 gs.switchstate(main);
 setInterval(function(){ gs.update(); },(updateRate));
@@ -82,7 +84,8 @@ setInterval(function(){
         pos: {x:Math.round(bot.position.x), y:Math.round(bot.position.y)},
         mov: {x:Math.round(bot.movement.x*10), y:Math.round(bot.movement.y*10)},
         id: dd,
-        interact: (bot.interactPeer==null) ? -1 : bot.interactPeer.id
+        interact: (bot.interactPeer==null) ? -1 : bot.interactPeer.id,
+        kill: bot.killed
       });
       
     });
@@ -118,6 +121,7 @@ setInterval(function(){
 io.sockets.on('connection', function (socket) {
   socket.set('challenge',false)
   
+
   // generate unique id
   var id = nextid();
   

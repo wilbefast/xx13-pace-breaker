@@ -3,7 +3,7 @@
 //! ----------------------------------------------------------------------------
 canHearHeartbeat = function(subject, object)
 {
-  return (subject.humanControlled 
+  return (subject.humanControlled && !object.killed
           && !object.robotTeam);
 }
 
@@ -148,7 +148,7 @@ game.prototype.update = function(delta_t) {
     //else
       //console.log(bot.id + " -> " + bot.interactPeer);
 	}
-};
+}
 
 game.prototype.draw = function() {
 

@@ -151,6 +151,7 @@ CivillianRobot.prototype.cancelInteract = function()
   // default stuff
   Robot.prototype.cancelInteract.call(this);
   
+  
   // also reset state
   this.startWander();
 }

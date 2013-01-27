@@ -52,6 +52,7 @@ socket.on('update',function(data) {
     var dy = ( ((data.pos.y - bot.position.y)/5) + data.mov.y)*2;
     bot.movement.setXY(dx, dy);
     bot.animdirection.setXY(data.mov.x,data.mov.y);
+    bot.killed = data.kill;
     
     //console.log("SERVER SAYS " + data.id + " -> " + data.interact);
     
