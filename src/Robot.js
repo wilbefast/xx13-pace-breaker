@@ -143,10 +143,8 @@ Robot.prototype.interface = function(otherRobot) {
 };
 
 Robot.prototype.consentToInteract = function(otherRobot) {
-  // override to refuse interactions
-  this.interactPeer = otherRobot;
-  
-  return true;
+  // override to accept interactions
+  return false;
 }
 
 Robot.prototype.cancelInteract = function(otherRobot) {
