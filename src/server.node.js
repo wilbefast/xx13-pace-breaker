@@ -87,9 +87,9 @@ setInterval(function(){
       
     });
     
-    var distance = G.robots[id].nearest_dist2;
-     
-    var vol = 1 - Math.min(1, Math.max(0,((distance - 20)/200)));
+    
+    var distance = Math.sqrt(G.robots[id].nearest_dist2);
+    var vol = 1 - Math.min(1, Math.max(0,((distance - 20)/20)));
       sock.emit('heartbeat',{vol: vol});
 
   });
