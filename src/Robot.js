@@ -30,6 +30,8 @@ if(!is_server)
   var imgGeorge = load_image('images/sheet_george.png');
   var imgMarie = load_image('images/sheet_marie_antoinette.png');
   var imgFlic = load_image('images/sheet_flic.png');
+  
+  var imgFlicMort = load_image('images/mort_flic_frame4.png');
 
   var animTron =
   {
@@ -381,8 +383,11 @@ Robot.prototype.draw = function()
 	// draw the sprite 
   if (!this.dead) {
     this.view.draw(this.position);
-  } else {
-    context.fillRect(this.position.x,this.position.y,10,10);
+  } 
+  else 
+  {
+console.log("one dead");
+    context.drawImage(imgFlicMort,this.position.x-16,this.position.y-32);
   }
   
   
