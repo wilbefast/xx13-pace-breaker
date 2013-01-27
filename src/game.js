@@ -39,7 +39,7 @@ game.prototype.update = function(delta_t) {
 		bot.update(delta_t);
     
     // reset nearest
-    bot.nearest = null;
+    bot.nearest.bot = null;
     bot.nearest.dist2 = Infinity;
     
     // pair functions
