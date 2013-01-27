@@ -77,7 +77,7 @@ setInterval(function(){
         pos: {x:Math.round(bot.position.x), y:Math.round(bot.position.y)},
         mov: {x:Math.round(bot.movement.x*10), y:Math.round(bot.movement.y*10)},
         id: dd,
-        interact: (bot.interactPeer==null?-1:bot.interactPeer.id)
+        interact: (bot.interactPeer==null) ? -1 : bot.interactPeer.id
       });
     });
 

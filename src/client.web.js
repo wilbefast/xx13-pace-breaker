@@ -43,11 +43,17 @@ socket.on('ping',function(data){
 
 socket.on('move',function(data) {
   var bot = G.robots[data.id];
-  if (bot) {
+  
+  if (bot) 
+  {
+    // move
     var dx = ( ((data.pos.x - bot.position.x)/5) + data.mov.x)*2;
     var dy = ( ((data.pos.y - bot.position.y)/5) + data.mov.y)*2;
     bot.movement.setXY(dx, dy);
     bot.animdirection.setXY(data.mov.x,data.mov.y);
+    
+    // interaction
+    bot.interactPeer = (data.interact == -1) ? null : G.robots[data.interact];
   }
 });
 
