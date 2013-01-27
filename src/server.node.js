@@ -16,11 +16,13 @@ require("./Robot.js");
 require("./CivillianRobot.js");
 require("./PoliceRobot.js");
 require("./gamestate.js");
+//require("./lobby.node.js");
 require("./main.node.js");
 
 
 updateRate = 1000/10;
 dt = updateRate;
+round = 1;
 
 gs.switchstate(main);
 setInterval(function(){ gs.update(); },(updateRate));
@@ -118,6 +120,12 @@ setInterval(function(){
 io.sockets.on('connection', function (socket) {
   socket.set('challenge',false)
   
+  if (gs.current.name=='main'){
+    noneRoster.push(socket);
+  } else if (gs.current.name=='lobby') {
+    noneRoster.push(socket);
+  }
+
   // generate unique id
   var id = nextid();
   

@@ -115,14 +115,7 @@ game.prototype.update = function(delta_t) {
     var borderCollision = boundObject(bot, this.level.playable_area);
     if(!borderCollision.isNull())
       bot.perceiveObstacle(borderCollision);
-    
-    if(bot.interactPeer)
-      console.log(bot.id + " -> " + bot.interactPeer.id + " && " 
-        + bot.interactPeer.id + " -> " + bot.interactPeer.interactPeer.id);
-    else
-      console.log(bot.id + " -> " + bot.interactPeer);
 	}
-	console.log();
 }
 
 game.prototype.draw = function() {
