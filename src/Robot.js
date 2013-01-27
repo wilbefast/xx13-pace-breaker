@@ -190,8 +190,9 @@ Robot.prototype.move = function(hori, vert) {
   this.movement.setXY(dx/10,dy/10);
 };
 
-Robot.prototype.toString = function() {
-	return "dull-looking robot";
+Robot.prototype.toString = function() 
+{
+	return ("robot(" + this.id /*+ "->" + (this.interactPeer ? this.interactPeer.id : "")*/ + ")");
 };
 
 //! ----------------------------------------------------------------------------
@@ -226,7 +227,9 @@ Robot.prototype.forceInteractPeer = function(newPeer)
   
   // unlink from previous
   if(this.interactPeer != null)
+  {
     this.interactPeer.cancelInteract();
+  }
   
   // cancel if passed a null
   if(newPeer == null)
@@ -247,33 +250,23 @@ Robot.prototype.forceInteractPeer = function(newPeer)
 
 Robot.prototype.tryInteractPeer = function(newPeer)
 {
-  //console.log("--------- ***START*** Robot::TRYINTERACTPEER : " + this.id 
-  //              + " -> " + ((newPeer != null) ? newPeer.id : newPeer) );
-  
   // skip if already interacting with this peer
   if(this.interactPeer == newPeer)
-  {
-    //console.log(this.id + ' is already interacting with ' + ((newPeer != null) ? newPeer.id : newPeer));
     return false;
-  }
   
   // cancel if passed a null
   if(newPeer == null)
   {
-    //console.log(this.id + ' broke connection with ' + this.interactPeer.id);
-    this.cancelInteract();
+    this.forceInteractPeer(null);
     return false;
   } 
   
   // request interaction
   else if(!newPeer.consentToInteract(this))
   {
-    //console.log(this.id + ' was refused by ' + this.interactPeer);
-    this.cancelInteract();
+    this.forceInteractPeer(null);
     return false;
   }
-
-  //console.log(this.id + ' is now connected to ' + ((newPeer != null) ? newPeer.id : newPeer));
   
   // link successful
   this.forceInteractPeer(newPeer);
@@ -364,7 +357,8 @@ Robot.prototype.draw = function()
   
   
   //! FIXME -- DEBUG STUFF
-  //context.strokeText(this.id+"", this.position.x + 32, this.position.y);
+  //context.lineWidth = 1;
+  //context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
 };
 
 Robot.prototype.collision = function(other)
