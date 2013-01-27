@@ -19,8 +19,27 @@ canInteractWith = function(subject, object)
   // HUMANS can interact with CIVILLIANS
   // POLICE can interact with CIVILLIANS and HUMANS
   
-  return (!object.humanControlled 
-    || (subject.humanControlled && subject.robotTeam));
+  // NOBODY can interact with cops
+  if(object.humanControlled && object.robotTeam)
+    return false;
+  
+  // EVERYONE can interact with CIVILLIANS
+  if(!object.humanControlled)
+    return true;
+  
+  // PLAYERS can interact ...
+  if(subject.humanControlled)
+  {
+    // ... COPS can interact with HUMANS
+    if(subject.robotTeam && !object.robotTeam)
+      return true;
+    
+    // ... HUMANS can interact with CIVILLIANS
+      // (already covered)
+  }
+  
+  // all other situations -- impossible
+  return false;
 }
 
 //! ----------------------------------------------------------------------------
@@ -98,11 +117,14 @@ game.prototype.update = function(delta_t) {
       
       // get bot nearest peers -- FOR INTERACTIONS
       //! FIXME if(!is_server)
+      {
         generateNearest(bot, other_bot, bot.nearest, canInteractWith);
+      }
       
       // get nearest human -- FOR HEARBEATS
+      if(is_server)
       //! FIXME else
-      if(is_server) {
+      {
         generateNearest(bot, other_bot, bot.nearestHuman, canHearHeartbeat);
         generateNearest(bot, other_bot, bot.nearestCop, canHearMusic);
       }
