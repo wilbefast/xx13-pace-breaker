@@ -42,28 +42,30 @@ PoliceRobot.prototype.init = function(position_)
 }
 
 PoliceRobot.prototype.update = function(delta_t) {
-  if (this.dying>0) {
-    this.dying -= dt;
-    if (this.dying<200) {
-      if (!this.dead) {
-        this.dead = true;
+  if (!this.dead) {
+    if (this.dying>0) {
+      this.dying -= dt;
+      if (this.dying<200) {
+        if (!this.dead) {
+          this.dead = true;
+        }
+        //this.dieFunction();
       }
-      //this.dieFunction();
     }
-  }
-  if (this.killed && this.dying==0 && !this.dead) {
-    this.dying = this.timeToDie;
-  }
-  
-  //if (is_server)
-  {
-    this.position.setXY(this.position.x+this.movement.x*dt*1.5, this.position.y+this.movement.y*dt*1.5);
-  }
+    if (this.killed && this.dying==0 && !this.dead) {
+      this.dying = this.timeToDie;
+    }
 
-  if (!(this.movement.x == 0 && this.movement.y == 0))
-  {
-    if(this.view)
-      this.view.update(delta_t);
+    //if (is_server)
+    {
+      this.position.setXY(this.position.x+this.movement.x*dt*1.5, this.position.y+this.movement.y*dt*1.5);
+    }
+
+    if (!(this.movement.x == 0 && this.movement.y == 0))
+    {
+      if(this.view)
+        this.view.update(delta_t);
+    }
   }
 };
 

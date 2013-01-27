@@ -85,7 +85,7 @@ CivillianRobot.prototype.update = function(delta_t)
 CivillianRobot.prototype.consentToInteract = function(otherRobot) 
 {
   // civillians are always happy to interact if not already interacting
-  return (this.interactPeer == null);
+  return (!this.dead && !this.killed && this.interactPeer == null);
 }
 
 //! ----------------------------------------------------------------------------
@@ -115,7 +115,7 @@ CivillianRobot.prototype.tryInteract = function()
   //console.log("--------- ***START*** Civillian::TRY INTERACT : " + this.id);
   
   // check if close enough and peer accepts
-  if(this.nearest
+  if(this.nearest && !this.dead && !this.killed
   && this.nearest.dist2 <= MAX_INTERACT_DISTANCE2 
   && this.tryInteractPeer(this.nearest.bot))
   {
