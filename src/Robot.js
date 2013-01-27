@@ -15,7 +15,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 //! ----------------------------------------------------------------------------
 //! CLASS -- ATTRIBUTES 
 //! ----------------------------------------------------------------------------
@@ -56,7 +55,6 @@ if(!is_server)
 
 }
   
-
 //! ----------------------------------------------------------------------------
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
@@ -138,17 +136,30 @@ Robot.prototype.toString = function() {
 //! ROBOT CONVERSATIONS
 //! ----------------------------------------------------------------------------
 
-Robot.prototype.interface = function(otherRobot) {
+Robot.prototype.interface = function(otherRobot) 
+{
 	console.log('Ello, ' + otherRobot);
 };
 
-Robot.prototype.consentToInteract = function(otherRobot) {
+Robot.prototype.consentToInteract = function(otherRobot) 
+{
   // override to accept interactions
   return false;
 }
 
-Robot.prototype.cancelInteract = function(otherRobot) {
-  this.interactPeer = null;
+Robot.prototype.tryInteractPeer = function(newPeer)
+{
+  // unlink from previous peer
+  if(this.interactPeer != null)
+    this.interactPeer.interactPeer = null;
+    
+  // request interaction
+  else if(newPeer != null && !newPeer.consentToInteract(this))
+    return false;
+
+  // link successful
+  this.interactPeer = newPeer;
+  return true;
 }
 
 //! ----------------------------------------------------------------------------

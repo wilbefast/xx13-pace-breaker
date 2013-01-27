@@ -99,11 +99,7 @@ CivillianRobot.prototype.cancelInteract = function(otherRobot)
 CivillianRobot.prototype.startWander = function()
 {
   // cancel interaction
-  if(this.interactPeer)
-  {
-    this.interactPeer.cancelInteract();
-    this.interactPeer = null;
-  }
+  this.tryInteractPeer(null);
   
   // move out in a random direction or stop
   this.move(rand_bool() ? 0 : rand_sign(), 
@@ -124,22 +120,11 @@ CivillianRobot.prototype.startInteract = function()
     this.startWander();
   }
   
-  // request interaction
-  else if(!this.nearest.consentToInteract(this))
-  {
-    this.startWander();
-  }
-  
   // set state
-  else
+  else if(this.tryInteractPeer(this.nearest))
   {
-    //! TODO
-    // send shiz to client
-    
-    
     this.move(0, 0);
     this.interact_timer.reset();
-    this.interactPeer = this.nearest;
     this.state = this.doInteract;
   }
 }
