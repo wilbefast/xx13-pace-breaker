@@ -1,7 +1,7 @@
 
 game = function(){
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 20;
+  this.STARTING_CIVILLIANS = 3;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -20,7 +20,7 @@ game.prototype.reset = function()
   {
     var spawn_pos = new V2();
     this.level.playable_area.randomWithin(spawn_pos);
-    G.addRobot(botid(),new CivillianRobot(spawn_pos));
+    G.addRobot(nextid(),new CivillianRobot(spawn_pos));
   }
 }
 

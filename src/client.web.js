@@ -23,6 +23,12 @@ socket.on('you',function(data) {
   id = data.id;
 });
 
+
+$('body').bind('beforeunload',function(){
+  alert("Cool");
+  socket.send("leaving");
+});
+
 socket.on('leave',function(data){
   delete G.robots[data.id];
 });

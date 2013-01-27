@@ -62,7 +62,7 @@ function handler (req, res) {
 }
 
 var x = 0;
-function nextid() {
+nextid = function() {
   return x++;
 }
 
@@ -87,13 +87,22 @@ setInterval(function(){
 
 setInterval(function(){
   connected.forEach(function(sock, id){
-    sock.emit('ping');
+    sock.get('challenge',function(err,data){
+      if (data && data){
+        sock.disconnect()
+      } else {
+        sock.emit('ping');
+        sock.set('challenge',true)
+      }
+    })
+
   });
-},1000);
+},2000);
 
 
 
 io.sockets.on('connection', function (socket) {
+  socket.set('challenge',false)
   // Add a player to the game
   var r = new Robot(new V2(100,100))
   var id = nextid();
@@ -107,7 +116,17 @@ io.sockets.on('connection', function (socket) {
     socket.emit('newBot',{bot: bot.position, id: id});
   })
 
+
+  socket.on('pong',function(data){
+    if (data.id==id){
+      socket.set('challenge',false);
+    } else {
+      socket.disconnect();
+    }
+  })
+
   socket.on('disconnect',function(){
+    delete G.robots[id];
     socket.get('id', function(err, dd){
       connected.forEach(function(sock){
         sock.emit('leave',{id: dd});
