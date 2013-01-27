@@ -87,10 +87,14 @@ setInterval(function(){
       
     });
     
-    
-    var distance = (G.robots[id]?Math.sqrt(G.robots[id].nearest_dist2):Infinity);
-    var vol = 1 - Math.min(1, Math.max(0,((distance - 20)/20)));
-      sock.emit('heartbeat',{vol: vol});
+    var distance = Infinity;
+    if (G.robots[id].robotTeam){
+      distance = (G.robots[id]?Math.sqrt(G.robots[id].nearestHuman.dist2):Infinity);
+    } else {
+      distance = (G.robots[id]?Math.sqrt(G.robots[id].nearestCop.dist2):Infinity);
+    }
+    var vol = 1 - Math.min(   1,      Math.max( 0, ((distance - 20)/300)   )       );
+    sock.emit('heartbeat',{vol: Math.floor(vol*100)});
 
   });
 },100);
@@ -186,6 +190,4 @@ io.sockets.on('connection', function (socket) {
     });
   });
   socket.emit('you', {id: id});
-
-	socket.emit("hello");
 });

@@ -7,6 +7,12 @@ canHearHeartbeat = function(subject, object)
           && !object.robotTeam);
 }
 
+canHearMusic = function(subject, object)
+{
+  return (subject.humanControlled 
+          && object.robotTeam && object.humanControlled);
+}
+
 canInteractWith = function(subject, object)
 {
   return ((!subject.humanControlled || !object.humanControlled) 
@@ -68,6 +74,8 @@ game.prototype.update = function(delta_t) {
     {
       bot.nearestHuman.bot = null;
       bot.nearestHuman.dist2 = Infinity;
+      bot.nearestCop.bot = null;
+      bot.nearestCop.dist2 = Infinity;
     }
 
     // pair functions
@@ -86,8 +94,10 @@ game.prototype.update = function(delta_t) {
         generateNearest(bot, other_bot, bot.nearest, canInteractWith);
       
       // get nearest human -- FOR HEARBEATS
-      else
+      else {
         generateNearest(bot, other_bot, bot.nearestHuman, canHearHeartbeat);
+        generateNearest(bot, other_bot, bot.nearestCop, canHearMusic);
+      }
     }
     
     // snap the robots inside the map
