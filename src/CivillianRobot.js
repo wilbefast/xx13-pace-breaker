@@ -48,6 +48,7 @@ CivillianRobot.prototype.init = function(position_)
 {
   Robot.prototype.init.call(this, position_);
   
+  this.timeToDie = 5000;
   this.wander_timer = new Timer(1500);
   this.interact_timer = new Timer(3500);
   this.state = this.doWander;
