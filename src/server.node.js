@@ -26,7 +26,7 @@ gs.switchstate(main);
 setInterval(function(){ gs.update(); },(updateRate));
 
 
-/**/
+/**
 repl = require('repl');
 rep = repl.start({
   prompt: "server> ",
@@ -113,16 +113,23 @@ setInterval(function(){
 
 io.sockets.on('connection', function (socket) {
   socket.set('challenge',false)
-  // Add a player to the game
+  
+  // generate unique id
   var id = nextid();
+  
+  // generate random position
   var pos = new V2();
   G.level.playable_area.randomWithin(pos);
-  var r = (id%2==0?
-              new PoliceRobot(pos):
-              new Robot(pos));
-
+  
+  // create robot
+  var robotTeam = (id % 2 == 0);
+  var r = robotTeam ? new PoliceRobot(pos): new Robot(pos);
   r.humanControlled = true;
-  r.robotTeam = id%2!=0;
+  r.robotTeam = robotTeam;
+  
+  // intialise secret (server-only) attributes
+  r.initSecret();
+  
   connected.forEach(function(sock){
     sock.emit('newBot',{bot: r.position, id: id, vis: r.visual});
   });
@@ -151,18 +158,28 @@ io.sockets.on('connection', function (socket) {
     });
   })
 
-  socket.on("update", function(data){
-    socket.get('id', function(err, dd){
+  socket.on("update", function(data)
+  {
+    socket.get('id', function(err, dd)
+    {
+      // SET MOVEMENT
       G.robots[dd].move(data.x, data.y);
-      if (data.inter){
+      
+      // SET INTERACTION (if applicable)
+      if (data.inter) // if the interaction key being pressed ?
+      {
         var v = new V2().setV2(G.robots[dd].position);
         var r = G.robots[data.intid];
-        if (!(r.humanControlled && r.robotTeam)){
+        if (r && !(r.humanControlled && r.robotTeam))
+        {
           var d = v.dist2(r.position);
-          if (d<MAX_INTERACT_DISTANCE2) {
+          if (d < MAX_INTERACT_DISTANCE2) 
+          {
             G.robots[dd].tryInteractPeer(r);
           }
-        } else {
+        } 
+        else 
+        {
           G.robots[dd].tryInteractPeer(null);
         }
       }

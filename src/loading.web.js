@@ -100,6 +100,8 @@ function loading_screen()
 
 /** TEST Jail-By 
 --------------------------------------------------------------------------------
+
+
 */
 
 window.onload = initialise;
@@ -113,6 +115,7 @@ function initialise() {
   bufferLoader = new BufferLoader(
     AudioContext,
     [
+    // ordre des fichier audio
       'audio/Battements_coeur.ogg'
     ],
     finishedLoading

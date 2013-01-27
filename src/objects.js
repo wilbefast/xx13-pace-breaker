@@ -77,14 +77,31 @@ generateCollision = function(a, b)
 }
 
 // get nearest object
-generateNearest = function(a, b, nearest)
+generateNearest = function(a, b, nearest, condition)
 {
+  // check condition
+  if(condition && !condition(a, b))
+    return;
+  
+  // check distance
   var dist2 = a.position.dist2(b.position);
   if(dist2 < nearest.dist2)
   {
     nearest.bot = b;
     nearest.dist2 = dist2;
     nearest.dir.setFromTo(a.position, b.position).normalise();
+  }
+}
+
+//set nearestHUMAN_dist2 variable BECAREFUL SEND AN HUMAN
+generateNearestHUMAN = function(a, b)
+{
+  var dist2 = a.position.dist2(b.position);
+  a.nearestHUMAN_dist2 = Infinity;
+  if(dist2 < a.nearestHUMAN_dist2)
+  {
+    a.nearestHUMAN = b;
+    a.nearestHUMAN_dist2 = dist2;
   }
 }
 

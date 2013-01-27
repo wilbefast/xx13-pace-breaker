@@ -36,10 +36,12 @@ socket.on('leave',function(data){
 });
 
 socket.on('heartbeat',function(data){
-	VolumeSample.source[0].noteOn(0); // bug car ne VolumeSample n'est pas creer la première fois
+    console.log("conard"); //pas afficher
+    console.log(VolumeSample);
+	VolumeSample.source[0].noteOn(0); // warrning car ne VolumeSample n'est pas creer la première fois
 	VolumeSample.source[0].loop = true;
 	changeVolume(VolumeSample.gainNode[0],data.vol); 	
-//	window.source1.setValueAtTime(data.vol,AudioContext.currentTime);
+
 });
 
 socket.on('ping',function(data){
@@ -48,7 +50,7 @@ socket.on('ping',function(data){
 
 socket.on('update',function(data) {
   var bot = G.robots[data.id];
-  
+
   if (bot) 
   {
     // move
