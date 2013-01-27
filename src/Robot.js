@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTANTS
 //! ----------------------------------------------------------------------------
 
-MAX_INTERACT_DISTANCE2 = 96*96;
+MAX_INTERACT_DISTANCE2 = Infinity; // 96*96;
 
 //! ----------------------------------------------------------------------------
 //! CLASS -- ATTRIBUTES 
@@ -209,33 +209,68 @@ Robot.prototype.cancelInteract = function()
   this.interactPeer_dist2 = Infinity;
 }
 
+Robot.prototype.startInteract = function()
+{
+  // override if needed
+}
+
+var forceInteraction = function(a, b)
+{
+  //! NB -- this is private because it is not safe, can lead to incoherence
+  
+  // link both
+  a.interactPeer = b;
+  b.interactPeer = a;
+  a.interactPeer_dist2 = b.interactPeer_dist2 = a.position.dist2(b.position);
+  
+  // inform the bots that they are connected
+  a.startInteract();
+  b.startInteract();
+  
+  // stop both from moving
+  a.move(0, 0);
+  b.move(0, 0);
+}
+
 Robot.prototype.tryInteractPeer = function(newPeer)
 {
+  //console.log("--------- ***START*** Robot::TRYINTERACTPEER : " + this.id 
+  //              + " -> " + ((newPeer != null) ? newPeer.id : newPeer) );
+  
   // skip if already interacting with this peer
   if(this.interactPeer == newPeer)
-    return true;
+  {
+    //console.log(this.id + ' is already interacting with ' + ((newPeer != null) ? newPeer.id : newPeer));
+    return false;
+  }
   
   // unlink from previous peer
   if(this.interactPeer != null)
+  {
+    //console.log(this.id + ' told ' + this.interactPeer.id + ' to break connection');
     this.interactPeer.cancelInteract();
+  }
   
   // cancel if passed a null
   if(newPeer == null)
   {
+    //console.log(this.id + ' broke connection with ' + this.interactPeer.id);
     this.cancelInteract();
     return false;
   } 
+  
   // request interaction
-  else if(newPeer.consentToInteract(this))
+  else if(!newPeer.consentToInteract(this))
   {
+    //console.log(this.id + ' was refused by ' + this.interactPeer);
     this.cancelInteract();
     return false;
   }
 
+  //console.log(this.id + ' is now connected to ' + ((newPeer != null) ? newPeer.id : newPeer));
+  
   // link successful
-  this.interactPeer = newPeer;
-  this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
-  this.move(0,0);
+  forceInteraction(this, newPeer);
   return true;
 }
 
@@ -271,9 +306,9 @@ Robot.prototype.update = function(delta_t)
   }
 };
 
-Robot.prototype.draw = function() {
+Robot.prototype.draw = function() 
+{
   var anix = this.animdirection.x;
-
   var aniy = this.animdirection.y;
 
   //this.view.setSpeed(0.005);
@@ -299,9 +334,12 @@ Robot.prototype.draw = function() {
     //this.view.setSpeed(0);
     this.view.setSubimage(1);
   }
-	
+  
+	// draw the sprite 
   this.view.draw(this.position);
   
+  
+  //! FIXME DO PRETTIER SHIZ
   if(this.interactPeer)
   {
     context.strokeLine(this.position.x, 
@@ -309,6 +347,9 @@ Robot.prototype.draw = function() {
                          this.interactPeer.position.x, 
                          this.interactPeer.position.y);
   }
+  
+  //! FIXME REMOVE DEBUG INFORMATION
+  context.strokeText(this.id+"", this.position.x + 32, this.position.y);
 };
 
 Robot.prototype.collision = function(other)

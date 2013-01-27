@@ -35,11 +35,9 @@ socket.on('leave',function(data){
 });
 
 socket.on('heartbeat',function(data){
-    console.log("conard"); //pas afficher
-    console.log(VolumeSample);
-	VolumeSample.source[0].noteOn(0); // warrning car ne VolumeSample n'est pas creer la première fois
-	VolumeSample.source[0].loop = true;
-	changeVolume(VolumeSample.gainNode[0],data.vol); 	
+	//VolumeSample.source[0].noteOn(0); // warrning car ne VolumeSample n'est pas creer la première fois
+	//VolumeSample.source[0].loop = true;
+	//changeVolume(VolumeSample.gainNode[0],data.vol); 	
 
 });
 

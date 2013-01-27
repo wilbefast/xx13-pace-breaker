@@ -9,8 +9,12 @@ canHearHeartbeat = function(subject, object)
 
 canInteractWith = function(subject, object)
 {
-  return ((!subject.humanControlled || !object.humanControlled) 
-          && (!subject.humanControlled || !object.robotTeam));
+  // CIVILLIANS can interact with CIVILLIANS
+  // HUMANS can interact with CIVILLIANS
+  // POLICE can interact with CIVILLIANS and HUMANS
+  
+  return (!object.humanControlled 
+    || (subject.humanControlled && subject.robotTeam));
 }
 
 //! ----------------------------------------------------------------------------
@@ -19,7 +23,7 @@ canInteractWith = function(subject, object)
 
 game = function(){
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 50;
+  this.STARTING_CIVILLIANS = 2;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -34,17 +38,22 @@ game = function(){
 
 game.prototype.reset = function()
 {
+  console.log("-----GAME HAS BEEN RESET-----");
   for (var i=0; i < this.STARTING_CIVILLIANS; i++)
   {
     var spawn_pos = new V2();
     this.level.playable_area.randomWithin(spawn_pos);
-    G.addRobot(nextid(),new CivillianRobot(spawn_pos));
+    var r = G.addRobot(nextid(), new CivillianRobot(spawn_pos));
+
   }
 }
 
-game.prototype.addRobot = function(id,robot) {
+game.prototype.addRobot = function(id, robot) {
 	this.robots[id]=robot;
   robot.id = id;
+  console.log(robot.id + " robotTeam? " + robot.robotTeam + 
+                " humanControlled? " + robot.humanControlled);
+  return robot;
 };
 
 game.prototype.update = function(delta_t) {
@@ -52,9 +61,6 @@ game.prototype.update = function(delta_t) {
 	for (bid in this.robots)
   {
 		var bot = this.robots[bid];
-    
-    // update the robots
-		bot.update(delta_t);
     
     // reset nearest -- ONLY ON CLIENT OR FOR NON-PLAYER CHARACTERS
     if(!is_server || !bot.humanControlled)
@@ -82,19 +88,30 @@ game.prototype.update = function(delta_t) {
       generateCollision(bot, other_bot);
       
       // get bot nearest peers -- FOR INTERACTIONS
-      if(!is_server)
+      //! FIXME if(!is_server)
         generateNearest(bot, other_bot, bot.nearest, canInteractWith);
       
       // get nearest human -- FOR HEARBEATS
-      else
+      //! FIXME else
+      if(is_server)
         generateNearest(bot, other_bot, bot.nearestHuman, canHearHeartbeat);
     }
+    
+    // update the robots
+    bot.update(delta_t);
     
     // snap the robots inside the map
     var borderCollision = boundObject(bot, this.level.playable_area);
     if(!borderCollision.isNull())
       bot.perceiveObstacle(borderCollision);
+    
+    if(bot.interactPeer)
+      console.log(bot.id + " -> " + bot.interactPeer.id + " && " 
+        + bot.interactPeer.id + " -> " + bot.interactPeer.interactPeer.id);
+    else
+      console.log(bot.id + " -> " + bot.interactPeer);
 	}
+	console.log();
 };
 
 game.prototype.draw = function() {
