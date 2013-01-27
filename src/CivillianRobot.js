@@ -15,7 +15,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 //! ----------------------------------------------------------------------------
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
@@ -34,11 +33,18 @@ CivillianRobot = function(position_)
 // inherits from Robot
 CivillianRobot.prototype = new Robot();
 
+
+//! ----------------------------------------------------------------------------
+//! OVERRIDE
+//! ----------------------------------------------------------------------------
+
 CivillianRobot.prototype.init = function(position_)
 {
   Robot.prototype.init.call(this, position_);
   
-  this.change_direction_timer = new Timer(1500);
+  this.wander_timer = new Timer(1500);
+  this.interact_timer = new Timer(3500);
+  this.state = this.doWander;
 }
 
 CivillianRobot.prototype.perceiveObstacle = function(side)
@@ -55,39 +61,80 @@ CivillianRobot.prototype.perceiveObstacle = function(side)
     this.move(0, 0);
   }
   
-  // randomise move time
-  this.change_direction_timer.randomTime();
-}
-
-CivillianRobot.prototype.stop = function()
-{
-  // stop
-  this.move(0, 0);
-}
-
-CivillianRobot.prototype.wander = function()
-{
-  // move in random direction
-  this.move(rand_bool() ? 0 : rand_sign(), 
-            rand_bool() ? 0 : rand_sign());
-  
-  // randomise move time
-  this.change_direction_timer.randomTime();
-}
-
-CivillianRobot.prototype.gotoInteraction = function()
-{
-  this.move(0, 0);
+  // break off interactions
+  this.startWander();
 }
 
 CivillianRobot.prototype.update = function(delta_t) 
 {
   // change direction periodically
-  if(this.change_direction_timer.update(dt))
-  {
-    rand_call([this.stop, this.wander, this.gotoInteraction], this);
-  }
+  this.state.call(this, delta_t);
   
   // update position
   Robot.prototype.update.call(this);
 };
+
+Robot.prototype.consentToInteract = function(otherRobot) 
+{
+  this.interactPeer = otherRobot;
+  return true;
+}
+
+//! ----------------------------------------------------------------------------
+//! FINITE STATE MACHINE -- ENTER
+//! ----------------------------------------------------------------------------
+
+CivillianRobot.prototype.startWander = function()
+{
+  // cancel interaction
+  this.tryInteractPeer(null);
+  
+  // move out in a random direction or stop
+  this.move(rand_bool() ? 0 : rand_sign(), 
+            rand_bool() ? 0 : rand_sign());
+  
+  // randomise move time
+  this.wander_timer.randomTime();
+  
+  // set state
+  this.state = this.doWander;
+}
+
+CivillianRobot.prototype.startInteract = function()
+{
+  // check if close enough and peer accepts
+  if(this.nearest_dist2 <= MAX_INTERACT_DISTANCE2 
+  || this.tryInteractPeer(this.nearest))
+  {
+    this.interact_timer.reset();
+    this.state = this.doInteract;
+  }
+  
+  // otherwise go back to wandering
+  else
+    this.startWander();
+}
+
+//! ----------------------------------------------------------------------------
+//! FINITE STATE MACHINE -- EXECUTE
+//! ----------------------------------------------------------------------------
+
+CivillianRobot.prototype.doWander = function(delta_t)
+{
+  // wander around
+  
+  // change state after a certain amount of time
+  if(this.wander_timer.update(dt))
+  { 
+    rand_call([this.startWander, this.startInteract], this);
+  }
+}
+
+CivillianRobot.prototype.doInteract = function(delta_t)
+{
+  // stop interacting after a certain amount of time
+  if(this.interact_timer.update(dt))
+  { 
+    this.startWander();
+  }
+}

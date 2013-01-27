@@ -15,6 +15,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//! ----------------------------------------------------------------------------
+//! CONSTANTS
+//! ----------------------------------------------------------------------------
+
+MAX_INTERACT_DISTANCE2 = 96*96;
 
 //! ----------------------------------------------------------------------------
 //! CLASS -- ATTRIBUTES 
@@ -102,6 +107,7 @@ copyBot = function(bot) {
 
 Robot.prototype.init = function(position_, visual)
 {
+  // collision
   this.radius = 8;
   this.radius2 = this.radius * this.radius;
   this.male = Math.random()<0.5;
@@ -147,23 +153,84 @@ Robot.prototype.toString = function() {
 	return "dull-looking robot";
 };
 
-Robot.prototype.interface = function(otherRobot) {
+//! ----------------------------------------------------------------------------
+//! ROBOT CONVERSATIONS
+//! ----------------------------------------------------------------------------
+
+Robot.prototype.interface = function(otherRobot) 
+{
 	console.log('Ello, ' + otherRobot);
 };
+
+Robot.prototype.consentToInteract = function(otherRobot) 
+{
+  // override to accept interactions
+  return false;
+}
+
+Robot.prototype.cancelInteract = function()
+{
+  this.interactPeer = null;
+  this.interactPeer_dist2 = Infinity;
+}
+
+Robot.prototype.tryInteractPeer = function(newPeer)
+{
+  // skip if already interacting with this peer
+  if(this.interactPeer == newPeer)
+    return true;
+  
+  // unlink from previous peer
+  if(this.interactPeer != null)
+    this.interactPeer.cancelInteract();
+  
+  // cancel if passed a null
+  if(newPeer == null)
+  {
+    this.cancelInteract();
+    return false;
+  } 
+  // request interaction
+  else if(newPeer.consentToInteract(this))
+  {
+    this.cancelInteract();
+    return false;
+  }
+
+  // link successful
+  this.interactPeer = newPeer;
+  this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
+  this.move(0,0);
+  return true;
+}
+
+//! ----------------------------------------------------------------------------
 
 Robot.prototype.perceiveObstacle = function(side)
 {
   // overriden by ai!
 }
 
-Robot.prototype.update = function(delta_t) {
-  //if (is_server)
+Robot.prototype.update = function(delta_t) 
+{
+  // update position
+  this.position.setXY(this.position.x + this.movement.x * dt, 
+                      this.position.y + this.movement.y * dt);
+  
+  // update peer distance
+  if(this.interactPeer != null)
   {
-    this.position.setXY(this.position.x+this.movement.x*dt, this.position.y+this.movement.y*dt);
+    this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
+    
+    // cancel if too far away
+    if(this.interactPeer_dist2 > MAX_INTERACT_DISTANCE2)
+      this.tryInteractPeer(null);
   }
-
-  if (!(this.movement.x == 0 && this.movement.y == 0))
+  
+  // ... if moving
+  if (this.movement.x != 0 || this.movement.y != 0)
   {
+    // update animation
     if(this.view)
       this.view.update(delta_t);
   }
@@ -199,6 +266,14 @@ Robot.prototype.draw = function() {
   }
 	
   this.view.draw(this.position);
+  
+  if(this.interactPeer)
+  {
+    context.strokeLine(this.position.x, 
+                         this.position.y, 
+                         this.interactPeer.position.x, 
+                         this.interactPeer.position.y);
+  }
 };
 
 Robot.prototype.collision = function(other)

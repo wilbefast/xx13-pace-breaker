@@ -26,6 +26,7 @@ game.prototype.reset = function()
 
 game.prototype.addRobot = function(id,robot) {
 	this.robots[id]=robot;
+  robot.id = id;
 };
 
 game.prototype.update = function(delta_t) {
@@ -64,6 +65,7 @@ game.prototype.update = function(delta_t) {
 };
 
 game.prototype.draw = function() {
+
 	context.drawImage(this.map,0,0);
   if (G.robots[id]) {
     context.drawImage(meSelector,G.robots[id].position.x-16,G.robots[id].position.y+4);
