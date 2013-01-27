@@ -85,7 +85,7 @@ setInterval(function(){
         mov: {x:Math.round(bot.movement.x*10), y:Math.round(bot.movement.y*10)},
         id: dd,
         interact: (bot.interactPeer==null) ? -1 : bot.interactPeer.id,
-        kill: bot.killed
+        dead: bot.dead
       });
       
     });

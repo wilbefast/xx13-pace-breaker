@@ -129,6 +129,9 @@ Robot.prototype.initSecret = function()
 Robot.prototype.init = function(position_, visual)
 {
   this.killed = false;
+  this.timeToDie = 0;
+  this.dying = 0;
+  this.dead = false;
   this.humanControlled = false;
   this.robotTeam = true;
 
@@ -288,6 +291,15 @@ Robot.prototype.perceiveObstacle = function(side)
 
 Robot.prototype.update = function(delta_t) 
 {
+  if (this.dying>0) {
+    this.dying -= dt;
+    if (this.dying<200) {
+      this.dead = true;
+    }
+  }
+  if (this.killed && this.dying==0 && !this.dead) {
+    this.dying = this.timeToDie;
+  }
   // update position
   this.position.setXY(this.position.x + this.movement.x * dt, 
                       this.position.y + this.movement.y * dt);
@@ -357,7 +369,7 @@ Robot.prototype.draw = function()
   }
   
 	// draw the sprite 
-  if (!this.killed) {
+  if (!this.dead) {
     this.view.draw(this.position);
   } else {
     context.fillRect(this.position.x,this.position.y,10,10);
