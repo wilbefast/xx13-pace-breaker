@@ -62,7 +62,7 @@ function handler (req, res) {
 }
 
 var x = 0;
-function nextid() {
+nextid = function() {
   return x++;
 }
 
@@ -116,11 +116,17 @@ io.sockets.on('connection', function (socket) {
     socket.emit('newBot',{bot: bot.position, id: id});
   })
 
-  socket.on('pong',function(){
-    socket.set('challenge',false);
+
+  socket.on('pong',function(data){
+    if (data.id==id){
+      socket.set('challenge',false);
+    } else {
+      socket.disconnect();
+    }
   })
 
   socket.on('disconnect',function(){
+    delete G.robots[id];
     socket.get('id', function(err, dd){
       connected.forEach(function(sock){
         sock.emit('leave',{id: dd});
