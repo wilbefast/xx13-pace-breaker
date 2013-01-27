@@ -34,8 +34,6 @@ if(!is_server)
   var imgSmoke = load_image('images/smoke.png');
   var imgElectrocution = load_image('images/electrocution.png');
   var imgExplosion = load_image('images/explosion.png');
-  
-  var imgFlicMort = load_image('images/mort_flic_frame4.png');
 
   var animTron =
   {
@@ -52,7 +50,7 @@ if(!is_server)
     walk_E : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3),
     walk_W : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3, 
                            FLIP_HORIZONTAL),
-    walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3)
+    walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3),
     die : new Animation(imgGeorge, new V2(32, 32), new V2(0, 96), 3)
   }
 
@@ -62,7 +60,7 @@ if(!is_server)
     walk_E : new Animation(imgMarie, new V2(32, 32), new V2(0, 32), 3),
     walk_W : new Animation(imgMarie, new V2(32, 32), new V2(0, 32), 3, 
                            FLIP_HORIZONTAL),
-    walk_S : new Animation(imgMarie, new V2(32, 32), new V2(0, 64), 3)
+    walk_S : new Animation(imgMarie, new V2(32, 32), new V2(0, 64), 3),
     die : new Animation(imgMarie, new V2(32, 32), new V2(0, 96), 3)
   }
 
