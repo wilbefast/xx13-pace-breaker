@@ -3,6 +3,7 @@ var is_server = false;
 
 var meSelector = load_image("images/cercle.png")
 var arrowSelector = load_image("images/fleche.png")
+var IWantToInteractWith = -1
 
 G = new game();
 
@@ -80,12 +81,19 @@ setInterval(function(){
 setInterval(function(){
     var dx = keyboard.direction.x;
     var dy = keyboard.direction.y;
+    if (keyboard.action) {
+      if (IWantToInteractWith==-1){
+        IWantToInteractWith = selected.id;
+      }
+    } else {
+      IWantToInteractWith = -1;
+    }
     if (id>=0) {
       socket.emit('update', {
         x: Math.round(dx),
         y: Math.round(dy),
-        inter: keyboard.action,
-        intid: G.robots[id].nearest.id
+        inter: IWantToInteractWith!=-1,
+        intid: IWantToInteractWith
       });
     }
   },100);
