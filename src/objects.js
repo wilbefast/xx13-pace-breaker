@@ -84,7 +84,7 @@ generateNearest = function(a, b)
   {
     a.nearest = b;
     a.nearest_dist2 = dist2;
-    a.to_nearest.fromTo(a.position, b.position).normalise();
+    a.to_nearest.setFromTo(a.position, b.position).normalise();
   }
 }
 

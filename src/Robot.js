@@ -89,6 +89,11 @@ Robot.prototype.init = function(position_)
   this.radius = 8;
   this.radius2 = this.radius * this.radius;
   
+  // nearest peer
+  this.nearest = null;
+  this.nearest_dist2 = Infinity;
+  this.to_nearest = new V2();
+  
   // skin ?
   this.male = rand_bool();
   
@@ -126,9 +131,26 @@ Robot.prototype.toString = function() {
 	return "dull-looking robot";
 };
 
+//! ----------------------------------------------------------------------------
+//! ROBOT CONVERSATIONS
+//! ----------------------------------------------------------------------------
+
 Robot.prototype.interface = function(otherRobot) {
 	console.log('Ello, ' + otherRobot);
 };
+
+Robot.prototype.consentToInteract = function(otherRobot) {
+  // override to refuse interactions
+  this.interactPeer = otherRobot;
+  
+  return true;
+}
+
+Robot.prototype.cancelInteract = function(otherRobot) {
+  this.interactPeer = null;
+}
+
+//! ----------------------------------------------------------------------------
 
 Robot.prototype.perceiveObstacle = function(side)
 {
@@ -178,6 +200,12 @@ Robot.prototype.draw = function() {
   }
 	
   this.view.draw(this.position);
+  
+  if(this.interactPeer)
+    this.view.strokeLine(this.position.x, 
+                         this.position.y, 
+                         this.interactPeer.position.x, 
+                         this.interactPeer.position.y);
 };
 
 Robot.prototype.collision = function(other)
