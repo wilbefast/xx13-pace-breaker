@@ -348,7 +348,7 @@ Robot.prototype.update = function(delta_t)
         this.view.update(delta_t);
         
         
-        this.buff_view.update(delta_t);
+        //this.buff_view.update(delta_t);
       }
     }
   }
@@ -404,7 +404,7 @@ Robot.prototype.draw = function()
   {
     this.view.draw(this.position);
     
-    this.buff_view.draw(this.position);
+    //this.buff_view.draw(this.position);
   } 
   else 
   {
