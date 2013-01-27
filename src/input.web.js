@@ -75,6 +75,7 @@ var keyboard =
   right		: false,
   up		: false,
   down		: false,
+  action  : false,
   space		: false,
   enter		: false,
   shift   : false,
@@ -98,14 +99,8 @@ var keyboard =
       case this.DOWN:	case this.S:	case this.O: 		
         this.down = state; 	
       break;
-      case this.SPACE:		
-        this.space = state; 
-      break;
-      case this.ENTER:
-        this.enter = state;
-      break;
-      case this.SHIFT:
-        this.shift = state;
+      case this.SPACE: case this.ENTER: case this.SHIFT:
+        this.action = state;
       break;
     }
     
