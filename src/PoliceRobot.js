@@ -53,3 +53,7 @@ PoliceRobot.prototype.update = function(delta_t) {
       this.view.update(delta_t);
   }
 };
+
+PoliceRobot.prototype.startInteract = function() {
+  // body...
+};

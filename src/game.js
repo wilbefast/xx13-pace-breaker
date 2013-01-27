@@ -3,7 +3,7 @@
 //! ----------------------------------------------------------------------------
 canHearHeartbeat = function(subject, object)
 {
-  return (subject.humanControlled 
+  return (subject.humanControlled && !object.killed
           && !object.robotTeam);
 }
 
