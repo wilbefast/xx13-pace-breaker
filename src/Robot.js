@@ -89,6 +89,9 @@ Robot.prototype.init = function(position_)
   this.radius = 8;
   this.radius2 = this.radius * this.radius;
   
+  // interactions
+  this.interactPeer = null;
+  
   // nearest peer
   this.nearest = null;
   this.nearest_dist2 = Infinity;
@@ -202,10 +205,12 @@ Robot.prototype.draw = function() {
   this.view.draw(this.position);
   
   if(this.interactPeer)
-    this.view.strokeLine(this.position.x, 
+  {
+    context.strokeLine(this.position.x, 
                          this.position.y, 
                          this.interactPeer.position.x, 
                          this.interactPeer.position.y);
+  }
 };
 
 Robot.prototype.collision = function(other)

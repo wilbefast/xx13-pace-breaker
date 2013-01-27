@@ -48,7 +48,8 @@ CivillianRobot.prototype.init = function(position_)
 {
   Robot.prototype.init.call(this, position_);
   
-  this.change_direction_timer = new Timer(1500);
+  this.wander_timer = new Timer(1500);
+  this.interact_timer = new Timer(3500);
   this.state = this.doWander;
 }
 
@@ -66,8 +67,8 @@ CivillianRobot.prototype.perceiveObstacle = function(side)
     this.move(0, 0);
   }
   
-  // randomise move time
-  this.change_direction_timer.randomTime();
+  // break off interactions
+  this.startWander();
 }
 
 CivillianRobot.prototype.update = function(delta_t) 
@@ -103,7 +104,7 @@ CivillianRobot.prototype.startWander = function()
             rand_bool() ? 0 : rand_sign());
   
   // randomise move time
-  this.change_direction_timer.randomTime();
+  this.wander_timer.randomTime();
   
   // set state
   this.state = this.doWander;
@@ -127,6 +128,7 @@ CivillianRobot.prototype.startInteract = function()
   else
   {
     this.move(0, 0);
+    this.interact_timer.reset();
     this.interactPeer = this.nearest;
     this.state = this.doInteract;
   }
@@ -141,7 +143,7 @@ CivillianRobot.prototype.doWander = function(delta_t)
   // wander around
   
   // change state after a certain amount of time
-  if(this.change_direction_timer.update(dt))
+  if(this.wander_timer.update(dt))
   { 
     rand_call([this.startWander, this.startInteract], this);
   }
@@ -149,5 +151,9 @@ CivillianRobot.prototype.doWander = function(delta_t)
 
 CivillianRobot.prototype.doInteract = function(delta_t)
 {
-  // zap zap zappity zap
+  // stop interacting after a certain amount of time
+  if(this.interact_timer.update(dt))
+  { 
+    this.startWander();
+  }
 }
