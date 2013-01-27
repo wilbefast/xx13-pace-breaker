@@ -16,6 +16,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //! ----------------------------------------------------------------------------
+//! CONSTANTS
+//! ----------------------------------------------------------------------------
+
+
+
+//! ----------------------------------------------------------------------------
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
@@ -49,15 +55,16 @@ CivillianRobot.prototype.init = function(position_)
 
 CivillianRobot.prototype.perceiveObstacle = function(side)
 {
+  // flip a coin ...
   if(rand_bool())
   {
     side.reverse();
-    // move away from collision
+    // ... move away from collision ?
     this.move(side.x, side.y);
   }
   else
   {
-    // stop
+    // ... stop ?
     this.move(0, 0);
   }
   
@@ -67,17 +74,17 @@ CivillianRobot.prototype.perceiveObstacle = function(side)
 
 CivillianRobot.prototype.update = function(delta_t) 
 {
-  // change direction periodically
+  // call state method, whatever that may be
   this.state.call(this, delta_t);
   
   // update position
   Robot.prototype.update.call(this);
 };
 
-Robot.prototype.consentToInteract = function(otherRobot) 
+CivillianRobot.prototype.consentToInteract = function(otherRobot) 
 {
-  this.interactPeer = otherRobot;
-  return true;
+  // civillians are always happy to interact if not already interacting
+  return (this.interactPeer == null);
 }
 
 //! ----------------------------------------------------------------------------
@@ -86,6 +93,8 @@ Robot.prototype.consentToInteract = function(otherRobot)
 
 CivillianRobot.prototype.startWander = function()
 {
+  //console.log(this.id + " is going back to wandering");
+  
   // cancel interaction
   this.tryInteractPeer(null);
   
@@ -100,19 +109,50 @@ CivillianRobot.prototype.startWander = function()
   this.state = this.doWander;
 }
 
-CivillianRobot.prototype.startInteract = function()
+CivillianRobot.prototype.tryInteract = function()
 {
+  //console.log("--------- ***START*** Civillian::TRY INTERACT : " + this.id);
+  
   // check if close enough and peer accepts
-  if(this.nearest.dist2 <= MAX_INTERACT_DISTANCE2 
-  || this.tryInteractPeer(this.nearest.bot))
+  if(this.nearest
+  && this.nearest.dist2 <= MAX_INTERACT_DISTANCE2 
+  && this.tryInteractPeer(this.nearest.bot))
   {
-    this.interact_timer.reset();
-    this.state = this.doInteract;
+    //console.log(this.id + ' successfully started interaction with ' + this.nearest.bot.id);
+    this.startInteract();
+    //console.log(this.id + " -> " + this.interactPeer.id + " && " 
+    //+ this.interactPeer.id + " -> " + this.interactPeer.interactPeer.id);
   }
   
   // otherwise go back to wandering
   else
+  {
+    //console.log(this.id + ' failed interaction with ' + this.nearest.bot.id);
     this.startWander();
+  }
+  
+  //console.log("--------- *END* TRY INTERACT : " + this.id);
+  //console.log();
+  //console.log();
+}
+
+CivillianRobot.prototype.startInteract = function()
+{
+  // default stuff
+  Robot.prototype.startInteract.call(this);
+  
+  // also reset state
+  this.interact_timer.reset();
+  this.state = this.doInteract;
+}
+
+CivillianRobot.prototype.cancelInteract = function()
+{
+  // default stuff
+  Robot.prototype.cancelInteract.call(this);
+  
+  // also reset state
+  this.startWander();
 }
 
 //! ----------------------------------------------------------------------------
@@ -126,7 +166,7 @@ CivillianRobot.prototype.doWander = function(delta_t)
   // change state after a certain amount of time
   if(this.wander_timer.update(dt))
   { 
-    rand_call([this.startWander, this.startInteract], this);
+    rand_call([this.startWander, this.tryInteract], this);
   }
 }
 
@@ -135,6 +175,11 @@ CivillianRobot.prototype.doInteract = function(delta_t)
   // stop interacting after a certain amount of time
   if(this.interact_timer.update(dt))
   { 
+    //console.log(this.id + ' stopped interacting becaused BORED!');
     this.startWander();
+    //console.log(this.id + ' FINISHED BOREDOM DISCONNECT');
+    //console.log();
+    //console.log();
+    
   }
 }
