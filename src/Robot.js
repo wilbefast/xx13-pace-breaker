@@ -402,8 +402,9 @@ Robot.prototype.draw = function()
   } 
   else 
   {
-    console.log("one dead");
-    context.drawImage(imgFlicMort,this.position.x-16,this.position.y-32);
+    this.view.setAnimation(this.animset.die);
+    this.view.setSubimage(2);
+    this.view.draw(this.position);
   }
   
   

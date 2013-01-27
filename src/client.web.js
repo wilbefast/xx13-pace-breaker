@@ -55,8 +55,8 @@ socket.on('update',function(data) {
     bot.movement.setXY(dx, dy);
     bot.animdirection.setXY(data.mov.x,data.mov.y);
     bot.dead = data.dead;
-    if (bot.dead)
-      console.log(bot.dead);
+    //if (bot.dead)
+      //console.log(bot.dead);
     
     //console.log("SERVER SAYS " + data.id + " -> " + data.interact);
     
@@ -92,10 +92,12 @@ setInterval(function()
   //! SEND INTERACTION REQUEST
   if (keyboard.action) 
   {
-    if (IWantToInteractWith == -1)
+    if (IWantToInteractWith == -1 && selected)
     {
       IWantToInteractWith = selected.id;
     }
+    else
+      IWantToInteractWith = -1;
   }
   else 
   {
