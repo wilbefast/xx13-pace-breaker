@@ -41,7 +41,8 @@ if(!is_server)
     walk_E : new Animation(imgTron, new V2(32, 32), new V2(0, 32), 3),
     walk_W : new Animation(imgTron, new V2(32, 32), new V2(0, 32), 3, 
                            FLIP_HORIZONTAL),
-    walk_S : new Animation(imgTron, new V2(32, 32), new V2(0, 64), 3)
+    walk_S : new Animation(imgTron, new V2(32, 32), new V2(0, 64), 3),
+    die : new Animation(imgTron, new V2(32, 32), new V2(0, 96), 3)
   }
   
   var animGeorge =
@@ -187,6 +188,9 @@ Robot.prototype.init = function(position_, visual)
     this.animdirection = new V2(0,1);
     this.view 
       = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
+      
+    this.buff_view
+      = new AnimationView(animWifi, new V2(32, 32), 0.005, REVERSE_AT_END);
   }
 }
 
@@ -348,7 +352,12 @@ Robot.prototype.update = function(delta_t)
     {
       // update animation
       if(this.view)
+      {
         this.view.update(delta_t);
+        
+        
+        //this.buff_view.update(delta_t);
+      }
     }
   }
 };
@@ -357,7 +366,7 @@ Robot.prototype.draw = function()
 {
     
   //! FIXME MAKE PRETTIER
-  context.lineWidth = 3.0;
+  context.lineWidth = 2.0;
   context.strokeStyle = 'lime';
   if(this.interactPeer)
   {
@@ -407,9 +416,14 @@ Robot.prototype.draw = function()
   } 
   else 
   {
-    //this.view.setAnimation(this.animset.die);
-    //this.view.setSubimage(2);
-    //this.view.draw(this.position);
+    this.view.setAnimation(this.animset.die);
+    
+    
+    if(!this.view.animation)
+      console.log("wtf " + this.view.animation);
+    
+    this.view.setSubimage(2);
+    this.view.draw(this.position);
   }
   
   
