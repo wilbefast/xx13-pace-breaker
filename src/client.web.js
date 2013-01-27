@@ -45,7 +45,7 @@ socket.on('ping',function(data){
   socket.emit('pong',{id: id});
 });
 
-socket.on('move',function(data) {
+socket.on('update',function(data) {
   var bot = G.robots[data.id];
   
   if (bot) 
@@ -62,7 +62,9 @@ socket.on('move',function(data) {
 });
 
 socket.on('newBot',function(data) {
-  var b = new Robot(new V2(data.bot.x,data.bot.y));
+  var b = (data.vis==4?
+                new PoliceRobot(new V2(data.bot.x,data.bot.y)):
+                new Robot(new V2(data.bot.x,data.bot.y),data.vis));
   G.addRobot(data.id, b);
 })
 

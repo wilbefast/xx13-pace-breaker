@@ -29,6 +29,7 @@ if(!is_server)
   var imgTron = load_image('images/sheet_tron.png');
   var imgGeorge = load_image('images/sheet_george.png');
   var imgMarie = load_image('images/sheet_marie_antoinette.png');
+  var imgFlic = load_image('images/sheet_flic.png');
 
   var animTron =
   {
@@ -57,17 +58,34 @@ if(!is_server)
     walk_S : new Animation(imgMarie, new V2(32, 32), new V2(0, 64), 3)
   }
 
-  anims = [animMarie, animGeorge, animTron];
+  var animFlic =
+  {
+    walk_N : new Animation(imgFlic, new V2(32, 32), new V2(0, 0), 3),
+    walk_E : new Animation(imgFlic, new V2(32, 32), new V2(0, 32), 3),
+    walk_W : new Animation(imgFlic, new V2(32, 32), new V2(0, 32), 3, 
+                           FLIP_HORIZONTAL),
+    walk_S : new Animation(imgFlic, new V2(32, 32), new V2(0, 64), 3)
+  }
+
+  anims = [animMarie, animGeorge, animTron, animFlic];
 
 }
+
+visuals = {
+  MARIE: 0,
+  GEORGE: 1,
+  TRON: 2,
+  FLIC: 3
+};
   
+
 //! ----------------------------------------------------------------------------
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-Robot = function(position_)
+Robot = function(position_,visual)
 {
-  this.init(position_);
+  this.init(position_, visual);
   return this;
 }
 
@@ -87,11 +105,28 @@ copyBot = function(bot) {
 //! PROTOTYPE
 //! ----------------------------------------------------------------------------
 
-Robot.prototype.init = function(position_)
+Robot.prototype.init = function(position_, visual)
 {
+  this.humanControlled = false;
+  this.robotTeam = true;
+
   // collision
   this.radius = 8;
   this.radius2 = this.radius * this.radius;
+
+  if (!is_server) {
+    if (visual) {
+      this.animset = anims[visual];
+    } else {
+      this.animset = anims[0];
+    }
+  } else {
+    if (visual) {
+      this.visual = visual;
+    } else {
+      this.visual = Math.round((3 - 1) * Math.random())
+    }
+  }
   
   // interactions
   this.interactPeer = null;
@@ -112,8 +147,6 @@ Robot.prototype.init = function(position_)
     dir : new V2()
   };
   
-  // skin ?
-  this.male = rand_bool();
   
   // position and speed
   this.position = position_;
@@ -122,7 +155,7 @@ Robot.prototype.init = function(position_)
   // view
   if (!is_server)
   {
-    this.animset = rand_in(anims);
+
     this.animdirection = new V2(0,1);
     this.view 
       = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);

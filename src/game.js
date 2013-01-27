@@ -1,7 +1,7 @@
 
 game = function(){
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 2;
+  this.STARTING_CIVILLIANS = 50;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -80,4 +80,9 @@ game.prototype.draw = function() {
 	this.robots.forEach(function(bot){
 		bot.draw();
 	});
+  if (selected) {
+    context.drawImage(arrowSelector,selected.position.x-6,selected.position.y-24);
+  } else {
+    console.log('Trippin, yo')
+  }
 };
