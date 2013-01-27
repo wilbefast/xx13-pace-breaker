@@ -296,38 +296,40 @@ Robot.prototype.perceiveObstacle = function(side)
 
 Robot.prototype.update = function(delta_t) 
 {
-  if (this.dying>0) {
-    this.dying -= dt;
-    if (this.dying<200) {
-      if (!this.dead) {
-        this.dead = true;
+  if (!this.dead) {
+    if (this.dying>0) {
+      this.dying -= dt;
+      if (this.dying<200) {
+        if (!this.dead) {
+          this.dead = true;
+        }
+        //this.dieFunction();
       }
-      //this.dieFunction();
     }
-  }
-  if (this.killed && this.dying==0 && !this.dead) {
-    this.dying = this.timeToDie;
-  }
-  // update position
-  this.position.setXY(this.position.x + this.movement.x * dt, 
-                      this.position.y + this.movement.y * dt);
-  
-  // update peer distance
-  if(this.interactPeer != null)
-  {
-    this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
+    if (this.killed && this.dying==0 && !this.dead) {
+      this.dying = this.timeToDie;
+    }
+    // update position
+    this.position.setXY(this.position.x + this.movement.x * dt, 
+                        this.position.y + this.movement.y * dt);
     
-    // cancel if too far away
-    if(this.interactPeer_dist2 > MAX_INTERACT_DISTANCE2)
-      this.tryInteractPeer(null);
-  }
-  
-  // ... if moving
-  if (this.movement.x != 0 || this.movement.y != 0)
-  {
-    // update animation
-    if(this.view)
-      this.view.update(delta_t);
+    // update peer distance
+    if(this.interactPeer != null)
+    {
+      this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
+      
+      // cancel if too far away
+      if(this.interactPeer_dist2 > MAX_INTERACT_DISTANCE2)
+        this.tryInteractPeer(null);
+    }
+    
+    // ... if moving
+    if (this.movement.x != 0 || this.movement.y != 0)
+    {
+      // update animation
+      if(this.view)
+        this.view.update(delta_t);
+    }
   }
 };
 
