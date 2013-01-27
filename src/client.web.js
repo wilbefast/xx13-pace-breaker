@@ -34,7 +34,9 @@ socket.on('leave',function(data){
 socket.on('heartbeat',function(data){
   //console.log("Volume: "+data.vol)
   var samp = (G.robots[id].animset==animFlic?0:1); // If I'm a cop
-	changeVolume(VolumeSample.gainNode[samp],data.vol/100); 	
+  
+  if(total_to_load <= 0)
+    changeVolume(VolumeSample.gainNode[samp],data.vol/100); 	
 
 });
 
