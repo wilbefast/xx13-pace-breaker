@@ -113,16 +113,23 @@ setInterval(function(){
 
 io.sockets.on('connection', function (socket) {
   socket.set('challenge',false)
-  // Add a player to the game
+  
+  // generate unique id
   var id = nextid();
+  
+  // generate random position
   var pos = new V2();
   G.level.playable_area.randomWithin(pos);
-  var r = (id%2==0?
-              new PoliceRobot(pos):
-              new Robot(pos));
-
+  
+  // create robot
+  var robotTeam = (id % 2 == 0);
+  var r = robotTeam ? new PoliceRobot(pos): new Robot(pos);
   r.humanControlled = true;
-  r.robotTeam = id%2!=0;
+  r.robotTeam = robotTeam;
+  
+  // intialise secret (server-only) attributes
+  r.initSecret();
+  
   connected.forEach(function(sock){
     sock.emit('newBot',{bot: r.position, id: id, vis: r.visual});
   });

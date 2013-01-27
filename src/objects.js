@@ -77,8 +77,13 @@ generateCollision = function(a, b)
 }
 
 // get nearest object
-generateNearest = function(a, b, nearest)
+generateNearest = function(a, b, nearest, condition)
 {
+  // check condition
+  if(condition && !condition(a, b))
+    return;
+  
+  // check distance
   var dist2 = a.position.dist2(b.position);
   if(dist2 < nearest.dist2)
   {
