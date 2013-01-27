@@ -224,8 +224,13 @@ Robot.prototype.startInteract = function()
 {
   // override if needed
   if (this.interactPeer.humanControlled) {
-    console.log("Oh ma gad!")
-    this.killed = true;
+    if (this.interactPeer.robotTeam && this.robotTeam) { //Cop kills robot
+      console.log('You cop dumbass');
+      this.interactPeer.dead = true;
+    } else {
+      this.killed = true;
+    }
+    //console.log("Oh ma gad!")
   }
 }
 
@@ -294,7 +299,10 @@ Robot.prototype.update = function(delta_t)
   if (this.dying>0) {
     this.dying -= dt;
     if (this.dying<200) {
-      this.dead = true;
+      if (!this.dead) {
+        this.dead = true;
+      }
+      //this.dieFunction();
     }
   }
   if (this.killed && this.dying==0 && !this.dead) {
