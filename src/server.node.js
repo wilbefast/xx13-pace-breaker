@@ -120,6 +120,9 @@ io.sockets.on('connection', function (socket) {
   var r = (id%2==0?
               new PoliceRobot(pos):
               new Robot(pos));
+
+  r.humanControlled = true;
+  r.robotTeam = id%2!=0;
   connected.forEach(function(sock){
     sock.emit('newBot',{bot: r.position, id: id, vis: r.visual});
   });

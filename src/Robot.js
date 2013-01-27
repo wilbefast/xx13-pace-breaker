@@ -107,6 +107,9 @@ copyBot = function(bot) {
 
 Robot.prototype.init = function(position_, visual)
 {
+  this.humanControlled = false;
+  this.robotTeam = true;
+
   // collision
   this.radius = 8;
   this.radius2 = this.radius * this.radius;
