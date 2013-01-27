@@ -170,25 +170,29 @@ io.sockets.on('connection', function (socket) {
   {
     socket.get('id', function(err, dd)
     {
+      var bot = G.robots[dd];
+      
       // SET MOVEMENT
-      G.robots[dd].move(data.x, data.y);
+      bot.move(data.x, data.y);
       
       // SET INTERACTION (if applicable)
       if (data.intid != -1)
       {
-        var v = new V2().setV2(G.robots[dd].position);
+        var v = new V2().setV2(bot.position);
         var r = G.robots[data.intid];
         if (r && !(r.humanControlled && r.robotTeam))
         {
           var d = v.dist2(r.position);
           if (d < MAX_INTERACT_DISTANCE2) 
           {
-            G.robots[dd].tryInteractPeer(r);
+            bot.tryInteractPeer(r);
           }
         }
       }
       else 
-        G.robots[dd].tryInteractPeer(null);
+      {
+        bot.tryInteractPeer(null);
+      }
     });
   });
   socket.emit('you', {id: id});
