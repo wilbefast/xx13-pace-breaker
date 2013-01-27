@@ -106,6 +106,7 @@ CivillianRobot.prototype.startInteract = function()
   if(this.nearest_dist2 <= MAX_INTERACT_DISTANCE2 
   || this.tryInteractPeer(this.nearest))
   {
+    console.log("interact succeeds!");
     this.interact_timer.reset();
     this.state = this.doInteract;
   }

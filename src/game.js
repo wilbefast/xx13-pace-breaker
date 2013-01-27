@@ -1,7 +1,7 @@
 
 game = function(){
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 5;
+  this.STARTING_CIVILLIANS = 2;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
