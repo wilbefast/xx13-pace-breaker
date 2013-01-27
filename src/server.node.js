@@ -48,6 +48,8 @@ io.set('log level',1)
 
 app.listen(1986);
 
+gameOn = false;
+
 function handler (req, res) {
   var filename = req.url;
   if (filename === '/') {
@@ -73,9 +75,11 @@ connected = [];
 
 setInterval(function(){
 
+  nbPlayers = 0;
   //! FOREACH player identified by (Socket sock, int id)
   connected.forEach(function(sock, id)
   {
+    nbPlayers ++;
     //! FOREACH robot in the game identified by (Robot bot, int dd)
     G.robots.forEach(function(bot, dd)
     {
@@ -100,7 +104,10 @@ setInterval(function(){
     sock.emit('heartbeat',{vol: Math.floor(vol*100)});
 
   });
+
+  gameOn = nbPlayers > 1;
 },100);
+
 
 setInterval(function(){
   connected.forEach(function(sock, id){
@@ -116,6 +123,7 @@ setInterval(function(){
   });
 },2000);
 
+score = 0
 
 
 io.sockets.on('connection', function (socket) {
@@ -171,28 +179,28 @@ io.sockets.on('connection', function (socket) {
     socket.get('id', function(err, dd)
     {
       var bot = G.robots[dd];
-      
-      // SET MOVEMENT
-      bot.move(data.x, data.y);
-      
-      // SET INTERACTION (if applicable)
-      if (data.intid != -1)
-      {
-        var v = new V2().setV2(bot.position);
-        var r = G.robots[data.intid];
-        if (r && !(r.humanControlled && r.robotTeam))
+      if (dd) {
+        // SET MOVEMENT
+        bot.move(data.x, data.y);
+        
+        // SET INTERACTION (if applicable)
+        if (data.intid != -1)
         {
-          var d = v.dist2(r.position);
-          if (d < MAX_INTERACT_DISTANCE2) 
+          var v = new V2().setV2(bot.position);
+          var r = G.robots[data.intid];
+          if (r && !(r.humanControlled && r.robotTeam))
           {
-            bot.tryInteractPeer(r);
+            var d = v.dist2(r.position);
+            if (d < MAX_INTERACT_DISTANCE2) 
+            {
+              bot.tryInteractPeer(r);
+            }
           }
         }
-      }
-      else 
-      {
-        
-        bot.tryInteractPeer(null);
+        else 
+        {
+          bot.tryInteractPeer(null);
+        }
       }
     });
   });

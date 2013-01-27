@@ -227,6 +227,11 @@ Robot.prototype.interface = function(otherRobot)
 Robot.prototype.consentToInteract = function(otherRobot) 
 {
   // override to accept interactions
+  console.log("Connect!")
+  this.dead = true;
+  if ((otherRobot.humanControlled && otherRobot.robotTeam)){
+    this.killed = true;
+  }
   return (otherRobot.humanControlled && otherRobot.robotTeam);
 }
 
@@ -317,6 +322,9 @@ Robot.prototype.update = function(delta_t)
       this.dying -= dt;
       if (this.dying<200) {
         if (!this.dead) {
+          if (this.robotTeam) {
+            score ++;
+          }
           this.dead = true;
         }
         //this.dieFunction();

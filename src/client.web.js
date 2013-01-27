@@ -35,13 +35,20 @@ socket.on('heartbeat',function(data){
   //console.log("Volume: "+data.vol)
   var samp = (G.robots[id].animset==animFlic?0:1); // If I'm a cop
   
-  if(total_to_load <= 0)
-    changeVolume(VolumeSample.gainNode[samp],data.vol/100); 	
+  changeVolume(VolumeSample.gainNode[samp],data.vol/100); 	
 
 });
 
 socket.on('ping',function(data){
   socket.emit('pong',{id: id});
+});
+
+socket.on('gameover',function(data){
+  if (data.elim) {
+    alert("The humans hacked "+data.score+" robots before being killed by the cops!");
+  } else {
+    alert("The humans hacked "+data.score+" robots but the cops messed up! Human score is 100!");
+  }
 });
 
 socket.on('update',function(data) {
