@@ -77,14 +77,14 @@ generateCollision = function(a, b)
 }
 
 // get nearest object
-generateNearest = function(a, b)
+generateNearest = function(a, b, nearest)
 {
   var dist2 = a.position.dist2(b.position);
-  if(dist2 < a.nearest_dist2)
+  if(dist2 < nearest.dist2)
   {
-    a.nearest = b;
-    a.nearest_dist2 = dist2;
-    a.to_nearest.setFromTo(a.position, b.position).normalise();
+    nearest.bot = b;
+    nearest.dist2 = dist2;
+    nearest.dir.setFromTo(a.position, b.position).normalise();
   }
 }
 

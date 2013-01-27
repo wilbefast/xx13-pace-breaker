@@ -103,8 +103,8 @@ CivillianRobot.prototype.startWander = function()
 CivillianRobot.prototype.startInteract = function()
 {
   // check if close enough and peer accepts
-  if(this.nearest_dist2 <= MAX_INTERACT_DISTANCE2 
-  || this.tryInteractPeer(this.nearest))
+  if(this.nearest.dist2 <= MAX_INTERACT_DISTANCE2 
+  || this.tryInteractPeer(this.nearest.bot))
   {
     this.interact_timer.reset();
     this.state = this.doInteract;

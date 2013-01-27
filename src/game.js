@@ -39,8 +39,8 @@ game.prototype.update = function(delta_t) {
 		bot.update(delta_t);
     
     // reset nearest
-    bot.nearest = null;
-    bot.nearest_dist2 = Infinity;
+    bot.nearest.bot = bot.nearestHuman.bot = null;
+    bot.nearest.dist2 = bot.nearestHuman.dist2 = Infinity;
     
     // pair functions
     for (other_bid in this.robots)
@@ -53,8 +53,14 @@ game.prototype.update = function(delta_t) {
       // get bot collisions
       generateCollision(bot, other_bot);
       
-      // get bot nearest peers
-      generateNearest(bot, other_bot);
+      // get bot nearest peers -- FOR INTERACTIONS
+      if(!is_server || !bot.humanControlled)
+        generateNearest(bot, other_bot, bot.nearest);
+      
+      // cops get nearest human -- FOR HEARBEATS
+      if(is_server && bot.humanControlled && other_bot.humanControlled 
+                   && !other_bot.robotTeam)
+        generateNearest(bot, other_bot, bot.nearestHuman);
     }
     
     // snap the robots inside the map

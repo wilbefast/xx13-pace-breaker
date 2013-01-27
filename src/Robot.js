@@ -97,9 +97,20 @@ Robot.prototype.init = function(position_)
   this.interactPeer = null;
   
   // nearest peer
-  this.nearest = null;
-  this.nearest_dist2 = Infinity;
-  this.to_nearest = new V2();
+  this.nearest = 
+  { 
+    bot : null, 
+    dist2 : Infinity, 
+    dir : new V2()
+  };
+  
+  // nearest human
+  this.nearestHuman =
+  {
+    bot : null,
+    dist2 : Infinity,
+    dir : new V2()
+  };
   
   // skin ?
   this.male = rand_bool();
