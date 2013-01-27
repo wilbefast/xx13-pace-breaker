@@ -169,7 +169,7 @@ io.sockets.on('connection', function (socket) {
       if (data.inter) // if the interaction key being pressed ?
       {
         var v = new V2().setV2(G.robots[dd].position);
-        var r = G.robots[data.intid];
+        var r = G.robots[data.intid]; // is (data.inter && data.intid == -1) ?
         if (r && !(r.humanControlled && r.robotTeam))
         {
           var d = v.dist2(r.position);
