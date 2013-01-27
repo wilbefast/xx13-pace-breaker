@@ -1,3 +1,21 @@
+//! ----------------------------------------------------------------------------
+//! UTILITY FUNCTION 
+//! ----------------------------------------------------------------------------
+canHearHeartbeat = function(subject, object)
+{
+  return (subject.humanControlled 
+          && !object.robotTeam);
+}
+
+canInteractWith = function(subject, object)
+{
+  return ((!subject.humanControlled || !object.humanControlled) 
+          && (!subject.humanControlled || !object.robotTeam));
+}
+
+//! ----------------------------------------------------------------------------
+//! GAME CLASS
+//! ----------------------------------------------------------------------------
 
 game = function(){
 	this.robots = [];
@@ -38,10 +56,20 @@ game.prototype.update = function(delta_t) {
     // update the robots
 		bot.update(delta_t);
     
-    // reset nearest
-    bot.nearest.bot = bot.nearestHuman.bot = null;
-    bot.nearest.dist2 = bot.nearestHuman.dist2 = Infinity;
+    // reset nearest -- ONLY ON CLIENT OR FOR NON-PLAYER CHARACTERS
+    if(!is_server || !bot.humanControlled)
+    {
+      bot.nearest.bot = null;
+      bot.nearest.dist2 = Infinity;
+    }
     
+    // reset nearestHuman -- ONLY ON SERVER AND FOR PLAYER CHARACTERS 
+    else if(is_server && bot.humanControlled)
+    {
+      bot.nearestHuman.bot = null;
+      bot.nearestHuman.dist2 = Infinity;
+    }
+
     // pair functions
     for (other_bid in this.robots)
     {
@@ -54,13 +82,12 @@ game.prototype.update = function(delta_t) {
       generateCollision(bot, other_bot);
       
       // get bot nearest peers -- FOR INTERACTIONS
-      if(!is_server || !bot.humanControlled)
-        generateNearest(bot, other_bot, bot.nearest);
+      if(!is_server)
+        generateNearest(bot, other_bot, bot.nearest, canInteractWith);
       
-      // cops get nearest human -- FOR HEARBEATS
-      if(is_server && bot.humanControlled && other_bot.humanControlled 
-                   && !other_bot.robotTeam)
-        generateNearest(bot, other_bot, bot.nearestHuman);
+      // get nearest human -- FOR HEARBEATS
+      else
+        generateNearest(bot, other_bot, bot.nearestHuman, canHearHeartbeat);
     }
     
     // snap the robots inside the map

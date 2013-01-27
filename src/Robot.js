@@ -105,6 +105,21 @@ copyBot = function(bot) {
 //! PROTOTYPE
 //! ----------------------------------------------------------------------------
 
+Robot.prototype.initSecret = function()
+{
+  // ONLY SERVER-SIDE HUMAN PLAYERS: nearest human
+  if(this.humanControlled)
+  {
+    this.nearestHuman =
+    {
+      bot : null,
+      dist2 : Infinity,
+      dir : new V2()
+    };
+  }
+  
+}
+
 Robot.prototype.init = function(position_, visual)
 {
   this.humanControlled = false;
@@ -138,15 +153,6 @@ Robot.prototype.init = function(position_, visual)
     dist2 : Infinity, 
     dir : new V2()
   };
-  
-  // nearest human
-  this.nearestHuman =
-  {
-    bot : null,
-    dist2 : Infinity,
-    dir : new V2()
-  };
-  
   
   // position and speed
   this.position = position_;
