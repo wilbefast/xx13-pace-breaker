@@ -94,8 +94,6 @@ CivillianRobot.prototype.consentToInteract = function(otherRobot)
 
 CivillianRobot.prototype.startWander = function()
 {
-  //console.log(this.id + " is going back to wandering");
-  
   // cancel interaction
   this.tryInteractPeer(null);
   
@@ -112,17 +110,12 @@ CivillianRobot.prototype.startWander = function()
 
 CivillianRobot.prototype.tryInteract = function()
 {
-  //console.log("--------- ***START*** Civillian::TRY INTERACT : " + this.id);
-  
   // check if close enough and peer accepts
   if(this.nearest && !this.dead && !this.killed
   && this.nearest.dist2 <= MAX_INTERACT_DISTANCE2 
   && this.tryInteractPeer(this.nearest.bot))
   {
-    //console.log(this.id + ' successfully started interaction with ' + this.nearest.bot.id);
     this.startInteract();
-    //console.log(this.id + " -> " + this.interactPeer.id + " && " 
-    //+ this.interactPeer.id + " -> " + this.interactPeer.interactPeer.id);
   }
   
   // otherwise go back to wandering
@@ -131,10 +124,6 @@ CivillianRobot.prototype.tryInteract = function()
     //console.log(this.id + ' failed interaction with ' + this.nearest.bot.id);
     this.startWander();
   }
-  
-  //console.log("--------- *END* TRY INTERACT : " + this.id);
-  //console.log();
-  //console.log();
 }
 
 CivillianRobot.prototype.startInteract = function()
@@ -151,7 +140,6 @@ CivillianRobot.prototype.cancelInteract = function()
 {
   // default stuff
   Robot.prototype.cancelInteract.call(this);
-  
   
   // also reset state
   this.startWander();

@@ -411,8 +411,8 @@ Robot.prototype.draw = function()
     this.view.setAnimation(this.animset.die);
     
     
-    if(!this.view.animation)
-      console.log("wtf " + this.view.animation);
+    //if(!this.view.animation)
+      //console.log("wtf " + this.view.animation);
     
     this.view.setSubimage(2);
     this.view.draw(this.position);
@@ -421,8 +421,8 @@ Robot.prototype.draw = function()
   
   
   //! FIXME -- DEBUG STUFF
-  //context.lineWidth = 1;
-  //context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
+  context.lineWidth = 1;
+  context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
 };
 
 Robot.prototype.collision = function(other)

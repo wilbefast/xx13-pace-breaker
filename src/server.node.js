@@ -191,6 +191,7 @@ io.sockets.on('connection', function (socket) {
       }
       else 
       {
+        
         bot.tryInteractPeer(null);
       }
     });
