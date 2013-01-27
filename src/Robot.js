@@ -116,6 +116,12 @@ Robot.prototype.initSecret = function()
       dist2 : Infinity,
       dir : new V2()
     };
+    this.nearestCop =
+    {
+      bot : null,
+      dist2 : Infinity,
+      dir : new V2()
+    };
   }
   
 }

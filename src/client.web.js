@@ -3,6 +3,7 @@ var is_server = false;
 
 var meSelector = load_image("images/cercle.png")
 var arrowSelector = load_image("images/fleche.png")
+var IWantToInteractWith = -1
 
 G = new game();
 
@@ -16,9 +17,6 @@ socket.on('load',function(data){
     loadScript(data.url);
 });
 
-socket.on('hello',function(data) {
-  console.log('Helloed');
-});
 id = -1;
 socket.on('you',function(data) {
   id = data.id;
@@ -35,9 +33,9 @@ socket.on('leave',function(data){
 });
 
 socket.on('heartbeat',function(data){
-	//VolumeSample.source[0].noteOn(0); // warrning car ne VolumeSample n'est pas creer la première fois
-	//VolumeSample.source[0].loop = true;
-	//changeVolume(VolumeSample.gainNode[0],data.vol); 	
+  //console.log("Volume: "+data.vol)
+  var samp = (G.robots[id].animset==animFlic?0:1); // If I'm a cop
+	changeVolume(VolumeSample.gainNode[samp],data.vol/100); 	
 
 });
 
@@ -85,12 +83,19 @@ setInterval(function(){
 setInterval(function(){
     var dx = keyboard.direction.x;
     var dy = keyboard.direction.y;
+    if (keyboard.action) {
+      if (IWantToInteractWith==-1){
+        IWantToInteractWith = selected.id;
+      }
+    } else {
+      IWantToInteractWith = -1;
+    }
     if (id>=0) {
       socket.emit('update', {
         x: Math.round(dx),
         y: Math.round(dy),
-        inter: keyboard.action,
-        intid: G.robots[id].nearest.id
+        inter: IWantToInteractWith!=-1,
+        intid: IWantToInteractWith
       });
     }
   },100);

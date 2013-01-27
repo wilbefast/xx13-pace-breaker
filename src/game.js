@@ -7,6 +7,12 @@ canHearHeartbeat = function(subject, object)
           && !object.robotTeam);
 }
 
+canHearMusic = function(subject, object)
+{
+  return (subject.humanControlled 
+          && object.robotTeam && object.humanControlled);
+}
+
 canInteractWith = function(subject, object)
 {
   // CIVILLIANS can interact with CIVILLIANS
@@ -62,6 +68,7 @@ game.prototype.update = function(delta_t) {
   {
 		var bot = this.robots[bid];
     
+   
     // reset nearest -- ONLY ON CLIENT OR FOR NON-PLAYER CHARACTERS
     if(!is_server || !bot.humanControlled)
     {
@@ -74,6 +81,8 @@ game.prototype.update = function(delta_t) {
     {
       bot.nearestHuman.bot = null;
       bot.nearestHuman.dist2 = Infinity;
+      bot.nearestCop.bot = null;
+      bot.nearestCop.dist2 = Infinity;
     }
 
     // pair functions
@@ -93,8 +102,10 @@ game.prototype.update = function(delta_t) {
       
       // get nearest human -- FOR HEARBEATS
       //! FIXME else
-      if(is_server)
+      if(is_server) {
         generateNearest(bot, other_bot, bot.nearestHuman, canHearHeartbeat);
+        generateNearest(bot, other_bot, bot.nearestCop, canHearMusic);
+      }
     }
     
     // update the robots
@@ -104,6 +115,12 @@ game.prototype.update = function(delta_t) {
     var borderCollision = boundObject(bot, this.level.playable_area);
     if(!borderCollision.isNull())
       bot.perceiveObstacle(borderCollision);
+    
+    //if(bot.interactPeer)
+      //console.log(bot.id + " -> " + bot.interactPeer.id + " && " 
+      //  + bot.interactPeer.id + " -> " + bot.interactPeer.interactPeer.id);
+    //else
+      //console.log(bot.id + " -> " + bot.interactPeer);
 	}
 };
 

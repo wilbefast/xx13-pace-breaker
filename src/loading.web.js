@@ -102,7 +102,7 @@ function loading_screen()
 --------------------------------------------------------------------------------
 
 
-*/
+*/  // add a / to uncomment
 
 window.onload = initialise;
 var AudioContext;
@@ -116,7 +116,8 @@ function initialise() {
     AudioContext,
     [
     // ordre des fichier audio
-      'audio/Battements_coeur.ogg'
+      'audio/Battements_coeur.ogg',
+      'audio/bumpy.ogg'
     ],
     finishedLoading
     );
@@ -188,8 +189,12 @@ function finishedLoading(bufferList) {
       VolumeSample.source[i].buffer = bufferList[i];
       VolumeSample.source[i].connect(VolumeSample.gainNode[i]);
       VolumeSample.gainNode[i].connect(AudioContext.destination);
+      changeVolume(VolumeSample.gainNode[i],0);  
   }
-  
+  var samp = (G.robots[id].animset==animFlic?0:1); // If I'm a cop
+  console.log(samp)
+  VolumeSample.source[samp].noteOn(0); // warrning car ne VolumeSample n'est pas creer la première fois
+  VolumeSample.source[samp].loop = true;
 }
 
 var changeVolume = function(gn,value) 
