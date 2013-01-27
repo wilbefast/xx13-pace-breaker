@@ -110,7 +110,7 @@ Robot.prototype.init = function(position_, visual)
   // collision
   this.radius = 8;
   this.radius2 = this.radius * this.radius;
-  this.male = Math.random()<0.5;
+
   if (!is_server) {
     if (visual) {
       this.animset = anims[visual];
@@ -125,12 +125,29 @@ Robot.prototype.init = function(position_, visual)
     }
   }
   
+  // interactions
+  this.interactPeer = null;
+  
+  // nearest peer
+  this.nearest = null;
+  this.nearest_dist2 = Infinity;
+  this.to_nearest = new V2();
+  
+  
+  // position and speed
   this.position = position_;
   this.movement = new V2();
-  this.animdirection = new V2(0,1);
-  this.view = (is_server) 
-        ? false 
-        :  new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
+  
+  // view
+  if (!is_server)
+  {
+
+    this.animdirection = new V2(0,1);
+    this.view 
+      = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
+  }
+  
+  //! WHAT THE FUCK ?????!!!!
 }
 
 Robot.prototype.move = function(hori, vert) {
