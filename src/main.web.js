@@ -39,11 +39,15 @@ main.update = function()
 	//! FIXME 
 	var delta_t = 1000/60;
 
-	var selectme = getNearest(G.robots[id], G.robots);
+  if(G.robots[id])
+  {
+  
+	var selectme = G.robots[id].nearest;
 
 	if (selectme) {
 		selected = selectme;
-	}
+    }
+  }
 
 
   
