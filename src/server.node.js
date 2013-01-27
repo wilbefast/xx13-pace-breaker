@@ -77,7 +77,7 @@ setInterval(function(){
     //! FOREACH robot in the game identified by (Robot bot, int dd)
     G.robots.forEach(function(bot, dd)
     {
-      sock.emit('move', 
+      sock.emit('update', 
       {
         pos: {x:Math.round(bot.position.x), y:Math.round(bot.position.y)},
         mov: {x:Math.round(bot.movement.x*10), y:Math.round(bot.movement.y*10)},
@@ -88,7 +88,7 @@ setInterval(function(){
     });
     
     
-    var distance = Math.sqrt(G.robots[id].nearest_dist2);
+    var distance = (G.robots[id]?Math.sqrt(G.robots[id].nearest_dist2):Infinity);
     var vol = 1 - Math.min(1, Math.max(0,((distance - 20)/20)));
       sock.emit('heartbeat',{vol: vol});
 
@@ -115,9 +115,11 @@ io.sockets.on('connection', function (socket) {
   socket.set('challenge',false)
   // Add a player to the game
   var id = nextid();
+  var pos = new V2();
+  G.level.playable_area.randomWithin(pos);
   var r = (id%2==0?
-              new PoliceRobot(new V2(100,100)):
-              new Robot(new V2(100,100)));
+              new PoliceRobot(pos):
+              new Robot(pos));
   connected.forEach(function(sock){
     sock.emit('newBot',{bot: r.position, id: id, vis: r.visual});
   });

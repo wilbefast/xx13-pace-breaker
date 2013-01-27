@@ -45,7 +45,7 @@ socket.on('ping',function(data){
   socket.emit('pong',{id: id});
 });
 
-socket.on('move',function(data) {
+socket.on('update',function(data) {
   var bot = G.robots[data.id];
   
   if (bot) 
