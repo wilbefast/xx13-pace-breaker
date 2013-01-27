@@ -41,6 +41,33 @@ main.leave = function() {
 main.update = function() {
 	// Simulate
 	G.update();
+
+	if (gameOn) {
+		var humansLeft = 0;
+		var robotsLeft = 0;
+		for (bot in G.robots) {
+			r = G.robots[bot];
+			if (r.humanControlled && !r.dead) {
+				if (r.robotTeam) {
+					robotsLeft++;
+				} else {
+					humansLeft++;
+				}
+			}
+		}
+		console.log(humansLeft,robotsLeft);
+		if (humansLeft==0 || robotsLeft==0) {
+			var elim = humansLeft==0;
+			connected.forEach(function(sock, id)
+  			{
+  				sock.emit('gameover',{elim: elim, score: score});
+  				sock.disconnect();
+  			});
+  			G.reset();
+		}
+	}
+
+
 	// Draw
 };
 

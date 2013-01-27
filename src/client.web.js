@@ -42,6 +42,14 @@ socket.on('ping',function(data){
   socket.emit('pong',{id: id});
 });
 
+socket.on('gameover',function(data){
+  if (data.elim) {
+    alert("The humans hacked "+data.score+" robots before being killed by the cops!");
+  } else {
+    alert("The humans hacked "+data.score+" robots but the cops messed up! Human score is 100!");
+  }
+});
+
 socket.on('update',function(data) {
   var bot = G.robots[data.id];
 

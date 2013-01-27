@@ -52,7 +52,7 @@ canInteractWith = function(subject, object)
 
 game = function(){
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 20;
+  this.STARTING_CIVILLIANS = 50;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -67,6 +67,8 @@ game = function(){
 
 game.prototype.reset = function()
 {
+  G.robots = [];
+  connected = [];
   //console.log("-----GAME HAS BEEN RESET-----");
   for (var i=0; i < this.STARTING_CIVILLIANS; i++)
   {
@@ -75,6 +77,7 @@ game.prototype.reset = function()
     var r = G.addRobot(nextid(), new CivillianRobot(spawn_pos));
 
   }
+
 }
 
 game.prototype.addRobot = function(id, robot) {
