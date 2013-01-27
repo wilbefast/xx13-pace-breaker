@@ -21,12 +21,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 PoliceRobot = function(position_)
 {
-  return Robot(position_);
+	this.init(position_);
+  return this;
 }
-
 //! ----------------------------------------------------------------------------
 //! PROTOTYPE
 //! ----------------------------------------------------------------------------
 
 // inherits from Robot
 PoliceRobot.prototype = new Robot();
+
+PoliceRobot.prototype.init = function(position_)
+{
+ 	Robot.prototype.init.call(this, position_);
+ 	if (!is_server) {
+		this.animset = animFlic;
+	} else {
+		this.visual = 4
+	}
+}
+
+PoliceRobot.prototype.update = function(delta_t) {
+  //if (is_server)
+  {
+    this.position.setXY(this.position.x+this.movement.x*dt*1.5, this.position.y+this.movement.y*dt*1.5);
+  }
+
+  if (!(this.movement.x == 0 && this.movement.y == 0))
+  {
+    if(this.view)
+      this.view.update(delta_t);
+  }
+};

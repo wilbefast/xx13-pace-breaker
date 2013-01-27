@@ -14,6 +14,7 @@ require("./Bank.js")
 require("./Timer.js")
 require("./Robot.js");
 require("./CivillianRobot.js");
+require("./PoliceRobot.js");
 require("./gamestate.js");
 require("./main.node.js");
 
@@ -104,16 +105,18 @@ setInterval(function(){
 io.sockets.on('connection', function (socket) {
   socket.set('challenge',false)
   // Add a player to the game
-  var r = new Robot(new V2(100,100))
   var id = nextid();
+  var r = (id%2==0?
+              new PoliceRobot(new V2(100,100)):
+              new Robot(new V2(100,100)));
   connected.forEach(function(sock){
-    sock.emit('newBot',{bot: r.position, id: id});
+    sock.emit('newBot',{bot: r.position, id: id, vis: r.visual});
   });
   connected[id]=socket;
   socket.set('id',id);
   G.addRobot(id, r);
   G.robots.forEach(function(bot, id){
-    socket.emit('newBot',{bot: bot.position, id: id});
+    socket.emit('newBot',{bot: bot.position, id: id, vis: bot.visual});
   })
 
 
