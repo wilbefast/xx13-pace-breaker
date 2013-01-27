@@ -26,7 +26,7 @@ gs.switchstate(main);
 setInterval(function(){ gs.update(); },(updateRate));
 
 
-/**
+/**/
 repl = require('repl');
 rep = repl.start({
   prompt: "server> ",
