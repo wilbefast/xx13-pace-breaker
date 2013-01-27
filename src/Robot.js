@@ -338,7 +338,7 @@ Robot.prototype.update = function(delta_t)
         this.tryInteractPeer(null);
     }
     
-    // ... if moving
+    // ... if moving or dead
     if (this.movement.x != 0 || this.movement.y != 0)
     {
       // update animation
