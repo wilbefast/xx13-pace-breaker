@@ -116,6 +116,8 @@ Robot.prototype.init = function(position_)
     this.view 
       = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
   }
+  
+  //! WHAT THE FUCK ?????!!!!
 }
 
 Robot.prototype.move = function(hori, vert) {
