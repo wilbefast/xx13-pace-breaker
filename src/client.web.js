@@ -81,9 +81,11 @@ setInterval(function(){
     var dx = keyboard.direction.x;
     var dy = keyboard.direction.y;
     if (id>=0) {
-      socket.emit('move', {
+      socket.emit('update', {
         x: Math.round(dx),
-        y: Math.round(dy)
+        y: Math.round(dy),
+        inter: keyboard.action,
+        intid: G.robots[id].nearest.id
       });
     }
   },100);

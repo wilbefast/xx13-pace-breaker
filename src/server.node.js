@@ -158,9 +158,21 @@ io.sockets.on('connection', function (socket) {
     });
   })
 
-  socket.on("move", function(data){
+  socket.on("update", function(data){
     socket.get('id', function(err, dd){
       G.robots[dd].move(data.x, data.y);
+      if (data.inter){
+        var v = new V2().setV2(G.robots[dd].position);
+        var r = G.robots[data.intid];
+        if (!(r.humanControlled && r.robotTeam)){
+          var d = v.dist2(r.position);
+          if (d<MAX_INTERACT_DISTANCE2) {
+            G.robots[dd].tryInteractPeer(r);
+          }
+        } else {
+          G.robots[dd].tryInteractPeer(null);
+        }
+      }
     });
   });
   socket.emit('you', {id: id});
