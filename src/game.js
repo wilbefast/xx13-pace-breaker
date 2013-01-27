@@ -14,7 +14,7 @@ game = function(){
 
 game.prototype.reset = function()
 {
-  for (var i=0; i<20; i++)
+  for (var i=0; i<2; i++)
   {
     var spawn_pos = new V2();
     this.level.playable_area.randomWithin(spawn_pos);

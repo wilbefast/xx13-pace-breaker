@@ -68,18 +68,26 @@ function nextid() {
 connected = [];
 
 setInterval(function(){
+
   connected.forEach(function(sock, id){
-    // vol 0
+  var distance = 10000;
     G.robots.forEach(function(bot, dd){
-      // 
+		if (dd != id)
+		{    
+      		distance = Math.min(distance,Math.sqrt(
+      					Math.pow(Math.abs(G.robots[id].position.x
+      					-bot.position.x),2)
+      					+ Math.pow(Math.abs(G.robots[id].position.y-bot.position.y),2)));
+      	}
       sock.emit('move', {
         pos: {x:bot.position.x, y:bot.position.y},
         mov: {x:bot.movement.x, y:bot.movement.y},
         id: dd
       });
+      
     });
-
-    sock.emit('heartbeat',{vol: 1});
+	var vol = 1 - Math.min(1,Math.max(0,((distance - 20)/200)));
+    sock.emit('heartbeat',{vol: vol});
 
   });
 },100);

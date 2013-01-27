@@ -2,6 +2,7 @@ var is_server = false;
 
 G = new game();
 
+//var coeur = load_audio("Battements_coeur.ogg");
 
 var socket = io.connect(location.origin);
 socket.on('load',function(data){
@@ -23,8 +24,11 @@ socket.on('leave',function(data){
   delete G.robots[data.id];
 });
 
-socket.on('hearbeat',function(data){
-  console.log(data.vol);
+socket.on('heartbeat',function(data){
+	VolumeSample.source[0].noteOn(0); // bug car ne VolumeSample n'est pas creer la première fois
+	VolumeSample.source[0].loop = true;
+	changeVolume(VolumeSample.gainNode[0],data.vol); 	
+//	window.source1.setValueAtTime(data.vol,AudioContext.currentTime);
 });
 
 socket.on('move',function(data) {
