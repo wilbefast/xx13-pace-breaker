@@ -173,7 +173,7 @@ CivillianRobot.prototype.doWander = function(delta_t)
 CivillianRobot.prototype.doInteract = function(delta_t)
 {
   // stop interacting after a certain amount of time
-  if(this.interact_timer.update(dt) && this.interactPeer.humanControlled)
+  if(this.interact_timer.update(dt) && !this.interactPeer.humanControlled)
   { 
     //console.log(this.id + ' stopped interacting becaused BORED!');
     this.startWander();
