@@ -26,6 +26,7 @@ game.prototype.reset = function()
 
 game.prototype.addRobot = function(id,robot) {
 	this.robots[id]=robot;
+  robot.id = id;
 };
 
 game.prototype.update = function(delta_t) {

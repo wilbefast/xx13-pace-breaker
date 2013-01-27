@@ -80,8 +80,14 @@ CivillianRobot.prototype.update = function(delta_t)
   Robot.prototype.update.call(this);
 };
 
+Robot.prototype.consentToInteract = function(otherRobot) 
+{
+  this.interactPeer = otherRobot;
+  return true;
+}
 
-CivillianRobot.prototype.cancelInteract = function(otherRobot) {
+CivillianRobot.prototype.cancelInteract = function(otherRobot)
+{
   this.interactPeer = null;
   this.startWander();
 }
@@ -127,6 +133,10 @@ CivillianRobot.prototype.startInteract = function()
   // set state
   else
   {
+    //! TODO
+    // send shiz to client
+    
+    
     this.move(0, 0);
     this.interact_timer.reset();
     this.interactPeer = this.nearest;
