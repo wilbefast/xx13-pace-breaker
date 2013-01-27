@@ -30,8 +30,10 @@ if(!is_server)
   var imgGeorge = load_image('images/sheet_george.png');
   var imgMarie = load_image('images/sheet_marie_antoinette.png');
   var imgFlic = load_image('images/sheet_flic.png');
-  
-  var imgFlicMort = load_image('images/mort_flic_frame4.png');
+  var imgWifi = load_image('images/wifi.png');
+  var imgSmoke = load_image('images/smoke.png');
+  var imgElectrocution = load_image('images/electrocution.png');
+  var imgExplosion = load_image('images/explosion.png');
 
   var animTron =
   {
@@ -48,7 +50,8 @@ if(!is_server)
     walk_E : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3),
     walk_W : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3, 
                            FLIP_HORIZONTAL),
-    walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3)
+    walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3),
+    die : new Animation(imgGeorge, new V2(32, 32), new V2(0, 96), 3)
   }
 
   var animMarie =
@@ -57,7 +60,8 @@ if(!is_server)
     walk_E : new Animation(imgMarie, new V2(32, 32), new V2(0, 32), 3),
     walk_W : new Animation(imgMarie, new V2(32, 32), new V2(0, 32), 3, 
                            FLIP_HORIZONTAL),
-    walk_S : new Animation(imgMarie, new V2(32, 32), new V2(0, 64), 3)
+    walk_S : new Animation(imgMarie, new V2(32, 32), new V2(0, 64), 3),
+    die : new Animation(imgMarie, new V2(32, 32), new V2(0, 96), 3)
   }
 
   var animFlic =
@@ -66,8 +70,14 @@ if(!is_server)
     walk_E : new Animation(imgFlic, new V2(32, 32), new V2(0, 32), 3),
     walk_W : new Animation(imgFlic, new V2(32, 32), new V2(0, 32), 3, 
                            FLIP_HORIZONTAL),
-    walk_S : new Animation(imgFlic, new V2(32, 32), new V2(0, 64), 3)
+    walk_S : new Animation(imgFlic, new V2(32, 32), new V2(0, 64), 3),
+    die : new Animation(imgFlic, new V2(32, 32), new V2(0, 96), 3)
   }
+  
+  animWifi = new Animation(imgWifi, new V2(32, 32), new V2(0, 0), 3);
+  animSmoke = new Animation(imgSmoke, new V2(32, 32), new V2(0, 0), 5);
+  animExplosion = new Animation(imgExplosion, new V2(32, 32), new V2(0, 0), 8);
+  imgElectrocution = new Animation(imgElectrocution, new V2(32, 32), new V2(0, 0), 8);
 
   anims = [animMarie, animGeorge, animTron, animFlic];
 
@@ -333,7 +343,7 @@ Robot.prototype.update = function(delta_t)
         this.tryInteractPeer(null);
     }
     
-    // ... if moving
+    // ... if moving or dead
     if (this.movement.x != 0 || this.movement.y != 0)
     {
       // update animation
@@ -389,13 +399,17 @@ Robot.prototype.draw = function()
   }
   
 	// draw the sprite 
-  if (!this.dead) {
+  if (!this.dead) 
+  {
     this.view.draw(this.position);
+    
+    //this.buff_view.draw(this.position);
   } 
   else 
   {
-    console.log("one dead");
-    context.drawImage(imgFlicMort,this.position.x-16,this.position.y-32);
+    //this.view.setAnimation(this.animset.die);
+    //this.view.setSubimage(2);
+    //this.view.draw(this.position);
   }
   
   

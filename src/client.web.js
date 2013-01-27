@@ -34,7 +34,8 @@ socket.on('leave',function(data){
 socket.on('heartbeat',function(data){
   //console.log("Volume: "+data.vol)
   var samp = (G.robots[id].animset==animFlic?0:1); // If I'm a cop
-	changeVolume(VolumeSample.gainNode[samp],data.vol/100); 	
+  
+  changeVolume(VolumeSample.gainNode[samp],data.vol/100); 	
 
 });
 
@@ -61,8 +62,8 @@ socket.on('update',function(data) {
     bot.movement.setXY(dx, dy);
     bot.animdirection.setXY(data.mov.x,data.mov.y);
     bot.dead = data.dead;
-    if (bot.dead)
-      console.log(bot.dead);
+    //if (bot.dead)
+      //console.log(bot.dead);
     
     //console.log("SERVER SAYS " + data.id + " -> " + data.interact);
     
@@ -98,10 +99,12 @@ setInterval(function()
   //! SEND INTERACTION REQUEST
   if (keyboard.action) 
   {
-    if (IWantToInteractWith == -1)
+    if (IWantToInteractWith == -1 && selected)
     {
       IWantToInteractWith = selected.id;
     }
+    else
+      IWantToInteractWith = -1;
   }
   else 
   {
