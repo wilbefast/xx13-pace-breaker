@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-CivillianRobot = function(position_)
+RobotCivillian = function(position_)
 {
 	this.init(position_);
 
@@ -37,14 +37,14 @@ CivillianRobot = function(position_)
 //! ----------------------------------------------------------------------------
 
 // inherits from Robot
-CivillianRobot.prototype = new Robot();
+RobotCivillian.prototype = new Robot();
 
 
 //! ----------------------------------------------------------------------------
 //! OVERRIDE
 //! ----------------------------------------------------------------------------
 
-CivillianRobot.prototype.init = function(position_)
+RobotCivillian.prototype.init = function(position_)
 {
   Robot.prototype.init.call(this, position_);
   
@@ -54,7 +54,7 @@ CivillianRobot.prototype.init = function(position_)
   this.state = this.doWander;
 }
 
-CivillianRobot.prototype.perceiveObstacle = function(side)
+RobotCivillian.prototype.perceiveObstacle = function(side)
 {
   // flip a coin ...
   if(rand_bool())
@@ -73,7 +73,7 @@ CivillianRobot.prototype.perceiveObstacle = function(side)
   this.startWander();
 }
 
-CivillianRobot.prototype.update = function(delta_t) 
+RobotCivillian.prototype.update = function(delta_t) 
 {
   // call state method, whatever that may be
   this.state.call(this, delta_t);
@@ -82,7 +82,7 @@ CivillianRobot.prototype.update = function(delta_t)
   Robot.prototype.update.call(this);
 };
 
-CivillianRobot.prototype.consentToInteract = function(otherRobot) 
+RobotCivillian.prototype.consentToInteract = function(otherRobot) 
 {
   // civillians are always happy to interact if not already interacting
   return (!this.dead && !this.killed && this.interactPeer == null);
@@ -92,7 +92,7 @@ CivillianRobot.prototype.consentToInteract = function(otherRobot)
 //! FINITE STATE MACHINE -- ENTER
 //! ----------------------------------------------------------------------------
 
-CivillianRobot.prototype.startWander = function()
+RobotCivillian.prototype.startWander = function()
 {
   // cancel interaction
   this.tryInteractPeer(null);
@@ -108,7 +108,7 @@ CivillianRobot.prototype.startWander = function()
   this.state = this.doWander;
 }
 
-CivillianRobot.prototype.tryInteract = function()
+RobotCivillian.prototype.tryInteract = function()
 {
   // check if close enough and peer accepts
   if(this.nearest && !this.dead && !this.killed
@@ -126,7 +126,7 @@ CivillianRobot.prototype.tryInteract = function()
   }
 }
 
-CivillianRobot.prototype.startInteract = function()
+RobotCivillian.prototype.startInteract = function()
 {
   // default stuff
   Robot.prototype.startInteract.call(this);
@@ -136,7 +136,7 @@ CivillianRobot.prototype.startInteract = function()
   this.state = this.doInteract;
 }
 
-CivillianRobot.prototype.cancelInteract = function()
+RobotCivillian.prototype.cancelInteract = function()
 {
   // default stuff
   Robot.prototype.cancelInteract.call(this);
@@ -149,7 +149,7 @@ CivillianRobot.prototype.cancelInteract = function()
 //! FINITE STATE MACHINE -- EXECUTE
 //! ----------------------------------------------------------------------------
 
-CivillianRobot.prototype.doWander = function(delta_t)
+RobotCivillian.prototype.doWander = function(delta_t)
 {
   // wander around
   
@@ -160,7 +160,7 @@ CivillianRobot.prototype.doWander = function(delta_t)
   }
 }
 
-CivillianRobot.prototype.doInteract = function(delta_t)
+RobotCivillian.prototype.doInteract = function(delta_t)
 {
   // stop interacting after a certain amount of time
   if(this.interact_timer.update(dt) && !this.interactPeer.humanControlled)

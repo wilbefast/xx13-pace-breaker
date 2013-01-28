@@ -50,7 +50,8 @@ canInteractWith = function(subject, object)
 //! GAME CLASS
 //! ----------------------------------------------------------------------------
 
-game = function(){
+game = function()
+{
 	this.robots = [];
   this.STARTING_CIVILLIANS = 2;
   

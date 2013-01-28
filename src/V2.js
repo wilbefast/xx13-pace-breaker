@@ -19,6 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
+
+var V2 = function...
+function V2 ...
+
+this.V2 = function...
+V2 = function ..
+
 V2 = function(_x, _y)
 {
   // < 2 argument passed
