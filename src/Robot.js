@@ -171,7 +171,7 @@ Robot.prototype.init = function(position_, visual)
   };
   
   // position and speed
-  this.position = position_;
+  this.position = new V2(position_);
   this.movement = new V2();
   
   // view

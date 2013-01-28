@@ -21,8 +21,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 V2 = function(_x, _y)
 {
-  this.x = (_x || 0);
-  this.y = (_y || 0);
+  // < 2 argument passed
+  if(_y == undefined)
+  {
+    // 0 arguments passed -- default to null vector
+    if(_x == undefined)
+      this.x = this.y = 0;
+    
+    // 1 argument passed -- interpret it as a vector
+    else
+    {
+      this.x = _x.x;
+      this.y = _x.y;
+    }
+  }
+  
+  // 2 arguments passed -- should be two numbers 'x' and 'y'
+  else
+  {
+    this.x = _x;
+    this.y = _y;
+  }
   
   return this;
 }
