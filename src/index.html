@@ -4,15 +4,22 @@
 	<meta charset="utf-8" />
 </head>
 
-<body bgcolor="#131313" background="images/backgr.png">
+<body bgcolor="#131313" background="assets/images/backgr.png">
 
         
 	<canvas style="position: fixed; top: 50%; margin-top: -250px;  left: 50%; 
           margin-left: -400px;" id="canvas" width="800" height="500">
   </canvas>
   
+  <a href="https://github.com/Bradshaw/octo-hipster">
+    <img style="position: absolute; top: 0; right: 0; border: 0;" 
+        src="assets/images/forkme_left_darkblue_121621.png" alt="Fork me on GitHub">
+  </a> 
+  
+  <!-- include your scripts in the order they will be executed -->
+  
   <script>
-          var DATA_LOCATION="./";
+          var DATA_LOCATION = "./assets/";
           var is_server = false;
   </script>
   
@@ -23,41 +30,39 @@
   <script type="text/javascript" src="jQuery.js"></script>
   
   <!-- global variables -->
-  <script type="text/javascript" src="canvas.web.js"></script>
-  <script type="text/javascript" src="context2d.web.js"></script>
+  <script type="text/javascript" src="client/canvas.web.js"></script>
+  <script type="text/javascript" src="client/context2d.web.js"></script>
   
   <!-- declare utility classes -->
-  <script type="text/javascript" src="V2.js"></script>
-  <script type="text/javascript" src="gamestate.js"></script>
-  <script type="text/javascript" src="Rect.js"></script>
-  <script type="text/javascript" src="Animation.js"></script>
-  <script type="text/javascript" src="AnimationView.js"></script>
-  <script type="text/javascript" src="Bank.js"></script>
-  <script type="text/javascript" src="Timer.js"></script>
+  <script type="text/javascript" src="game/V2.js"></script>
+  <script type="text/javascript" src="game/gamestate.js"></script>
+  <script type="text/javascript" src="game/Rect.js"></script>
+  <script type="text/javascript" src="game/Bank.js"></script>
+  <script type="text/javascript" src="game/Timer.js"></script>
 
   <!-- declare functions -->
-  <script type="text/javascript" src="utility.js"></script>
-  <script type="text/javascript" src="objects.js"></script>
-  <script type="text/javascript" src="loading.web.js"></script>
-  <script type="text/javascript" src="input.web.js"></script>
+  <script type="text/javascript" src="game/utility.js"></script>
+  <script type="text/javascript" src="game/objects.js"></script>
+  
+  <!-- client-specific functions and classes-->
+  <script type="text/javascript" src="client/Animation.web.js"></script>
+  <script type="text/javascript" src="client/AnimationView.web.js"></script>
+  <script type="text/javascript" src="client/loading.web.js"></script>
+  <script type="text/javascript" src="client/input.web.js"></script>
 
   <!-- declare game-object classes -->
-  <script type="text/javascript" src="Robot.js"></script>
-  <script type="text/javascript" src="CivillianRobot.js"></script>
-  <script type="text/javascript" src="PoliceRobot.js"></script>
+  <script type="text/javascript" src="game/Robot.js"></script>
+  <script type="text/javascript" src="game/RobotCivillian.js"></script>
+  <script type="text/javascript" src="game/RobotPolice.js"></script>
+  <script type="text/javascript" src="game/RobotImposter.js"></script>
 
-  <script type="text/javascript" src="game.js"></script>
+  <script type="text/javascript" src="game/game.js"></script>
 
   <!-- main loop ('tis a gamestate) -->
-  <script type="text/javascript" src="main.web.js"></script>
+  <script type="text/javascript" src="client/main.web.js"></script>
   
   <!-- launch! -->
-  <script type="text/javascript" src="client.web.js"></script>
-		
-	<a href="https://github.com/Bradshaw/octo-hipster">
-    <img style="position: absolute; top: 0; right: 0; border: 0;" 
-        src="images/forkme_left_darkblue_121621.png" alt="Fork me on GitHub">
-  </a> 
+  <script type="text/javascript" src="client/client.web.js"></script>
 </body>
 
 </html>

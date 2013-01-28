@@ -26,14 +26,14 @@ MAX_INTERACT_DISTANCE2 = 96*96;
 //! ----------------------------------------------------------------------------
 if(!is_server)
 {
-  var imgTron = load_image('images/sheet_tron.png');
-  var imgGeorge = load_image('images/sheet_george.png');
-  var imgMarie = load_image('images/sheet_marie_antoinette.png');
-  var imgFlic = load_image('images/sheet_flic.png');
-  var imgWifi = load_image('images/wifi.png');
-  var imgSmoke = load_image('images/smoke.png');
-  var imgElectrocution = load_image('images/electrocution.png');
-  var imgExplosion = load_image('images/explosion.png');
+  var imgTron = load_image('sheet_tron.png');
+  var imgGeorge = load_image('sheet_george.png');
+  var imgMarie = load_image('sheet_marie_antoinette.png');
+  var imgFlic = load_image('sheet_flic.png');
+  var imgWifi = load_image('wifi.png');
+  var imgSmoke = load_image('smoke.png');
+  var imgElectrocution = load_image('electrocution.png');
+  var imgExplosion = load_image('explosion.png');
 
   var animTron =
   {

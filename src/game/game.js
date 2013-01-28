@@ -63,7 +63,7 @@ game = function()
   
   
 	if (!is_server)
-		this.map = load_image("images/map.png");
+		this.map = load_image("map.png");
 }
 
 game.prototype.reset = function()
@@ -74,7 +74,7 @@ game.prototype.reset = function()
   for (var i=0; i < this.STARTING_CIVILLIANS; i++)
   {
     this.level.playable_area.randomWithin(spawn_pos);
-    var r = G.addRobot(nextid(), new CivillianRobot(spawn_pos));
+    var r = G.addRobot(nextid(), new RobotCivillian(spawn_pos));
   }
 
 }

@@ -1,7 +1,7 @@
 var is_server = false;
 
-var meSelector = load_image("images/cercle.png")
-var arrowSelector = load_image("images/fleche.png")
+var meSelector = load_image("cercle.png")
+var arrowSelector = load_image("fleche.png")
 
 G = new game();
 
@@ -94,29 +94,26 @@ setInterval(function() { gs.update(); }, (updateRate));
 
 setInterval(function()
 {
-  var dx = keyboard.direction.x;
-  var dy = keyboard.direction.y;
-  
   //! SEND INTERACTION REQUEST
-  var request_interact_id = -1, 
+  var request_interact = (keyboard.action && keyboard.direction.isNull());
+      request_interact_id = -1, 
       current_interact = G.robots[local_id].interactPeer;
   
   // keep same interaction target ?
-  if(keyboard.action && current_interact != null)
+  if(request_interact && current_interact != null)
     request_interact_id = current_interact.id;
   
   // acquire a new interaction target ?
-  else if(keyboard.action && selected)
+  else if(request_interact && selected)
     request_interact_id = selected.id
  
-  
   //! SEND MOVEMENT REQUEST
   if (local_id >= 0) 
   {
     socket.emit('update', 
     {
-      x: Math.round(dx),
-      y: Math.round(dy),
+      x: Math.round(keyboard.direction.x),
+      y: Math.round(keyboard.direction.y),
       intid: request_interact_id
     });
   }

@@ -5,18 +5,20 @@ mime = require('mime')
   , io = require('socket.io').listen(app)
   , fs = require('fs');
 
-require("./utility.js");
-require("./objects.js");
-require("./game.js");
-require("./V2.js");
-require("./Rect.js");
-require("./Bank.js")
-require("./Timer.js")
-require("./Robot.js");
-require("./CivillianRobot.js");
-require("./PoliceRobot.js");
-require("./gamestate.js");
-//require("./lobby.node.js");
+require("./game/utility.js");
+require("./game/objects.js");
+require("./game/game.js");
+require("./game/V2.js");
+require("./game/Rect.js");
+require("./game/Bank.js")
+require("./game/Timer.js")
+require("./game/Robot.js");
+require("./game/RobotCivillian.js");
+require("./game/RobotCivillian.js");
+require("./game/RobotImposter.js");
+require("./game/gamestate.js");
+
+//require("lobby.node.js");
 require("./main.node.js");
 
 
@@ -50,14 +52,18 @@ app.listen(1986);
 
 gameOn = false;
 
-function handler (req, res) {
+function handler (req, res) 
+{
   var filename = req.url;
-  if (filename === '/') {
+  if (filename === '/') 
+  {
     filename = '/index.html';
   }
   fs.readFile(__dirname + filename,
-  function (err, data) {
-    if (err) {
+  function (err, data) 
+  {
+    if (err) 
+    {
       res.writeHead(500);
       return res.end('Mistakes were made...');
     }
@@ -67,15 +73,17 @@ function handler (req, res) {
 }
 
 var x = 0;
-nextid = function() {
+nextid = function() 
+{
   return x++;
 }
 
 connected = [];
 
-setInterval(function(){
-
+setInterval(function()
+{
   nbPlayers = 0;
+  
   //! FOREACH player identified by (Socket sock, int id)
   connected.forEach(function(sock, id)
   {
@@ -85,8 +93,8 @@ setInterval(function(){
     {
       sock.emit('update', 
       {
-        pos: {x:Math.round(bot.position.x), y:Math.round(bot.position.y)},
-        mov: {x:Math.round(bot.movement.x*10), y:Math.round(bot.movement.y*10)},
+        pos: {x: Math.round(bot.position.x), y:Math.round(bot.position.y)},
+        mov: {x: Math.round(bot.movement.x*10), y:Math.round(bot.movement.y*10)},
         id: dd,
         interact: (bot.interactPeer==null) ? -1 : bot.interactPeer.id,
         dead: bot.dead
@@ -95,9 +103,12 @@ setInterval(function(){
     });
     
     var distance = Infinity;
-    if (G.robots[id]!=null && G.robots[id].robotTeam){
+    if (G.robots[id]!=null && G.robots[id].robotTeam)
+    {
       distance = (G.robots[id]?Math.sqrt(G.robots[id].nearestHuman.dist2):Infinity);
-    } else {
+    } 
+    else 
+    {
       distance = (G.robots[id]?Math.sqrt(G.robots[id].nearestCop.dist2):Infinity);
     }
     var vol = 1 - Math.min(   1,      Math.max( 0, ((distance - 20)/300)   )       );
@@ -157,29 +168,37 @@ io.sockets.on('connection', function (socket)
   // intialise secret (server-only) attributes
   r.initSecret();
   
-  connected.forEach(function(sock){
+  connected.forEach(function(sock)
+  {
     sock.emit('newBot',{bot: r.position, id: id, vis: r.visual});
   });
   connected[id]=socket;
   socket.set('id',id);
   G.addRobot(id, r);
-  G.robots.forEach(function(bot, id){
-    socket.emit('newBot',{bot: bot.position, id: id, vis: bot.visual});
+  G.robots.forEach(function(bot, id)
+  {
+    socket.emit('newBot', {bot: bot.position, id: id, vis: bot.visual});
   })
 
 
   socket.on('pong',function(data){
-    if (data.id==id){
+    if (data.id == id)
+    {
       socket.set('challenge',false);
-    } else {
+    } 
+    else 
+    {
       socket.disconnect();
     }
   })
 
-  socket.on('disconnect',function(){
+  socket.on('disconnect',function()
+  {
     delete G.robots[id];
-    socket.get('id', function(err, dd){
-      connected.forEach(function(sock){
+    socket.get('id', function(err, dd)
+    {
+      connected.forEach(function(sock)
+      {
         sock.emit('leave',{id: dd});
       });
     });
@@ -201,8 +220,7 @@ io.sockets.on('connection', function (socket)
           var r = G.robots[data.intid];
           if (r && !(r.humanControlled && r.robotTeam))
           {
-            var d = v.dist2(r.position);
-            if (d < MAX_INTERACT_DISTANCE2) 
+            if (v.dist2(r.position) < MAX_INTERACT_DISTANCE2) 
             {
               bot.tryInteractPeer(r);
             }

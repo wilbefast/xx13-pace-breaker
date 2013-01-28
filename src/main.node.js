@@ -31,7 +31,8 @@ main.enter = function(previous) {
 *	Allows the state to clean up after itself.
 *	Be a friendly state and leave things how they were when you found them!
 */
-main.leave = function() {
+main.leave = function() 
+{
 };
 
 /** Called each frame
@@ -87,6 +88,7 @@ main.update = function()
 *
 *	event - object containing the event that occurred
 */
-main.eventreg = function(event) {
+main.eventreg = function(event) 
+{
 
 };

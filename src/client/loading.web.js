@@ -41,7 +41,7 @@ function load_image(file_name)
 {
   // inform the system that we want to load this image
   var image = new Image();
-  image.src = DATA_LOCATION + file_name;
+  image.src = DATA_LOCATION + "images/" + file_name;
   
   // make sure we wait till its loaded
   image.onload = resourceLoaded;
@@ -59,7 +59,7 @@ function load_audio(file_name)
   // inform the system that we want to load this image
   var audio = new Audio();
   audio.preload = true;
-  audio.src = DATA_LOCATION + file_name;
+  audio.src = DATA_LOCATION + "sound/"  + file_name;
   
   // make sure we wait till its loaded
   audio.addEventListener('canplaythrough', resourceLoaded);
@@ -115,8 +115,8 @@ function initialise() {
     AudioContext,
     [
     // ordre des fichier audio
-      'audio/Battements_coeur.ogg',
-      'audio/bumpy.ogg'
+      'assets/sounds/Battements_coeur.ogg',
+      'assets/sounds/bumpy.ogg'
     ],
     finishedLoading
     );
