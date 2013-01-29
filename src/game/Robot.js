@@ -30,6 +30,7 @@ Robot = function(id_, position_, skin_i_)
 //! ----------------------------------------------------------------------------
 
 // collisions and interactions
+Robot.prototype.SPEED = 0.1;
 Robot.prototype.radius = 16;
 Robot.prototype.radius2 = Robot.prototype.RADIUS * Robot.prototype.RADIUS;
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
@@ -37,6 +38,7 @@ Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
 Robot.prototype.TYPE_CIVILLIAN = 0;
 Robot.prototype.TYPE_POLICE = 1;
 Robot.prototype.TYPE_IMPOSTER = 2;
+Robot.prototype.TYPE_NAMES = [ "Civillian", "Police", "Imposter" ];
 // states enumeration
 Robot.prototype.STATE_IDLE = 0;
 Robot.prototype.STATE_INTERACT = 1;
@@ -99,7 +101,7 @@ Robot.prototype.forceSetSpeed = function(x, y)
 
 Robot.prototype.trySetSpeed = function(x, y)
 {
-  this.forceSetSpeed(0.1 * bound(x, -1, 1), 0.1 * bound(y, -1, 1));
+  this.forceSetSpeed(this.SPEED * bound(x, -1, 1), this.SPEED * bound(y, -1, 1));
 };
 
 Robot.prototype.collision = function(other)
@@ -233,10 +235,10 @@ Robot.prototype.update = function(delta_t)
 Robot.prototype.getPerceivedTypeOf = function(otherBot)
 {
   return (otherBot.TYPE == this.TYPE_IMPOSTER && this.TYPE != this.TYPE_IMPOSTER)
-          ? RobotCivillian.TYPE : otherBot.TYPE;
+          ? this.TYPE_CIVILLIAN : otherBot.TYPE;
 }
 
 Robot.prototype.toString = function() 
 {
-  return ("robot(" + this.id + ")");
+  return (this.TYPE_NAMES[this.TYPE] + "(" + this.id + ")");
 }

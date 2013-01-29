@@ -14,7 +14,7 @@ require("./game/Bank.js")
 require("./game/Timer.js")
 require("./game/Robot.js");
 require("./game/RobotCivillian.js");
-require("./game/RobotCivillian.js");
+require("./game/RobotPolice.js");
 require("./game/RobotImposter.js");
 require("./game/gamestate.js");
 
@@ -168,7 +168,10 @@ io.sockets.on('connection', function (socket)
   G.level.playable_area.randomWithin(pos);
   
   // create robot -- place a new robot object at this position
-  var sockBot = new RobotImposter(sockId, pos); //! FIXME
+  
+  var sockBot = (sockId % 2) 
+                    ? new RobotImposter(sockId, pos) 
+                    : new RobotPolice(sockId, pos);
   G.addRobot(sockBot);
   
   // tell OTHER PLAYERS about NEW PLAYER
@@ -177,6 +180,9 @@ io.sockets.on('connection', function (socket)
     otherSocket.get('id', function(err, otherId)
     {
       var otherBot = G.robots[otherId];
+      if(!otherBot)
+        console.log("there is no robot " + otherId);
+      else
       otherSocket.emit('newBot', 
                           { pos: sockBot.position, 
                             id: sockId, 
