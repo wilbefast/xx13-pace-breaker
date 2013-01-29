@@ -3,3 +3,4 @@ audio_rush/*.wav
 *.kate-swp
 *.orig
 src/.DS_Store
+*.db
