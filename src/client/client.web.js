@@ -119,8 +119,11 @@ function treatUserInput()
 {
   //! SKIP IF THERE IS NO LOCALLY-CONTROLLED ROBOT DEFINED
   if(!local_bot)
+  {
+    console.log("no local bot");
     return;
-  
+  }
+    
   //! SEND INTERACTION REQUEST
   var request_interact = (keyboard.action && keyboard.direction.isNull());
       request_interact_id = -1, 
@@ -135,14 +138,11 @@ function treatUserInput()
     request_interact_id = selected.id
  
   //! SEND MOVEMENT REQUEST
-  if (local_id >= 0) 
+  socket.emit('synch', 
   {
-    socket.emit('update', 
-    {
-      x: Math.round(keyboard.direction.x),
-      y: Math.round(keyboard.direction.y),
-      intid: request_interact_id
-    });
-  }
+    x: Math.round(keyboard.direction.x),
+    y: Math.round(keyboard.direction.y),
+    intid: request_interact_id
+  });
 }
 setInterval(treatUserInput, 100);
