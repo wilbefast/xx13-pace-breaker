@@ -119,8 +119,8 @@ function treatUserInput()
     return;
     
   //! SEND INTERACTION REQUEST
-  var request_interact = (keyboard.action && keyboard.direction.isNull());
-      request_interact_id = -1, 
+  var request_interact = (keyboard.action && keyboard.direction.isNull()),
+      request_interact_id, 
       current_interact = local_bot.interactPeer;
   
   // keep same interaction target ?
@@ -130,6 +130,10 @@ function treatUserInput()
   // acquire a new interaction target ?
   else if(request_interact && selected)
     request_interact_id = selected.id
+    
+  // cancel interaction ?
+  else
+    request_interact_id = -1;
  
   //! SEND MOVEMENT REQUEST
   socket.emit('input', 

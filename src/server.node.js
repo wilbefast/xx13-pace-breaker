@@ -188,7 +188,7 @@ io.sockets.on('connection', function (socket)
                             skn: sockBot.skin_i
                           });
       else
-        console.log("couldn't find Robot number " + otherId);
+        console.log("Can't find Robot number " + otherId);
     });
   });
   

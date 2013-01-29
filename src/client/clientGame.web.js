@@ -33,12 +33,12 @@ Game.prototype.draw = function()
   
   // draw a circle around the controlled robot
    
-  if (local_bot) 
+  /*if (local_bot) 
   {
     context.drawImage(this.meSelector, 
                       local_bot.position.x - local_bot.SPRITE_SIZE.x * 0.2,
                       local_bot.position.y + local_bot.SPRITE_SIZE.y * 0.2);
-  }
+  }*/
   
   // draw each robot
   this.robots.forEach(function(bot) { bot.draw(); });

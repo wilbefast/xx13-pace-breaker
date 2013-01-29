@@ -101,6 +101,31 @@ Robot.prototype.draw = function()
   // draw the sprite
   this.view.draw(this.position);
   
+  // draw GUI stuff
+  
+  // -- self (green)
+  if(this.id == local_id)
+  {
+    context.lineWidth = 3.0;
+    context.strokeStyle = 'rgb(82,176,36)';
+    context.strokeCircle(this.position.x, this.position.y, this.radius);
+  }
+  // -- friends (blue)
+  else if(this.TYPE == local_bot.TYPE)
+  {
+    context.lineWidth = 2.0;
+    context.strokeStyle = 'blue';
+    context.strokeCircle(this.position.x, this.position.y, this.radius);
+  }
+  // -- foes (red)
+  else if(this.TYPE == this.TYPE_POLICE && local_bot.TYPE == this.TYPE_IMPOSTER)
+  {
+    context.lineWidth = 2.0;
+    context.strokeStyle = 'red';
+    context.strokeCircle(this.position.x, this.position.y, this.radius);
+  }
+  
+  
   //! FIXME -- DEBUG STUFF
   /*context.lineWidth = 1;
   context.strokeText(this.id+"->"
