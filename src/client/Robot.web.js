@@ -32,31 +32,51 @@ function addSkin(skin_array, image_file)
   });
 }
 
+
 //!-----------------------------------------------------------------------------
 //! CIVILLIAN SKINS 
 //!-----------------------------------------------------------------------------
-civillianSkins = [];
-addSkin(civillianSkins, 'sheet_george');
-addSkin(civillianSkins, 'sheet_mary');
-addSkin(civillianSkins, 'sheet_tron');
+CivillianRobot.prototype.SKINS = [];
+addSkin(CivillianRobot.prototype.SKINS, 'sheet_george');
+addSkin(CivillianRobot.prototype.SKINS, 'sheet_mary');
+addSkin(CivillianRobot.prototype.SKINS, 'sheet_tron');
 
 
 //!-----------------------------------------------------------------------------
 //! POLICE SKINS 
 //!-----------------------------------------------------------------------------
-policeSkins = [];
-addSkin(policeSkins, 'sheet_arnold');
+PoliceRobot.prototype.SKINS  = [];
+addSkin(PoliceRobot.prototype.SKINS , 'sheet_arnold');
+
 
 //!-----------------------------------------------------------------------------
 //! IMPOSTER SKINS 
 //!-----------------------------------------------------------------------------
-imposterSkins = [];
-addSkin(imposterSkins, 'sheet_imposter');
+ImposterRobot.prototype.SKINS  = [];
+addSkin(ImposterRobot.prototype.SKINS , 'sheet_imposter');
+
+
+
+//!-----------------------------------------------------------------------------
+
+
+
+//!-----------------------------------------------------------------------------
+//! INITIALISE ROBOTS
+//!-----------------------------------------------------------------------------
+
+Robot.prototype.initClient = function()
+{
+  // initialise visual stuff on the client only
+  this.skin = this.SKINS[this.skin_i];
+  this.facing = new V2(0, 1);
+  this.view = new AnimationView(this.skin.walk_E, 
+                                new V2(32, 32), 0.005, REVERSE_AT_END);
+}
 
 //!-----------------------------------------------------------------------------
 //! DRAW ROBOTS
 //!-----------------------------------------------------------------------------
-
 Robot.prototype.draw = function() 
 {
   // only one of the two need draw the connection
@@ -98,7 +118,6 @@ Robot.prototype.draw = function()
   //context.lineWidth = 1;
   //context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
 };
-
 
 //! FIXME -- unused
 /*animWifi = new Animation(imgWifi, new V2(32, 32), new V2(0, 0), 3);

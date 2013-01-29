@@ -31,7 +31,7 @@ RobotImposter = function(position_)
 
 // inherits from Robot
 RobotImposter.prototype = new Robot();
-RobotImposter.prototype.TYPE = Robot.prototype.TYPE_IMPOSTER;;
+RobotImposter.prototype.TYPE = Robot.prototype.TYPE_IMPOSTER;
 
 
 //! ----------------------------------------------------------------------------

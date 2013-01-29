@@ -34,7 +34,7 @@ Robot.prototype.RADIUS = 16;
 Robot.prototype.RADIUS2 = Robot.prototype.RADIUS * Robot.prototype.RADIUS;
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
 // types enumeration
-Robot.prototype.TYPE = -1 // overriden by prototype chain
+Robot.prototype.TYPE = 0; // overriden by prototype chain
 Robot.prototype.TYPE_CIVILLIAN = 0;
 Robot.prototype.TYPE_POLICE = 1;
 Robot.prototype.TYPE_IMPOSTER = 2;
@@ -43,8 +43,6 @@ Robot.prototype.STATE_IDLE = 0;
 Robot.prototype.STATE_INTERACT = 1;
 Robot.prototype.STATE_DYING = 2;
 Robot.prototype.STATE_DEAD = 3;
-// skins
-Robot.prototype.MAX_SKIN_I = 3;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION
@@ -106,13 +104,6 @@ Robot.prototype.initServer = function()
       dist2 : Infinity,
     };
   }  
-}
-
-Robot.prototype.initClient = function()
-{
-  this.facing = new V2(0, 1);
-  this.view 
-      = new AnimationView(this.skin.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
 }
 
 //! ----------------------------------------------------------------------------
