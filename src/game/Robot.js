@@ -69,7 +69,7 @@ Robot.prototype.init = function(id_, position_, skin_i_)
   
   //! FIXME
   // skin
-  this.skin_i = (skin_i_ || 0);
+  this.skin_i = (skin_i_ || rand(3)); // arbitrarily 3 skins maximum
      
   // interactions
   this.interactPeer = null;

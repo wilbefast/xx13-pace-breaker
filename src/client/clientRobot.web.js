@@ -75,7 +75,7 @@ RobotPolice.prototype.SPRITE_SIZE = new V2(64, 64);
 
 Robot.prototype.specialInit = function()
 {
-  // initialise visual stuff on the client only
+  this.skin_i = (this.skin_i % this.SKINS.length);
   this.skin = this.SKINS[this.skin_i];
   
   this.facing = new V2(0, 1);
@@ -111,7 +111,7 @@ Robot.prototype.draw = function()
     context.strokeCircle(this.position.x, this.position.y, this.radius);
   }
   // -- friends (blue)
-  else if(this.TYPE == local_bot.TYPE)
+  else if(local_bot && this.TYPE == local_bot.TYPE)
   {
     context.lineWidth = 2.0;
     context.strokeStyle = 'blue';
@@ -187,8 +187,6 @@ Robot.prototype.updateSpecial = function(delta_t)
     this.view.setSubimage(1);
   else
     this.view.update(delta_t);
-  
-
 }
 
 
