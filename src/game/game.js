@@ -53,7 +53,7 @@ canInteractWith = function(subject, object)
 game = function()
 {
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 20;
+  this.STARTING_CIVILLIANS = 10;
   
   // Replace with "new level()" when THAT's done
 	this.level = 

@@ -91,7 +91,7 @@ setInterval(function()
     //! FOREACH robot in the game identified by (Robot bot, int dd)
     G.robots.forEach(function(bot, dd)
     {
-      sock.emit('update', 
+      sock.emit('synch', 
       {
         pos: {x: Math.round(bot.position.x), y:Math.round(bot.position.y)},
         mov: {x: Math.round(bot.movement.x*10), y:Math.round(bot.movement.y*10)},
@@ -204,7 +204,7 @@ io.sockets.on('connection', function (socket)
     });
   })
 
-  socket.on("update", function(data)
+  socket.on('synch', function(data)
   {
     socket.get('id', function(err, dd)
     {

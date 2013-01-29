@@ -45,22 +45,22 @@ $('body').bind('beforeunload',function() { socket.send("leaving"); });
 //! SYNCHRONISED WITH SERVER
 function synchronise(data)
 {
-  if (local_bot) 
-  {
-    // move -- smoothe transition to avoid ugly snapping
-    local_bot.movement.setFromTo(local_bot.position, data.pos)
-                      .scale(0.4)
-                      .addV2(data.mov);
-    // die
-    local_bot.dead = data.dead;
-    
-    // interact
-    local_bot.forceInteractPeer((data.interact == -1) 
-                                    ? null 
-                                    : G.robots[data.interact]);
-  }
+  
+  var bot = G.robots[data.id];
+  var peer = (data.interact == -1) ? null : G.robots[data.interact];
+  
+  // move -- smoothe transition to avoid ugly snapping
+  bot.movement.setFromTo(bot.position, data.pos)
+                    .scale(0.4)
+                    .addV2(data.mov);
+  
+  // die
+  bot.dead = data.dead;
+  
+  // interact
+  bot.forceInteractPeer(peer);
 }
-socket.on('update', synchronise);
+socket.on('synch', synchronise);
 
 //! DEAD RECKONING (CLIENT-SIDE SIMULATION)
 var updateRate = 1000/60;
