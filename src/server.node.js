@@ -222,7 +222,7 @@ io.sockets.on('connection', function (socket)
       if (dd) 
       {
         // SET MOVEMENT
-        bot.tryMove(data.x, data.y);
+        bot.trySetSpeed(data.x, data.y);
         
         // SET INTERACTION (if applicable)
         if (data.intid != -1)

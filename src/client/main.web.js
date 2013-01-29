@@ -43,7 +43,7 @@ main.update = function()
   if(local_bot)
   {
     // select a nearby bot
-    if(local_bot.nearest.dist2 <= MAX_INTERACT_DISTANCE2)
+    if(local_bot.nearest.dist2 <= local_bot.MAX_INTERACT_DISTANCE2)
     {
       // 'nearest.dist2' is set to Infinity whenever 'nearest.bot' is null 
       // hence selected must be non-null
