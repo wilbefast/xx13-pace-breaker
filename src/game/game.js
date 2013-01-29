@@ -137,14 +137,17 @@ game.prototype.update = function(delta_t)
     // snap the robots inside the map
     var borderCollision = boundObject(bot, this.level.playable_area);
     if(!borderCollision.isNull())
+    {
       bot.perceiveObstacle(borderCollision);
+      console.log("collision!");
+    }
 	}
 }
 
 game.prototype.draw = function()
 {
   // draw the background
-	context.drawImage(this.map,0,0);
+	context.drawImage(this.map, 0, 0);
   
   // draw a circle around the controlled robot
   if (G.robots[local_id]) 
@@ -159,6 +162,8 @@ game.prototype.draw = function()
   // draw the targeter
   if (selected) 
   {
-    context.drawImage(arrowSelector,selected.position.x-6,selected.position.y-24);
+    context.drawImage(arrowSelector,
+                      selected.position.x - 6,
+                      selected.position.y - 24);
   } 
 };

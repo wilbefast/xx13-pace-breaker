@@ -128,11 +128,11 @@ setInterval(function()
 //! ----------------------------------------------------------------------------
 setInterval(function()
 {
-  connected.forEach(function(sock, id)
+  connected.forEach(function(sock, challengeId)
   {
-    sock.get('challenge',function(err,data)
+    sock.get('challenge', function(err, data)
     {
-      if (data && data)
+      if (data && data) //! FIXME -- wtf is this?
       {
         sock.disconnect()
       } 
@@ -157,31 +157,34 @@ io.sockets.on('connection', function (socket)
   socket.set('challenge', false)
   
   // generate unique id or the player
-  var id = nextid();
+  var sockId = nextid();
   
   // create robot -- generate random position
   var pos = new V2();
   G.level.playable_area.randomWithin(pos);
   
   // create robot -- place a new robot object at this position
-  var newBot = new RobotImposter(pos);
-  G.addRobot(id, newBot);
+  var sockBot = new RobotImposter(pos);
+  G.addRobot(sockId, sockBot);
   
   // tell OTHER PLAYER about NEW PLAYER
   connected.forEach(function(sock)
   {
-    sock.emit('newBot', { bot: newBot.position, id: id, skn: newBot.skin_i });
+    sock.emit('newBot', { bot: sockBot.position, 
+                          id: sockId, 
+                          skn: sockBot.skin_i});
   });
   
-  // 
-  connected[id] = socket;
-  socket.set('id', id);
-  
+  // attach an id to the socket
+  connected[sockId] = socket;
+  socket.set('id', sockId);
   
   // tell NEW PLAYER about OTHER PLAYERS
-  G.robots.forEach(function(bot, id)
+  G.robots.forEach(function(otherBot, otherId)
   {
-    socket.emit('newBot', {bot: bot.position, id: id, skn: bot.skin_i});
+    socket.emit('newBot', { bot: otherBot.position, 
+                            id: otherId, 
+                            skn: otherBot.skin_i});
   })
 
   //! --------------------------------------------------------------------------
@@ -191,7 +194,7 @@ io.sockets.on('connection', function (socket)
   // -- client replying to 'are you alive?' request
   socket.on('pong', function(data)
   {
-    if (data.id == id)
+    if (data.id == sockId)
     {
       socket.set('challenge', false);
     } 
@@ -204,49 +207,50 @@ io.sockets.on('connection', function (socket)
   // -- client informing server that it wishes to disconnect
   socket.on('disconnect', function()
   {
-    delete G.robots[id];
-    socket.get('id', function(err, dd)
+    delete G.robots[sockId];
+    socket.get('id', function(err, disconnectId)
     {
       connected.forEach(function(sock)
       {
-        sock.emit('leave',{id: dd});
+        sock.emit('leave', {id: disconnectId});
       });
     });
   })
 
   // -- client sending user input to server
-  socket.on('synch', function(data)
+  socket.on('input', function(data)
   {
-    socket.get('id', function(err, synch_id)
+    socket.get('id', function(err, inputId)
     {
-      if (synch_id) 
+      if (inputId) 
       {
-        var synch_bot = G.robots[synch_id];
+        var inputBot = G.robots[inputId];
         
         // SET MOVEMENT
-        synch_bot.trySetSpeed(data.x, data.y);
+        if(data.x || data.y)
+        inputBot.trySetSpeed(data.x, data.y);
         
         // SET INTERACTION (if applicable)
-        if (data.intid != -1)
+        if (data.who != -1)
         {
-          var interactTarget = G.robots[data.intid];
+          var interactTarget = G.robots[data.who];
           if (interactTarget && interactTarget.TYPE != Robot.TYPE_POLICE)
           {
-            if (synch_bot.position.dist2(synch_bot.position) 
-                < synch_bot.MAX_INTERACT_DISTANCE2)
+            if (inputBot.position.dist2(inputBot.position) 
+                < inputBot.MAX_INTERACT_DISTANCE2)
             {
-              synch_bot.tryInteractPeer(interactTarget);
+              inputBot.tryInteractPeer(interactTarget);
             }
           }
         }
         else 
         {
-          synch_bot.tryInteractPeer(null);
+          inputBot.tryInteractPeer(null);
         }
       }
     });
   });
   
-  // tell NEW PLAYER what its id is
-  socket.emit('you', {id: id});
+  // tell NEW PLAYER what their id is
+  socket.emit('you', {id: sockId});
 });
