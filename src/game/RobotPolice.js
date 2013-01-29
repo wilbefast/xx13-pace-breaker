@@ -19,9 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-RobotPolice = function(position_)
+RobotPolice = function(id_, position_, skin_i_)
 {
-	this.init(position_);
+	this.init(id_, position_, skin_i_);
   return this;
 }
 //! ----------------------------------------------------------------------------
@@ -36,9 +36,9 @@ RobotPolice.prototype.TYPE = Robot.prototype.TYPE_POLICE;
 //! INITIALISATION
 //! ----------------------------------------------------------------------------
 
-RobotPolice.prototype.init = function(position_)
+RobotPolice.prototype.init = function(id_, position_, skin_i_)
 {
- 	Robot.prototype.init.call(this, position_);
+ 	Robot.prototype.init.call(this, id_, position_, skin_i_);
  	if (!is_server) {
 		this.animset = animFlic;
 	} else {

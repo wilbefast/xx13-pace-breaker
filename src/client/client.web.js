@@ -59,9 +59,6 @@ function synchronise(data)
                     .scale(0.4)
                     .addV2(data.mov);
   
-  // die
-  bot.dead = data.dead;
-  
   // interact
   bot.forceInteractPeer(peer);
 }
@@ -77,12 +74,10 @@ setInterval(function() { gs.update(); }, updateRate);
 //! ----------------------------------------------------------------------------
 //! CREATE NEW ROBOTS ONLY WHEN SERVER SAYS SO
 //! ----------------------------------------------------------------------------
-socket.on('newBot',function(data)
+socket.on('newBot', function(data)
 {
-  var newBot = ((data.vis == 4) 
-            ? new RobotPolice(new V2(data.bot.x, data.bot.y))
-            : new RobotCivillian(new V2(data.bot.x, data.bot.y), data.vis));
-  G.addRobot(data.id, newBot);
+  // parse new Robot object from data
+  var newBot = G.unpackRobot(data);
   
   // assume control of the new Robot (if it's ours)
   if(newBot.id == local_id)

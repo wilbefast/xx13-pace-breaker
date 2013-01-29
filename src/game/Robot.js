@@ -19,9 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-Robot = function(position_, type_i_, skin_i_)
+Robot = function(id_, position_, skin_i_)
 {
-  this.init(position_, type_i_, skin_i_);
+  this.init(id_, position_, skin_i_);
   return this;
 }
 
@@ -34,7 +34,6 @@ Robot.prototype.radius = 16;
 Robot.prototype.radius2 = Robot.prototype.RADIUS * Robot.prototype.RADIUS;
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
 // types enumeration
-Robot.prototype.TYPE = 0; // overriden by prototype chain
 Robot.prototype.TYPE_CIVILLIAN = 0;
 Robot.prototype.TYPE_POLICE = 1;
 Robot.prototype.TYPE_IMPOSTER = 2;
@@ -48,8 +47,11 @@ Robot.prototype.STATE_DEAD = 3;
 //! INITIALISATION
 //! ----------------------------------------------------------------------------
 
-Robot.prototype.init = function(position_, skin_i_)
+Robot.prototype.init = function(id_, position_, skin_i_)
 {
+  // identifier
+  this.id = id_;
+  
   //! FIXME -- replace with state
   this.killed = false;
   this.timeToDie = 0;
@@ -228,7 +230,13 @@ Robot.prototype.update = function(delta_t)
     this.updateSpecial(dt); //! FIXME -- why not delta_t?
 }
 
+Robot.prototype.getPerceivedTypeOf = function(otherBot)
+{
+  return (otherBot.TYPE == this.TYPE_IMPOSTER && this.TYPE != this.TYPE_IMPOSTER)
+          ? RobotCivillian.TYPE : otherBot.TYPE;
+}
+
 Robot.prototype.toString = function() 
 {
-  return ("robot" + this.id);
+  return ("robot(" + this.id + ")");
 }

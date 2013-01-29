@@ -66,24 +66,54 @@ game = function()
 		this.map = load_image("map.png");
 }
 
+game.prototype.toString = function()
+{
+  return "game(" + this.robots.length + " Robots)";
+}
+
 game.prototype.reset = function()
 {
   G.robots = [];
   connected = [];
+  
+  // create Civillians
   var spawn_pos = new V2();
   for (var i=0; i < this.STARTING_CIVILLIANS; i++)
   {
     this.level.playable_area.randomWithin(spawn_pos);
-    var r = G.addRobot(nextid(), new RobotCivillian(spawn_pos));
+    G.addRobot(new RobotCivillian(nextid(), spawn_pos));
   }
-
+}
+  
+game.prototype.addRobot = function(newBot)
+{
+  this.robots[newBot.id] = newBot;
 }
 
-game.prototype.addRobot = function(id, robot)
+game.prototype.unpackRobot = function(packet)
 {
-	this.robots[id]=robot;
-  robot.id = id;
-  return robot;
+  var newBot;
+  switch(packet.typ)
+  {
+    case RobotCivillian.prototype.TYPE:
+      newBot = new RobotCivillian(packet.id, packet.pos, packet.skn);
+      break;
+      
+    case RobotPolice.prototype.TYPE:
+      newBot = new RobotPolice(packet.id, packet.pos, packet.skn);
+      break;
+      
+    case RobotImposter.prototype.TYPE:
+      newBot = new RobotImposter(packet.id, packet.pos, packet.skn);
+      break;
+      
+    default:
+      console.log("invalid Robot type " + packet.typ);
+      return null;
+      
+  }
+	this.robots[packet.id] = newBot;
+  return newBot;
 };
 
 game.prototype.update = function(delta_t) 

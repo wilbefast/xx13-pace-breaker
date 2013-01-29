@@ -19,9 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-RobotImposter = function(position_)
+RobotImposter = function(id_, position_, skin_i_)
 {
-  this.init(position_);
+  this.init(id_, position_, skin_i_);
   return this;
 }
 
@@ -38,7 +38,7 @@ RobotImposter.prototype.TYPE = Robot.prototype.TYPE_IMPOSTER;
 //! INITIALISATION
 //! ----------------------------------------------------------------------------
 
-RobotImposter.prototype.init = function(position_)
+RobotImposter.prototype.init = function(id_, position_, skin_i_)
 {
-  Robot.prototype.init.call(this, position_);
+  Robot.prototype.init.call(this, id_, position_, skin_i_);
 }

@@ -85,20 +85,24 @@ setInterval(function()
 {
   nbPlayers = 0;
   
-  //! FOREACH player identified by (Socket sock, int id)
-  connected.forEach(function(sock, id)
+  //! FOREACH player (socket) connected to the server
+  connected.forEach(function(synchSock, synchSockId)
   {
     nbPlayers++;
-    //! FOREACH robot in the game identified by (Robot bot, int dd)
-    G.robots.forEach(function(bot, dd)
+    //! FOREACH robot in the game
+    G.robots.forEach(function(synchBot, synchBotId)
     {
-      sock.emit('synch', 
+      synchSock.emit('synch', 
       {
-        pos: {x: Math.round(bot.position.x), y:Math.round(bot.position.y)},
-        mov: {x: Math.round(bot.speed.x*10), y:Math.round(bot.speed.y*10)},
-        id: dd,
-        interact: (bot.interactPeer == null) ? -1 : bot.interactPeer.id,
-        dead: bot.dead
+        pos: { x: Math.round(synchBot.position.x), 
+               y:Math.round(synchBot.position.y) },
+        mov: { x: Math.round(synchBot.speed.x * 10), 
+               y:Math.round(synchBot.speed.y * 10) },
+        id: synchBotId,
+        interact: ((synchBot.interactPeer != null) 
+                            ? synchBot.interactPeer.id 
+                            : -1),
+        dead: synchBot.dead
       });
       
     });
@@ -164,15 +168,22 @@ io.sockets.on('connection', function (socket)
   G.level.playable_area.randomWithin(pos);
   
   // create robot -- place a new robot object at this position
-  var sockBot = new RobotImposter(pos);
-  G.addRobot(sockId, sockBot);
+  var sockBot = new RobotImposter(sockId, pos); //! FIXME
+  G.addRobot(sockBot);
   
-  // tell OTHER PLAYER about NEW PLAYER
-  connected.forEach(function(sock)
+  // tell OTHER PLAYERS about NEW PLAYER
+  connected.forEach(function(otherSocket)
   {
-    sock.emit('newBot', { bot: sockBot.position, 
-                          id: sockId, 
-                          skn: sockBot.skin_i});
+    otherSocket.get('id', function(err, otherId)
+    {
+      var otherBot = G.robots[otherId];
+      otherSocket.emit('newBot', 
+                          { pos: sockBot.position, 
+                            id: sockId, 
+                            typ: otherBot.getPerceivedTypeOf(sockBot),
+                            skn: sockBot.skin_i
+                          });
+    });
   });
   
   // attach an id to the socket
@@ -182,8 +193,9 @@ io.sockets.on('connection', function (socket)
   // tell NEW PLAYER about OTHER PLAYERS
   G.robots.forEach(function(otherBot, otherId)
   {
-    socket.emit('newBot', { bot: otherBot.position, 
+    socket.emit('newBot', { pos: otherBot.position, 
                             id: otherId, 
+                            typ: sockBot.getPerceivedTypeOf(otherBot),
                             skn: otherBot.skin_i});
   })
 

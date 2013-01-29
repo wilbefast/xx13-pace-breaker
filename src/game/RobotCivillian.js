@@ -19,9 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-RobotCivillian = function(position_)
+RobotCivillian = function(id_, position_, skin_i_)
 {
-	this.init(position_);
+	this.init(id_, position_, skin_i_);
 
   return this;
 }
@@ -38,9 +38,9 @@ RobotCivillian.prototype.TYPE = Robot.prototype.TYPE_CIVILLIAN;
 //! INITIALISATION
 //! ----------------------------------------------------------------------------
 
-RobotCivillian.prototype.init = function(position_)
+RobotCivillian.prototype.init = function(id_, position_, skin_i_)
 {
-  Robot.prototype.init.call(this, position_);
+  Robot.prototype.init.call(this, id_, position_, skin_i_);
   
   this.timeToDie = 5000; //! FIXME
   this.wander_timer = new Timer(1500);
