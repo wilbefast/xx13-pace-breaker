@@ -19,17 +19,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! SKIN BUILDER FUNCTION
 //!-----------------------------------------------------------------------------
 
-function addSkin(skin_array, image_file)
+function addSkin(skin_array, image_file, is_cop) //! is_cop is a kludge
 {
   var image = load_image(image_file);
-  skin_array.push
-  ({
-    WALK_N : new Animation(image, new V2(32, 32), new V2(0, 0), 3),
-    WALK_E : new Animation(image, new V2(32, 32), new V2(0, 32), 3),
-    WALK_W : new Animation(image, new V2(32, 32), new V2(0, 32), 3, FLIP_X),
-    WALK_S : new Animation(image, new V2(32, 32), new V2(0, 64), 3),
-    DIE : new Animation(image, new V2(32, 32), new V2(0, 96), 3)
-  });
+  if (!is_cop) {
+	skin_array.push
+		({
+			WALK_N : new Animation(image, new V2(32, 32), new V2(0, 0), 3),
+			WALK_E : new Animation(image, new V2(32, 32), new V2(0, 32), 3),
+			WALK_W : new Animation(image, new V2(32, 32), new V2(0, 32), 3, FLIP_X),
+			WALK_S : new Animation(image, new V2(32, 32), new V2(0, 64), 3),
+			DIE : new Animation(image, new V2(32, 32), new V2(0, 96), 3)
+		});
+	} else {
+	skin_array.push
+		({
+			WALK_N : new Animation(image, new V2(64, 64), new V2(0, 0), 3),
+			WALK_E : new Animation(image, new V2(64, 64), new V2(0, 64), 3),
+			WALK_W : new Animation(image, new V2(64, 64), new V2(0, 64), 3, FLIP_X),
+			WALK_S : new Animation(image, new V2(64, 64), new V2(0, 128), 3),
+			DIE : new Animation(image, new V2(64, 64), new V2(0, 192), 3)
+		});
+	}
 }
 
 
