@@ -220,7 +220,7 @@ io.sockets.on('connection', function (socket)
           var r = G.robots[data.intid];
           if (r && !(r.humanControlled && r.robotTeam))
           {
-            if (v.dist2(r.position) < MAX_INTERACT_DISTANCE2) 
+            if (v.dist2(r.position) < MAX_INTERACT_DISTANCE2)
             {
               bot.tryInteractPeer(r);
             }

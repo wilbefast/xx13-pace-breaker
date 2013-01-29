@@ -106,6 +106,22 @@ V2.prototype.setFromTo = function(v, w)
   return this;
 }
 
+V2.prototype.setBetween = function(start, end, fraction)
+{
+  if(fraction == undefined)
+    fraction = 0.5;
+  
+  if(fraction < 0)
+    this.setV2(start);
+  else if(fraction > 1)
+    this.setV2(end);
+  else
+    this.setXY(start.x + (end.x - start.x) * fraction,
+                 start.y + (end.y - start.y) * fraction);
+  return this;
+}
+
+
 V2.prototype.setNorm = function(new_norm)
 {
   if(new_norm <= 0.0)

@@ -127,13 +127,11 @@ Robot.prototype.initSecret = function()
     {
       bot : null,
       dist2 : Infinity,
-      dir : new V2()
     };
     this.nearestCop =
     {
       bot : null,
       dist2 : Infinity,
-      dir : new V2()
     };
   }
   
@@ -160,25 +158,22 @@ Robot.prototype.init = function(position_, visual)
      
   // interactions
   this.interactPeer = null;
-  this.interactPeer_dir = new V2();
   
   // nearest peer
   this.nearest = 
   { 
     bot : null, 
     dist2 : Infinity, 
-    dir : new V2()
   };
   
   // position and speed
   this.position = new V2(position_);
   this.movement = new V2();
+  this.facing = new V2(0, 1);
   
   // view
   if (!is_server)
   {
-
-    this.animdirection = new V2(0,1);
     this.view 
       = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
       
@@ -187,20 +182,16 @@ Robot.prototype.init = function(position_, visual)
   }
 }
 
-Robot.prototype.move = function(hori, vert) {
-  var dx = 0;
-  if (hori>0) {
-    dx = 1;
-  } else if (hori<0) {
-    dx = -1
-  }
-  var dy = 0;
-  if (vert>0) {
-    dy = 1;
-  } else if (vert<0) {
-    dy = -1
-  }
-  this.movement.setXY(dx/10,dy/10);
+Robot.prototype.move = function(x, y)
+{
+  x = bound(x, -1, 1);
+  y = bound(y, -1, 1);
+  
+  
+  this.movement.setXY(x * 0.1, y * 0.1);
+  this.facing.setXY(x, y);
+  
+  console.log(this.movement);
 };
 
 Robot.prototype.toString = function() 
@@ -212,15 +203,9 @@ Robot.prototype.toString = function()
 //! ROBOT CONVERSATIONS
 //! ----------------------------------------------------------------------------
 
-Robot.prototype.interface = function(otherRobot) 
-{
-	console.log('Ello, ' + otherRobot);
-};
-
 Robot.prototype.consentToInteract = function(otherRobot) 
 {
   // override to accept interactions
-  console.log("Connect!")
   this.dead = true;
   if ((otherRobot.humanControlled && otherRobot.robotTeam)){
     this.killed = true;
@@ -273,7 +258,6 @@ Robot.prototype.forceInteractPeer = function(newPeer)
     // link to new
     this.interactPeer = newPeer;
     this.interactPeer_dist2 = this.position.dist2(newPeer.position);
-    this.interactPeer_dir.setFromTo(this.position, newPeer.position).normalise();
     
     // inform ai of connection
     this.startInteract();
@@ -365,58 +349,29 @@ Robot.prototype.update = function(delta_t)
 
 Robot.prototype.draw = function() 
 {
-    
-  //! FIXME MAKE PRETTIER
-  context.lineWidth = 2.0;
-  context.strokeStyle = 'lime';
-  if(this.interactPeer)
+  // only one of the two need draw the connection
+  if(this.interactPeer && this.id > this.interactPeer.id)
   {
-    // draw a circle around each
-    context.strokeCircle(this.position.x, this.position.y, this.radius);
-    
-    // only one of the two need draw the connection
-    if(this.id > this.interactPeer.id)
-    {
-      var offx = this.interactPeer_dir.x * this.radius,
-          offy = this.interactPeer_dir.y * this.radius;
-      
-      context.strokeLine(this.position.x + offx, 
-                          this.position.y + offy, 
-                          this.interactPeer.position.x - offx, 
-                          this.interactPeer.position.y - offy);
-    }
+    var where = new V2().setBetween(this.position, this.interactPeer.position, 
+                                    0.2 + Math.random()*0.6 );
+    context.strokeStyle = 'rgb(82,176,36)';
+    context.lineWidth = 1.0;
+    context.strokeText(rand_bool() ? '0' : '1', where.x, where.y);
   }
   
-  
-  
-  
-  
-  var anix = this.animdirection.x;
-  var aniy = this.animdirection.y;
-
-  //this.view.setSpeed(0.005);
-  if (anix < 0)
-  {
+  // set sprite to face in the robot's direction
+  if(this.facing.x < 0)
     this.view.setAnimation(this.animset.walk_W);
-  }
-  else if (anix > 0)
-  {
+  else if(this.facing.x > 0)
     this.view.setAnimation(this.animset.walk_E);
-  }
-	
-	else if (aniy < 0)
-	{
+	else if (this.facing.y < 0)
     this.view.setAnimation(this.animset.walk_N);
-	}
-	else if (aniy > 0 )
-	{
+	else if (this.facing.y > 0)
 		this.view.setAnimation(this.animset.walk_S);
-	}
-  else
-  {
-    //this.view.setSpeed(0);
+  
+  // don't animate if not moving
+  if(this.movement.isNull())
     this.view.setSubimage(1);
-  }
   
 	// draw the sprite 
   if (!this.dead) 
@@ -425,14 +380,10 @@ Robot.prototype.draw = function()
     
     //this.buff_view.draw(this.position);
   } 
-  else 
+  else // dead
   {
     this.view.setAnimation(this.animset.die);
-    
-    
-    //if(!this.view.animation)
-      //console.log("wtf " + this.view.animation);
-    
+        
     this.view.setSubimage(2);
     this.view.draw(this.position);
   }
@@ -440,8 +391,9 @@ Robot.prototype.draw = function()
   
   
   //! FIXME -- DEBUG STUFF
-  context.lineWidth = 1;
-  context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
+  context.strokeText(this.facing.x+"", this.position.x, this.position.y);
+  //context.lineWidth = 1;
+  //context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
 };
 
 Robot.prototype.collision = function(other)
@@ -450,7 +402,4 @@ Robot.prototype.collision = function(other)
   var manifold = new V2().setFromTo(other.position, this.position);
   manifold.normalise();
   this.position.addV2(manifold);
-  
-  // react to collision if applicable
-  //this.perceiveObstacle(manifold.reverse().mapToXY(Math.round));
 }
