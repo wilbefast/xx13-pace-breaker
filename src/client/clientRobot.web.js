@@ -104,27 +104,30 @@ Robot.prototype.draw = function()
 
 Robot.prototype.updateSpecial = function(delta_t)
 {
-  // set sprite to face in the robot's direction
-  this.facing.setV2(this.speed).mapToXY(Math.round);
-  if(this.facing.x < 0)
-    this.view.setAnimation(this.skin.WALK_W);
-  else if(this.facing.x > 0)
-    this.view.setAnimation(this.skin.WALK_E);
-  else if (this.facing.y < 0)
-    this.view.setAnimation(this.skin.WALK_N);
-  else if (this.facing.y > 0)
-    this.view.setAnimation(this.skin.WALK_S);
-  
-  // don't animate if not moving
-  if(this.facing.isNull())
-    this.view.setSubimage(1);
-  
   // update the sprite if moving
   if (this.speed.x != 0 || this.speed.y != 0)
   {
-    // update animation
-    this.view.update(delta_t);
+    // update direction
+    this.facing.setV2(this.speed).mapToXY(Math.round);
+    
+    // set sprite to face in the robot's direction
+    if(this.facing.x < 0)
+      this.view.setAnimation(this.skin.WALK_W);
+    else if(this.facing.x > 0)
+      this.view.setAnimation(this.skin.WALK_E);
+    else if (this.facing.y < 0)
+      this.view.setAnimation(this.skin.WALK_N);
+    else if (this.facing.y > 0)
+      this.view.setAnimation(this.skin.WALK_S);
   }
+  
+  // update animation where applicable
+  if(this.facing.isNull())
+    this.view.setSubimage(1);
+  else
+    this.view.update(delta_t);
+  
+
 }
 
 
