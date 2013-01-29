@@ -209,7 +209,8 @@ io.sockets.on('connection', function (socket)
     socket.get('id', function(err, dd)
     {
       var bot = G.robots[dd];
-      if (dd) {
+      if (dd) 
+      {
         // SET MOVEMENT
         bot.move(data.x, data.y);
         
