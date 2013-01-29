@@ -102,10 +102,13 @@ setInterval(function()
       
     });
     
+    //! FIXME
+    /*
     var distance = Infinity;
-    if (G.robots[id]!=null && G.robots[id].robotTeam)
+    if (G.robots[id] != null && G.robots[id].robotTeam)
     {
-      distance = (G.robots[id]?Math.sqrt(G.robots[id].nearestHuman.dist2):Infinity);
+      distance = (G.robots[id])
+                      ? Math.sqrt(G.robots[id].nearestHuman.dist2)
     } 
     else 
     {
@@ -113,7 +116,7 @@ setInterval(function()
     }
     var vol = 1 - Math.min(   1,      Math.max( 0, ((distance - 20)/300)   )       );
     sock.emit('heartbeat',{vol: Math.floor(vol*100)});
-
+    */
   });
 
   gameOn = nbPlayers > 1;

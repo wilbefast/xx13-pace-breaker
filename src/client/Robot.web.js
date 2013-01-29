@@ -36,24 +36,24 @@ function addSkin(skin_array, image_file)
 //!-----------------------------------------------------------------------------
 //! CIVILLIAN SKINS 
 //!-----------------------------------------------------------------------------
-CivillianRobot.prototype.SKINS = [];
-addSkin(CivillianRobot.prototype.SKINS, 'sheet_george');
-addSkin(CivillianRobot.prototype.SKINS, 'sheet_mary');
-addSkin(CivillianRobot.prototype.SKINS, 'sheet_tron');
+RobotCivillian.prototype.SKINS = [];
+addSkin(RobotCivillian.prototype.SKINS, 'sheet_george');
+addSkin(RobotCivillian.prototype.SKINS, 'sheet_mary');
+addSkin(RobotCivillian.prototype.SKINS, 'sheet_tron');
 
 
 //!-----------------------------------------------------------------------------
 //! POLICE SKINS 
 //!-----------------------------------------------------------------------------
-PoliceRobot.prototype.SKINS  = [];
-addSkin(PoliceRobot.prototype.SKINS , 'sheet_arnold');
+RobotPolice.prototype.SKINS  = [];
+addSkin(RobotPolice.prototype.SKINS , 'sheet_arnold');
 
 
 //!-----------------------------------------------------------------------------
 //! IMPOSTER SKINS 
 //!-----------------------------------------------------------------------------
-ImposterRobot.prototype.SKINS  = [];
-addSkin(ImposterRobot.prototype.SKINS , 'sheet_imposter');
+RobotImposter.prototype.SKINS  = [];
+addSkin(RobotImposter.prototype.SKINS , 'sheet_imposter');
 
 
 

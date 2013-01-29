@@ -82,13 +82,11 @@ Robot.prototype.init = function(position_, skin_i_)
   this.speed = new V2();
   
   // client- and server-specific initialisations
-  if (is_server)
-    this.initServer();
-  else
-    this.initClient();
+  if(this.specialInit)
+    this.specialInit();
 }
 
-Robot.prototype.initServer = function()
+Robot.prototype.specialInit = function()
 {
   // only human-controlled Robots need care about displaying a proximity 'hint'
   if(this.TYPE == this.TYPE_POLICE || this.TYPE == this.TYPE_IMPOSTER)
