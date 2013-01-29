@@ -65,7 +65,7 @@ addSkin(RobotImposter.prototype.SKINS , 'sheet_imposter');
 //! INITIALISE ROBOTS
 //!-----------------------------------------------------------------------------
 
-Robot.prototype.initClient = function()
+Robot.prototype.initSpecial = function()
 {
   // initialise visual stuff on the client only
   this.skin = this.SKINS[this.skin_i];

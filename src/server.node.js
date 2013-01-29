@@ -18,6 +18,7 @@ require("./game/RobotCivillian.js");
 require("./game/RobotImposter.js");
 require("./game/gamestate.js");
 
+require("./serverRobot.node.js");
 //require("lobby.node.js");
 require("./main.node.js");
 

@@ -86,24 +86,6 @@ Robot.prototype.init = function(position_, skin_i_)
     this.specialInit();
 }
 
-Robot.prototype.specialInit = function()
-{
-  // only human-controlled Robots need care about displaying a proximity 'hint'
-  if(this.TYPE == this.TYPE_POLICE || this.TYPE == this.TYPE_IMPOSTER)
-  {
-    this.nearestHuman =
-    {
-      bot : null,
-      dist2 : Infinity,
-    };
-    this.nearestCop =
-    {
-      bot : null,
-      dist2 : Infinity,
-    };
-  }  
-}
-
 //! ----------------------------------------------------------------------------
 //! MOVEMENT AND COLLISIONS
 //! ----------------------------------------------------------------------------
@@ -269,5 +251,5 @@ Robot.prototype.update = function(delta_t)
 
 Robot.prototype.toString = function() 
 {
-  return ("robot(" + this.id + ")");
+  return ("robot" + this.id);
 };
