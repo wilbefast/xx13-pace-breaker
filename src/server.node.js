@@ -232,7 +232,7 @@ io.sockets.on('connection', function (socket)
           var interactTarget = G.robots[data.intid];
           if (interactTarget && interactTarget.TYPE != Robot.TYPE_POLICE)
           {
-            if (synch_bot.position.dist2(r.position) 
+            if (synch_bot.position.dist2(synch_bot.position) 
                 < synch_bot.MAX_INTERACT_DISTANCE2)
             {
               synch_bot.tryInteractPeer(interactTarget);

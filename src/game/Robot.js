@@ -210,8 +210,8 @@ Robot.prototype.perceiveObstacle = function(side)
 Robot.prototype.update = function(delta_t) 
 {
   // update position
-  this.position.setXY(this.position.x + this.speed.x * dt, 
-                      this.position.y + this.speed.y * dt);
+  this.position.setXY(this.position.x + this.speed.x * dt,  //! FIXME -- why not delta_t?
+                      this.position.y + this.speed.y * dt); //! FIXME -- why not delta_t?
 
   // update peer distance
   if(this.interactPeer != null)
@@ -225,7 +225,7 @@ Robot.prototype.update = function(delta_t)
   
   // client- or server-specific update code
   if(this.updateSpecial)
-    this.updateSpecial(delta_t);
+    this.updateSpecial(dt); //! FIXME -- why not delta_t?
 }
 
 Robot.prototype.toString = function() 

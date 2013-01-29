@@ -72,7 +72,7 @@ Robot.prototype.specialInit = function()
   
   this.facing = new V2(0, 1);
   this.view = new AnimationView(this.skin.WALK_E, 
-                                new V2(32, 32), 0.005, REVERSE_AT_END);
+                                new V2(32, 32), 0.4, REVERSE_AT_END);
 }
 
 //!-----------------------------------------------------------------------------
