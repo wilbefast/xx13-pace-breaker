@@ -9,11 +9,7 @@ var is_server = false;
 var local_id = -1;
 var local_bot = undefined;
 
-// interface images
-var meSelector = load_image("cercle.png");
-var arrowSelector = load_image("fleche.png");
-
-G = new game();
+G = new Game();
 
 //! ----------------------------------------------------------------------------
 //! MANAGE CONNECTION

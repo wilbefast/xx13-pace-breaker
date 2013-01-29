@@ -1,3 +1,20 @@
+/*
+Copyright (C) 2013 William James Dyce, Kevin Bradshaw and Jean-Bapiste Subils
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 //! ----------------------------------------------------------------------------
 //! UTILITY FUNCTIONS
 //! ----------------------------------------------------------------------------
@@ -50,7 +67,7 @@ canInteractWith = function(subject, object)
 //! GAME CLASS
 //! ----------------------------------------------------------------------------
 
-game = function()
+Game = function()
 {
 	this.robots = [];
   this.STARTING_CIVILLIANS = 20;
@@ -66,14 +83,14 @@ game = function()
 		this.map = load_image("map.png");
 }
 
-game.prototype.toString = function()
+Game.prototype.toString = function()
 {
-  return "game(" + this.robots.length + " Robots)";
+  return "Game(" + this.robots.length + " Robots)";
 }
 
-game.prototype.reset = function()
+Game.prototype.reset = function()
 {
-  G.robots = [];
+  this.robots = [];
   connected = [];
   
   // create Civillians
@@ -81,16 +98,16 @@ game.prototype.reset = function()
   for (var i=0; i < this.STARTING_CIVILLIANS; i++)
   {
     this.level.playable_area.randomWithin(spawn_pos);
-    G.addRobot(new RobotCivillian(nextid(), spawn_pos));
+    this.addRobot(new RobotCivillian(nextid(), spawn_pos));
   }
 }
   
-game.prototype.addRobot = function(newBot)
+Game.prototype.addRobot = function(newBot)
 {
   this.robots[newBot.id] = newBot;
 }
 
-game.prototype.unpackRobot = function(packet)
+Game.prototype.unpackRobot = function(packet)
 {
   var newBot;
   switch(packet.typ)
@@ -116,7 +133,7 @@ game.prototype.unpackRobot = function(packet)
   return newBot;
 };
 
-game.prototype.update = function(delta_t) 
+Game.prototype.update = function(delta_t) 
 {
 	for (bid in this.robots)
   {
@@ -172,27 +189,3 @@ game.prototype.update = function(delta_t)
     }
 	}
 }
-
-game.prototype.draw = function()
-{
-  // draw the background
-	context.drawImage(this.map, 0, 0);
-  
-  // draw a circle around the controlled robot
-  if (G.robots[local_id]) 
-  {
-    context.drawImage(meSelector, G.robots[local_id].position.x - 16,
-                                  G.robots[local_id].position.y + 4);
-  }
-  
-  // draw each robot
-	this.robots.forEach(function(bot) { bot.draw(); });
-  
-  // draw the targeter
-  if (selected) 
-  {
-    context.drawImage(arrowSelector,
-                      selected.position.x - 6,
-                      selected.position.y - 24);
-  } 
-};

@@ -9,7 +9,7 @@ main = new gs.gamestate('main');
 *	state will need in here
 */
 main.init = function() {
-	G = new game()
+	G = new Game()
 	_botid = 0;
 	botid = function(){
 		return _botid++;

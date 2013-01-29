@@ -59,7 +59,12 @@ addSkin(RobotImposter.prototype.SKINS , 'sheet_imposter.png', 32);
 
 //!-----------------------------------------------------------------------------
 
+// interface images
 
+/*
+var meSelector = load_image("cercle.png");
+var arrowSelector = load_image("fleche.png");
+*/
 
 //!-----------------------------------------------------------------------------
 //! CLIENT-ONLY -- INITIALISE ROBOTS' ANIMATIONS
@@ -107,27 +112,53 @@ Robot.prototype.draw = function()
 //! CLIENT-ONLY -- UPDATE ROBOTS' ANIMATIONS
 //!-----------------------------------------------------------------------------
 
-Robot.prototype.updateSpecial = function(delta_t)
+Robot.prototype.resetSprite = function()
 {
-  // update the sprite if moving
-  if (this.speed.x != 0 || this.speed.y != 0)
+  // set sprite to face in the robot's direction
+  
+  // horizontal
+  if(Math.abs(this.facing.x) >= Math.abs(this.facing.y))
   {
-    // update direction
-    this.facing.setV2(this.speed).mapToXY(Math.round);
-    
-    // set sprite to face in the robot's direction
+    // west
     if(this.facing.x < 0)
       this.view.setAnimation(this.skin.WALK_W);
+    // east
     else if(this.facing.x > 0)
       this.view.setAnimation(this.skin.WALK_E);
-    else if (this.facing.y < 0)
+  }
+  // vertical
+  else
+  {
+    // north
+    if (this.facing.y < 0)
       this.view.setAnimation(this.skin.WALK_N);
+    // south
     else if (this.facing.y > 0)
       this.view.setAnimation(this.skin.WALK_S);
   }
+}
+
+Robot.prototype.updateSpecial = function(delta_t)
+{
+  // moving ?
+  if (this.speed.x != 0 || this.speed.y != 0)
+  {
+    // update direction from movement
+    this.facing.setV2(this.speed).mapToXY(Math.round);
+    this.resetSprite();
+  }
+  
+  // interacting ?
+  if(this.interactPeer)
+  {
+    // update direction from interact
+    this.facing.setFromTo(this.position, this.interactPeer.position);
+    this.resetSprite();
+    this.view.setSubimage(1);
+  }
   
   // update animation where applicable
-  if(this.facing.isNull())
+  else if(this.facing.isNull())
     this.view.setSubimage(1);
   else
     this.view.update(delta_t);

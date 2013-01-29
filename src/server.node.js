@@ -7,7 +7,7 @@ mime = require('mime')
 
 require("./game/utility.js");
 require("./game/objects.js");
-require("./game/game.js");
+require("./game/Game.js");
 require("./game/V2.js");
 require("./game/Rect.js");
 require("./game/Bank.js")
@@ -180,12 +180,15 @@ io.sockets.on('connection', function (socket)
     otherSocket.get('id', function(err, otherId)
     {
       var otherBot = G.robots[otherId];
+      if(otherBot)
       otherSocket.emit('newBot', 
                           { pos: sockBot.position, 
                             id: sockId, 
                             typ: otherBot.getPerceivedTypeOf(sockBot),
                             skn: sockBot.skin_i
                           });
+      else
+        console.log("couldn't find Robot number " + otherId);
     });
   });
   
