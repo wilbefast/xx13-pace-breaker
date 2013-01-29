@@ -94,7 +94,7 @@ setInterval(function()
       sock.emit('synch', 
       {
         pos: {x: Math.round(bot.position.x), y:Math.round(bot.position.y)},
-        mov: {x: Math.round(bot.movement.x*10), y:Math.round(bot.movement.y*10)},
+        mov: {x: Math.round(bot.speed.x*10), y:Math.round(bot.speed.y*10)},
         id: dd,
         interact: (bot.interactPeer == null) ? -1 : bot.interactPeer.id,
         dead: bot.dead
@@ -152,39 +152,44 @@ io.sockets.on('connection', function (socket)
 {
   socket.set('challenge', false)
   
-  // generate unique id
+  // generate unique id or the player
   var id = nextid();
   
-  // generate random position
+  // create robot -- generate random position
   var pos = new V2();
   G.level.playable_area.randomWithin(pos);
   
-  // create robot
-  var robotTeam = false; //FIXME (id % 2 == 0);
-  var r = robotTeam ? new PoliceRobot(pos): new Robot(pos);
-  r.humanControlled = true;
-  r.robotTeam = robotTeam;
+  // create robot -- place a new robot object at this position
+  var newBot = new RobotImposter(pos);
+  G.addRobot(id, newBot);
   
-  // intialise secret (server-only) attributes
-  r.initSecret();
-  
+  // tell OTHER PLAYER about NEW PLAYER
   connected.forEach(function(sock)
   {
-    sock.emit('newBot', { bot: r.position, id: id, skn: r.skin_i });
+    sock.emit('newBot', { bot: newBot.position, id: id, skn: newBot.skin_i });
   });
-  connected[id]=socket;
-  socket.set('id',id);
-  G.addRobot(id, r);
+  
+  // 
+  connected[id] = socket;
+  socket.set('id', id);
+  
+  
+  // tell NEW PLAYER about OTHER PLAYERS
   G.robots.forEach(function(bot, id)
   {
     socket.emit('newBot', {bot: bot.position, id: id, skn: bot.skin_i});
   })
 
+  //! --------------------------------------------------------------------------
+  //! MANAGE CONNECTION
+  //! --------------------------------------------------------------------------
 
-  socket.on('pong',function(data){
+  // -- client replying to 'are you alive?' request
+  socket.on('pong', function(data)
+  {
     if (data.id == id)
     {
-      socket.set('challenge',false);
+      socket.set('challenge', false);
     } 
     else 
     {
@@ -192,7 +197,8 @@ io.sockets.on('connection', function (socket)
     }
   })
 
-  socket.on('disconnect',function()
+  // -- client informing server that it wishes to disconnect
+  socket.on('disconnect', function()
   {
     delete G.robots[id];
     socket.get('id', function(err, dd)
@@ -204,6 +210,7 @@ io.sockets.on('connection', function (socket)
     });
   })
 
+  // -- client sending user input to server
   socket.on('synch', function(data)
   {
     socket.get('id', function(err, dd)
@@ -234,5 +241,7 @@ io.sockets.on('connection', function (socket)
       }
     });
   });
+  
+  // tell NEW PLAYER what its id is
   socket.emit('you', {id: id});
 });

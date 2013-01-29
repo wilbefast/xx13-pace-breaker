@@ -30,6 +30,11 @@ RobotPolice = function(position_)
 
 // inherits from Robot
 RobotPolice.prototype = new Robot();
+RobotPolice.prototype.TYPE = Robot.prototype.TYPE_POLICE;
+
+//! ----------------------------------------------------------------------------
+//! INITIALISATION
+//! ----------------------------------------------------------------------------
 
 RobotPolice.prototype.init = function(position_)
 {

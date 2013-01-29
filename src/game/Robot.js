@@ -29,9 +29,12 @@ Robot = function(position_, type_i_, skin_i_)
 //! CLASS ATTRIBUTES 
 //! ----------------------------------------------------------------------------
 
-// collisions
+// collisions and interactions
+Robot.prototype.RADIUS = 16;
+Robot.prototype.RADIUS2 = Robot.prototype.RADIUS * Robot.prototype.RADIUS;
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
 // types enumeration
+Robot.prototype.TYPE = -1 // overriden by prototype chain
 Robot.prototype.TYPE_CIVILLIAN = 0;
 Robot.prototype.TYPE_POLICE = 1;
 Robot.prototype.TYPE_IMPOSTER = 2;
@@ -41,13 +44,13 @@ Robot.prototype.STATE_INTERACT = 1;
 Robot.prototype.STATE_DYING = 2;
 Robot.prototype.STATE_DEAD = 3;
 // skins
-Robot.prototype.MAX_SKIN_I = 9;
+Robot.prototype.MAX_SKIN_I = 3;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION
 //! ----------------------------------------------------------------------------
 
-Robot.prototype.init = function(position_, type_i_, skin_i_)
+Robot.prototype.init = function(position_, skin_i_)
 {
   //! FIXME -- replace with state
   this.killed = false;
@@ -59,21 +62,12 @@ Robot.prototype.init = function(position_, type_i_, skin_i_)
   this.humanControlled = false;
   this.robotTeam = true;
   
-  // type -- should be either CIVILLIAN, POLICE or IMPOSTER
-  this.type_i = type_i_;
-  
   // state
   this.state_i = this.STATE_IDLE;
-
-  // collisions
-  this.radius = 16;
-  this.radius2 = this.radius * this.radius;
   
+  //! FIXME
   // skin
-  if(!skin_i_)
-    this.skin_i = (is_server) 
-                    ? (rand(this.MAX_SKIN_I))
-                    : (skin_i_ % this.SKINS.length);
+  this.skin_i = (skin_i_ || 0);
      
   // interactions
   this.interactPeer = null;
@@ -87,20 +81,19 @@ Robot.prototype.init = function(position_, type_i_, skin_i_)
   
   // position and speed
   this.position = new V2(position_);
-  this.movement = new V2();
+  this.speed = new V2();
   
-  
-  this.facing = new V2(0, 1);
-  
-  // view
-  if (!is_server)
+  // client- and server-specific initialisations
+  if (is_server)
+    this.initServer();
+  else
     this.initClient();
 }
 
 Robot.prototype.initServer = function()
 {
-  // ONLY SERVER-SIDE
-  if(this.humanControlled)
+  // only human-controlled Robots need care about displaying a proximity 'hint'
+  if(this.TYPE == this.TYPE_POLICE || this.TYPE == this.TYPE_IMPOSTER)
   {
     this.nearestHuman =
     {
@@ -117,8 +110,9 @@ Robot.prototype.initServer = function()
 
 Robot.prototype.initClient = function()
 {
+  this.facing = new V2(0, 1);
   this.view 
-      = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
+      = new AnimationView(this.skin.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
 }
 
 //! ----------------------------------------------------------------------------
@@ -127,7 +121,7 @@ Robot.prototype.initClient = function()
 
 Robot.prototype.forceSetSpeed = function(x, y)
 {
-  this.movement.setXY(x, y);
+  this.speed.setXY(x, y);
 }
 
 Robot.prototype.trySetSpeed = function(x, y)
@@ -261,8 +255,8 @@ Robot.prototype.update = function(delta_t)
       this.dying = this.timeToDie;
 
     // update position
-    this.position.setXY(this.position.x + this.movement.x * dt, 
-                        this.position.y + this.movement.y * dt);
+    this.position.setXY(this.position.x + this.speed.x * dt, 
+                        this.position.y + this.speed.y * dt);
 
     // update peer distance
     if(this.interactPeer != null)
@@ -275,7 +269,7 @@ Robot.prototype.update = function(delta_t)
     }
     
     // ... if moving or dead
-    if (this.movement.x != 0 || this.movement.y != 0)
+    if (this.speed.x != 0 || this.speed.y != 0)
     {
       // update animation
       if(this.view)

@@ -19,65 +19,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! SKIN BUILDER FUNCTION
 //!-----------------------------------------------------------------------------
 
-function buildSkin(image, i)
+function addSkin(skin_array, image_file)
 {
-  this.prototype.SKINS[i] = 
-  {
+  var image = load_image(image_file);
+  skin_array.push
+  ({
     WALK_N : new Animation(image, new V2(32, 32), new V2(0, 0), 3),
     WALK_E : new Animation(image, new V2(32, 32), new V2(0, 32), 3),
     WALK_W : new Animation(image, new V2(32, 32), new V2(0, 32), 3, FLIP_X),
     WALK_S : new Animation(image, new V2(32, 32), new V2(0, 64), 3),
     DIE : new Animation(image, new V2(32, 32), new V2(0, 96), 3)
-  }
+  });
 }
 
 //!-----------------------------------------------------------------------------
 //! CIVILLIAN SKINS 
 //!-----------------------------------------------------------------------------
-RobotCivillian.prototype.IMAGES =
-[
-  load_image('sheet_tron.png'),
-  load_image('sheet_george.png'),
-  load_image('sheet_mary.png')
-];
-RobotCivillian.prototype.SKINS = 
-[
-];
-RobotCivillian.prototype.IMAGES.forEach(createRobotAnimation, RobotCivillian);
+civillianSkins = [];
+addSkin(civillianSkins, 'sheet_george');
+addSkin(civillianSkins, 'sheet_mary');
+addSkin(civillianSkins, 'sheet_tron');
 
 
 //!-----------------------------------------------------------------------------
 //! POLICE SKINS 
 //!-----------------------------------------------------------------------------
-
-RobotPolice.prototype.IMAGES = 
-[
-  load_image('sheet_arnold.png');
-];
-RobotPolice.prototype.SKINS =
-[
-];
-RobotPolice.prototype.IMAGES.forEach(createRobotAnimation, RobotPolice);
+policeSkins = [];
+addSkin(policeSkins, 'sheet_arnold');
 
 //!-----------------------------------------------------------------------------
 //! IMPOSTER SKINS 
 //!-----------------------------------------------------------------------------
-
-RobotImposter.prototype.IMAGES = 
-[
-  load_image('sheet_imposter.png');
-];
-RobotImposter.prototype.SKINS =
-[
-];
-RobotImposter.prototype.IMAGES.forEach(createRobotAnimation, RobotPolice);
-
-    
-/*animWifi = new Animation(imgWifi, new V2(32, 32), new V2(0, 0), 3);
-animSmoke = new Animation(imgSmoke, new V2(32, 32), new V2(0, 0), 5);
-animExplosion = new Animation(imgExplosion, new V2(32, 32), new V2(0, 0), 8);
-imgElectrocution = new Animation(imgElectrocution, new V2(32, 32), new V2(0, 0), 8);*/
-
+imposterSkins = [];
+addSkin(imposterSkins, 'sheet_imposter');
 
 //!-----------------------------------------------------------------------------
 //! DRAW ROBOTS
@@ -89,7 +63,7 @@ Robot.prototype.draw = function()
   if(this.interactPeer && this.id > this.interactPeer.id)
   {
     var where = new V2().setBetween(this.position, this.interactPeer.position, 
-                                    0.2 + Math.random()*0.6 );
+                                    0.2 + Math.random() * 0.6 );
     context.strokeStyle = 'rgb(82,176,36)';
     context.lineWidth = 1.0;
     context.strokeText(rand_bool() ? '0' : '1', where.x, where.y);
@@ -124,3 +98,10 @@ Robot.prototype.draw = function()
   //context.lineWidth = 1;
   //context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
 };
+
+
+//! FIXME -- unused
+/*animWifi = new Animation(imgWifi, new V2(32, 32), new V2(0, 0), 3);
+animSmoke = new Animation(imgSmoke, new V2(32, 32), new V2(0, 0), 5);
+animExplosion = new Animation(imgExplosion, new V2(32, 32), new V2(0, 0), 8);
+imgElectrocution = new Animation(imgElectrocution, new V2(32, 32), new V2(0, 0), 8);*/

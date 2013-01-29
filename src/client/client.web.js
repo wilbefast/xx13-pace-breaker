@@ -45,12 +45,12 @@ $('body').bind('beforeunload',function() { socket.send("leaving"); });
 //! SYNCHRONISED WITH SERVER
 function synchronise(data)
 {
-  
+  // which Robot are we synchronising ? 
   var bot = G.robots[data.id];
   var peer = (data.interact == -1) ? null : G.robots[data.interact];
   
   // move -- smoothe transition to avoid ugly snapping
-  bot.movement.setFromTo(bot.position, data.pos)
+  bot.speed.setFromTo(bot.position, data.pos)
                     .scale(0.4)
                     .addV2(data.mov);
   
@@ -104,13 +104,12 @@ socket.on('gameover',function(data)
 //! ----------------------------------------------------------------------------
 //! PLAY HEARTBEAT SOUND AT THE SPECIFIED VOLUME
 //! ----------------------------------------------------------------------------
-socket.on('heartbeat',function(data)
+socket.on('heartbeat', function(data)
 {
-  var samp = (local_bot.animset == animFlic ? 0 : 1); // If I'm a cop
-  
   if(window.VolumeSample)
   {
-    changeVolume(VolumeSample.gainNode[samp], data.vol * 0.01);   
+    var sample_index = (local_bot.TYPE == RobotPolice.TYPE ? 0 : 1);
+    changeVolume(VolumeSample.gainNode[sample_index], data.vol * 0.01);   
   }
 });
 

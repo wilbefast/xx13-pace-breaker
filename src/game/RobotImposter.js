@@ -29,4 +29,16 @@ RobotImposter = function(position_)
 //! PROTOTYPE
 //! ----------------------------------------------------------------------------
 
+// inherits from Robot
 RobotImposter.prototype = new Robot();
+RobotImposter.prototype.TYPE = Robot.prototype.TYPE_IMPOSTER;;
+
+
+//! ----------------------------------------------------------------------------
+//! INITIALISATION
+//! ----------------------------------------------------------------------------
+
+RobotImposter.prototype.init = function(position_)
+{
+  Robot.prototype.init.call(this, position_);
+}

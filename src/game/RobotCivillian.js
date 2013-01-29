@@ -38,21 +38,25 @@ RobotCivillian = function(position_)
 
 // inherits from Robot
 RobotCivillian.prototype = new Robot();
-
+RobotCivillian.prototype.TYPE = Robot.prototype.TYPE_CIVILLIAN;
 
 //! ----------------------------------------------------------------------------
-//! OVERRIDE
+//! INITIALISATION
 //! ----------------------------------------------------------------------------
 
 RobotCivillian.prototype.init = function(position_)
 {
   Robot.prototype.init.call(this, position_);
   
-  this.timeToDie = 5000;
+  this.timeToDie = 5000; //! FIXME
   this.wander_timer = new Timer(1500);
   this.interact_timer = new Timer(3500);
   this.state = this.doWander;
 }
+
+//! ----------------------------------------------------------------------------
+//! OVERRIDES
+//! ----------------------------------------------------------------------------
 
 RobotCivillian.prototype.perceiveObstacle = function(side)
 {
