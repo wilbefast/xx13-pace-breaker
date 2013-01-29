@@ -30,8 +30,8 @@ Robot = function(position_, type_i_, skin_i_)
 //! ----------------------------------------------------------------------------
 
 // collisions and interactions
-Robot.prototype.RADIUS = 16;
-Robot.prototype.RADIUS2 = Robot.prototype.RADIUS * Robot.prototype.RADIUS;
+Robot.prototype.radius = 16;
+Robot.prototype.radius2 = Robot.prototype.RADIUS * Robot.prototype.RADIUS;
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
 // types enumeration
 Robot.prototype.TYPE = 0; // overriden by prototype chain

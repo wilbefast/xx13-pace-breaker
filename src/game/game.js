@@ -53,7 +53,7 @@ canInteractWith = function(subject, object)
 game = function()
 {
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 0;
+  this.STARTING_CIVILLIANS = 20;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -133,13 +133,12 @@ game.prototype.update = function(delta_t)
     
     // update the robots
     bot.update(delta_t);
-    
+   
     // snap the robots inside the map
     var borderCollision = boundObject(bot, this.level.playable_area);
     if(!borderCollision.isNull())
     {
       bot.perceiveObstacle(borderCollision);
-      console.log("collision!");
     }
 	}
 }
