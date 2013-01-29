@@ -29,6 +29,7 @@ Robot = function(position_, type_i_, skin_i_)
 //! CLASS ATTRIBUTES 
 //! ----------------------------------------------------------------------------
 
+// collisions
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
 // types enumeration
 Robot.prototype.TYPE_CIVILLIAN = 0;
@@ -39,6 +40,8 @@ Robot.prototype.STATE_IDLE = 0;
 Robot.prototype.STATE_INTERACT = 1;
 Robot.prototype.STATE_DYING = 2;
 Robot.prototype.STATE_DEAD = 3;
+// skins
+Robot.prototype.MAX_SKIN_I = 9;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION
@@ -68,7 +71,9 @@ Robot.prototype.init = function(position_, type_i_, skin_i_)
   
   // skin
   if(!skin_i_)
-    this.skin_i = (is_server) ? rand_index(this.SKINS) : 0;
+    this.skin_i = (is_server) 
+                    ? (rand(this.MAX_SKIN_I))
+                    : (skin_i_ % this.SKINS.length);
      
   // interactions
   this.interactPeer = null;
@@ -120,11 +125,14 @@ Robot.prototype.initClient = function()
 //! MOVEMENT AND COLLISIONS
 //! ----------------------------------------------------------------------------
 
-Robot.prototype.tryMove = function(x, y)
+Robot.prototype.forceSetSpeed = function(x, y)
 {
-  x = bound(x, -1, 1);
-  y = bound(y, -1, 1);
-  this.movement.setXY(x * 0.1, y * 0.1);
+  this.movement.setXY(x, y);
+}
+
+Robot.prototype.trySetSpeed = function(x, y)
+{
+  this.forceSetSpeed(0.1 * bound(x, -1, 1), 0.1 * bound(y, -1, 1));
 };
 
 Robot.prototype.collision = function(other)
@@ -197,7 +205,7 @@ Robot.prototype.forceInteractPeer = function(newPeer)
     this.startInteract();
     
     // stop from moving
-    this.move(0, 0);
+    this.forceSetSpeed(0, 0);
   }
 }
 
@@ -262,7 +270,7 @@ Robot.prototype.update = function(delta_t)
       this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
       
       // cancel if too far away
-      if(this.interactPeer_dist2 > MAX_INTERACT_DISTANCE2)
+      if(this.interactPeer_dist2 > this.MAX_INTERACT_DISTANCE2)
         this.tryInteractPeer(null);
     }
     

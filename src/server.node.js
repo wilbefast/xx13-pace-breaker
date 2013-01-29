@@ -30,7 +30,7 @@ gs.switchstate(main);
 setInterval(function(){ gs.update(); },(updateRate));
 
 
-/**
+/**/
 repl = require('repl');
 rep = repl.start({
   prompt: "server> ",
@@ -170,14 +170,14 @@ io.sockets.on('connection', function (socket)
   
   connected.forEach(function(sock)
   {
-    sock.emit('newBot',{bot: r.position, id: id, vis: r.visual});
+    sock.emit('newBot', { bot: r.position, id: id, skn: r.skin_i });
   });
   connected[id]=socket;
   socket.set('id',id);
   G.addRobot(id, r);
   G.robots.forEach(function(bot, id)
   {
-    socket.emit('newBot', {bot: bot.position, id: id, vis: bot.visual});
+    socket.emit('newBot', {bot: bot.position, id: id, skn: bot.skin_i});
   })
 
 

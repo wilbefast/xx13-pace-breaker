@@ -20,6 +20,11 @@ sign = function(x)
   return (x > 0) ? 1 : ((x < 0) ? -1 : 0);
 }
 
+rand = function(max)
+{
+  return Math.round(Math.random() * max);
+}
+
 rand_call = function(choices, context)
 {
   return choices[Math.round((choices.length - 1) * Math.random())].call(context);

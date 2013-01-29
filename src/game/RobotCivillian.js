@@ -61,12 +61,12 @@ RobotCivillian.prototype.perceiveObstacle = function(side)
   {
     side.reverse();
     // ... move away from collision ?
-    this.move(side.x, side.y);
+    this.trySetSpeed(side.x, side.y);
   }
   else
   {
     // ... stop ?
-    this.move(0, 0);
+    this.forceSetSpeed(0, 0);
   }
   
   // break off interactions
@@ -98,8 +98,8 @@ RobotCivillian.prototype.startWander = function()
   this.tryInteractPeer(null);
   
   // move out in a random direction or stop
-  this.move(rand_bool() ? 0 : rand_sign(), 
-            rand_bool() ? 0 : rand_sign());
+  this.trySetSpeed(rand_bool() ? 0 : rand_sign(), 
+                   rand_bool() ? 0 : rand_sign());
   
   // randomise move time
   this.wander_timer.randomTime();
@@ -112,7 +112,7 @@ RobotCivillian.prototype.tryInteract = function()
 {
   // check if close enough and peer accepts
   if(this.nearest && !this.dead && !this.killed
-  && this.nearest.dist2 <= MAX_INTERACT_DISTANCE2 
+  && this.nearest.dist2 <= this.MAX_INTERACT_DISTANCE2 
   && this.tryInteractPeer(this.nearest.bot))
   {
     this.startInteract();
