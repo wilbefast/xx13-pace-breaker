@@ -30,32 +30,19 @@ Robot = function(position_, type_i_, skin_i_)
 //! ----------------------------------------------------------------------------
 
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
-Robot.prototype.TYP_CIVILLIAN = 0;
-Robot.prototype.TYP_POLICE = 1;
-Robot.prototype.TYP_IMPOSTER = 2;
+// types enumeration
+Robot.prototype.TYPE_CIVILLIAN = 0;
+Robot.prototype.TYPE_POLICE = 1;
+Robot.prototype.TYPE_IMPOSTER = 2;
+// states enumeration
+Robot.prototype.STATE_IDLE = 0;
+Robot.prototype.STATE_INTERACT = 1;
+Robot.prototype.STATE_DYING = 2;
+Robot.prototype.STATE_DEAD = 3;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION
 //! ----------------------------------------------------------------------------
-
-Robot.prototype.initSecret = function()
-{
-  // ONLY SERVER-SIDE
-  if(this.humanControlled)
-  {
-    this.nearestHuman =
-    {
-      bot : null,
-      dist2 : Infinity,
-    };
-    this.nearestCop =
-    {
-      bot : null,
-      dist2 : Infinity,
-    };
-  }
-  
-}
 
 Robot.prototype.init = function(position_, type_i_, skin_i_)
 {
@@ -68,8 +55,14 @@ Robot.prototype.init = function(position_, type_i_, skin_i_)
   //! FIXME -- replace with type
   this.humanControlled = false;
   this.robotTeam = true;
+  
+  // type -- should be either CIVILLIAN, POLICE or IMPOSTER
+  this.type_i = type_i_;
+  
+  // state
+  this.state_i = this.STATE_IDLE;
 
-  // collision
+  // collisions
   this.radius = 16;
   this.radius2 = this.radius * this.radius;
   
@@ -90,16 +83,38 @@ Robot.prototype.init = function(position_, type_i_, skin_i_)
   // position and speed
   this.position = new V2(position_);
   this.movement = new V2();
+  
+  
   this.facing = new V2(0, 1);
   
   // view
   if (!is_server)
-  {
-    this.view 
-      = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
-  }
+    this.initClient();
 }
 
+Robot.prototype.initServer = function()
+{
+  // ONLY SERVER-SIDE
+  if(this.humanControlled)
+  {
+    this.nearestHuman =
+    {
+      bot : null,
+      dist2 : Infinity,
+    };
+    this.nearestCop =
+    {
+      bot : null,
+      dist2 : Infinity,
+    };
+  }  
+}
+
+Robot.prototype.initClient = function()
+{
+  this.view 
+      = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
+}
 
 //! ----------------------------------------------------------------------------
 //! MOVEMENT AND COLLISIONS
