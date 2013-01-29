@@ -186,12 +186,7 @@ Robot.prototype.move = function(x, y)
 {
   x = bound(x, -1, 1);
   y = bound(y, -1, 1);
-  
-  
   this.movement.setXY(x * 0.1, y * 0.1);
-  this.facing.setXY(x, y);
-  
-  console.log(this.movement);
 };
 
 Robot.prototype.toString = function() 
@@ -207,9 +202,9 @@ Robot.prototype.consentToInteract = function(otherRobot)
 {
   // override to accept interactions
   this.dead = true;
-  if ((otherRobot.humanControlled && otherRobot.robotTeam)){
+  if ((otherRobot.humanControlled && otherRobot.robotTeam))
     this.killed = true;
-  }
+
   return (otherRobot.humanControlled && otherRobot.robotTeam);
 }
 
@@ -315,13 +310,13 @@ Robot.prototype.update = function(delta_t)
         //this.dieFunction();
       }
     }
-    if (this.killed && this.dying==0 && !this.dead) {
+    if (this.killed && this.dying==0 && !this.dead)
       this.dying = this.timeToDie;
-    }
+
     // update position
     this.position.setXY(this.position.x + this.movement.x * dt, 
                         this.position.y + this.movement.y * dt);
-    
+
     // update peer distance
     if(this.interactPeer != null)
     {
@@ -337,12 +332,7 @@ Robot.prototype.update = function(delta_t)
     {
       // update animation
       if(this.view)
-      {
         this.view.update(delta_t);
-        
-        
-        //this.buff_view.update(delta_t);
-      }
     }
   }
 };
@@ -360,6 +350,7 @@ Robot.prototype.draw = function()
   }
   
   // set sprite to face in the robot's direction
+  this.facing.setV2(this.movement).mapToXY(Math.round);
   if(this.facing.x < 0)
     this.view.setAnimation(this.animset.walk_W);
   else if(this.facing.x > 0)
@@ -370,7 +361,7 @@ Robot.prototype.draw = function()
 		this.view.setAnimation(this.animset.walk_S);
   
   // don't animate if not moving
-  if(this.movement.isNull())
+  if(this.facing.isNull())
     this.view.setSubimage(1);
   
 	// draw the sprite 
@@ -391,7 +382,6 @@ Robot.prototype.draw = function()
   
   
   //! FIXME -- DEBUG STUFF
-  context.strokeText(this.facing.x+"", this.position.x, this.position.y);
   //context.lineWidth = 1;
   //context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
 };
