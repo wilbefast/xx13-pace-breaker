@@ -209,47 +209,26 @@ Robot.prototype.perceiveObstacle = function(side)
 
 Robot.prototype.update = function(delta_t) 
 {
-  if (!this.dead) {
-    if (this.dying>0) {
-      this.dying -= dt;
-      if (this.dying<200) {
-        if (!this.dead) {
-          if (this.robotTeam) {
-            score ++;
-          }
-          this.dead = true;
-        }
-        //this.dieFunction();
-      }
-    }
-    if (this.killed && this.dying==0 && !this.dead)
-      this.dying = this.timeToDie;
+  // update position
+  this.position.setXY(this.position.x + this.speed.x * dt, 
+                      this.position.y + this.speed.y * dt);
 
-    // update position
-    this.position.setXY(this.position.x + this.speed.x * dt, 
-                        this.position.y + this.speed.y * dt);
-
-    // update peer distance
-    if(this.interactPeer != null)
-    {
-      this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
-      
-      // cancel if too far away
-      if(this.interactPeer_dist2 > this.MAX_INTERACT_DISTANCE2)
-        this.tryInteractPeer(null);
-    }
+  // update peer distance
+  if(this.interactPeer != null)
+  {
+    this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
     
-    // ... if moving or dead
-    if (this.speed.x != 0 || this.speed.y != 0)
-    {
-      // update animation
-      if(this.view)
-        this.view.update(delta_t);
-    }
+    // cancel if too far away
+    if(this.interactPeer_dist2 > this.MAX_INTERACT_DISTANCE2)
+      this.tryInteractPeer(null);
   }
-};
+  
+  // client- or server-specific update code
+  if(this.updateSpecial)
+    this.updateSpecial(delta_t);
+}
 
 Robot.prototype.toString = function() 
 {
   return ("robot" + this.id);
-};
+}

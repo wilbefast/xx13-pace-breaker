@@ -80,8 +80,8 @@ setInterval(function() { gs.update(); }, updateRate);
 socket.on('newBot',function(data)
 {
   var newBot = ((data.vis == 4) 
-            ? new PoliceRobot(new V2(data.bot.x, data.bot.y))
-            : new Robot(new V2(data.bot.x, data.bot.y), data.vis));
+            ? new RobotPolice(new V2(data.bot.x, data.bot.y))
+            : new RobotCivillian(new V2(data.bot.x, data.bot.y), data.vis));
   G.addRobot(data.id, newBot);
   
   // assume control of the new Robot (if it's ours)

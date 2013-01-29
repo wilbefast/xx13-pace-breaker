@@ -37,23 +37,23 @@ function addSkin(skin_array, image_file)
 //! CIVILLIAN SKINS 
 //!-----------------------------------------------------------------------------
 RobotCivillian.prototype.SKINS = [];
-addSkin(RobotCivillian.prototype.SKINS, 'sheet_george');
-addSkin(RobotCivillian.prototype.SKINS, 'sheet_mary');
-addSkin(RobotCivillian.prototype.SKINS, 'sheet_tron');
+addSkin(RobotCivillian.prototype.SKINS, 'sheet_george.png');
+addSkin(RobotCivillian.prototype.SKINS, 'sheet_mary.png');
+addSkin(RobotCivillian.prototype.SKINS, 'sheet_tron.png');
 
 
 //!-----------------------------------------------------------------------------
 //! POLICE SKINS 
 //!-----------------------------------------------------------------------------
 RobotPolice.prototype.SKINS  = [];
-addSkin(RobotPolice.prototype.SKINS , 'sheet_arnold');
+addSkin(RobotPolice.prototype.SKINS , 'sheet_arnold.png');
 
 
 //!-----------------------------------------------------------------------------
 //! IMPOSTER SKINS 
 //!-----------------------------------------------------------------------------
 RobotImposter.prototype.SKINS  = [];
-addSkin(RobotImposter.prototype.SKINS , 'sheet_imposter');
+addSkin(RobotImposter.prototype.SKINS , 'sheet_imposter.png');
 
 
 
@@ -62,20 +62,21 @@ addSkin(RobotImposter.prototype.SKINS , 'sheet_imposter');
 
 
 //!-----------------------------------------------------------------------------
-//! INITIALISE ROBOTS
+//! CLIENT-ONLY -- INITIALISE ROBOTS' ANIMATIONS
 //!-----------------------------------------------------------------------------
 
-Robot.prototype.initSpecial = function()
+Robot.prototype.specialInit = function()
 {
   // initialise visual stuff on the client only
   this.skin = this.SKINS[this.skin_i];
+  
   this.facing = new V2(0, 1);
-  this.view = new AnimationView(this.skin.walk_E, 
+  this.view = new AnimationView(this.skin.WALK_E, 
                                 new V2(32, 32), 0.005, REVERSE_AT_END);
 }
 
 //!-----------------------------------------------------------------------------
-//! DRAW ROBOTS
+//! CLIENT-ONLY -- DRAW ROBOTS
 //!-----------------------------------------------------------------------------
 Robot.prototype.draw = function() 
 {
@@ -89,8 +90,22 @@ Robot.prototype.draw = function()
     context.strokeText(rand_bool() ? '0' : '1', where.x, where.y);
   }
   
+  // draw the sprite
+  this.view.draw(this.position);
+  
+  //! FIXME -- DEBUG STUFF
+  //context.lineWidth = 1;
+  //context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
+};
+
+//!-----------------------------------------------------------------------------
+//! CLIENT-ONLY -- UPDATE ROBOTS' ANIMATIONS
+//!-----------------------------------------------------------------------------
+
+Robot.prototype.updateSpecial = function(delta_t)
+{
   // set sprite to face in the robot's direction
-  this.facing.setV2(this.movement).mapToXY(Math.round);
+  this.facing.setV2(this.speed).mapToXY(Math.round);
   if(this.facing.x < 0)
     this.view.setAnimation(this.skin.WALK_W);
   else if(this.facing.x > 0)
@@ -104,20 +119,14 @@ Robot.prototype.draw = function()
   if(this.facing.isNull())
     this.view.setSubimage(1);
   
-  // don't animate if dead
-  if(dead)
+  // update the sprite if moving
+  if (this.speed.x != 0 || this.speed.y != 0)
   {
-    this.view.setAnimation(this.animset.DIE);
-    this.view.setSubimage(2);
+    // update animation
+    this.view.update(delta_t);
   }
-  
-  // draw the sprite
-  this.view.draw(this.position);
-  
-  //! FIXME -- DEBUG STUFF
-  //context.lineWidth = 1;
-  //context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
-};
+}
+
 
 //! FIXME -- unused
 /*animWifi = new Animation(imgWifi, new V2(32, 32), new V2(0, 0), 3);

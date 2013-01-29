@@ -217,30 +217,31 @@ io.sockets.on('connection', function (socket)
   // -- client sending user input to server
   socket.on('synch', function(data)
   {
-    socket.get('id', function(err, dd)
+    socket.get('id', function(err, synch_id)
     {
-      var bot = G.robots[dd];
-      if (dd) 
+      if (synch_id) 
       {
+        var synch_bot = G.robots[synch_id];
+        
         // SET MOVEMENT
-        bot.trySetSpeed(data.x, data.y);
+        synch_bot.trySetSpeed(data.x, data.y);
         
         // SET INTERACTION (if applicable)
         if (data.intid != -1)
         {
-          var v = new V2().setV2(bot.position);
-          var r = G.robots[data.intid];
-          if (r && !(r.humanControlled && r.robotTeam))
+          var interactTarget = G.robots[data.intid];
+          if (interactTarget && interactTarget.TYPE != Robot.TYPE_POLICE)
           {
-            if (v.dist2(r.position) < MAX_INTERACT_DISTANCE2)
+            if (synch_bot.position.dist2(r.position) 
+                < synch_bot.MAX_INTERACT_DISTANCE2)
             {
-              bot.tryInteractPeer(r);
+              synch_bot.tryInteractPeer(interactTarget);
             }
           }
         }
         else 
         {
-          bot.tryInteractPeer(null);
+          synch_bot.tryInteractPeer(null);
         }
       }
     });
