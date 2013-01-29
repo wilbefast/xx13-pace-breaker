@@ -222,30 +222,22 @@ io.sockets.on('connection', function (socket)
   {
     socket.get('id', function(err, inputId)
     {
-      if (inputId) 
+      var inputBot = G.robots[inputId];
+      
+      // SET MOVEMENT
+      inputBot.trySetSpeed(data.x, data.y);
+      
+      // SET INTERACTION (if applicable)
+      if (data.who != -1)
       {
-        var inputBot = G.robots[inputId];
-        
-        // SET MOVEMENT
-        if(data.x || data.y)
-        inputBot.trySetSpeed(data.x, data.y);
-        
-        // SET INTERACTION (if applicable)
-        if (data.who != -1)
+        var interactTarget = G.robots[data.who];
+        if (interactTarget && interactTarget.TYPE != Robot.TYPE_POLICE)
         {
-          var interactTarget = G.robots[data.who];
-          if (interactTarget && interactTarget.TYPE != Robot.TYPE_POLICE)
+          if (inputBot.position.dist2(inputBot.position) 
+              < inputBot.MAX_INTERACT_DISTANCE2)
           {
-            if (inputBot.position.dist2(inputBot.position) 
-                < inputBot.MAX_INTERACT_DISTANCE2)
-            {
-              inputBot.tryInteractPeer(interactTarget);
-            }
+            inputBot.tryInteractPeer(interactTarget);
           }
-        }
-        else 
-        {
-          inputBot.tryInteractPeer(null);
         }
       }
     });
