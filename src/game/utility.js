@@ -30,6 +30,11 @@ rand_in = function(choices)
   return choices[Math.round((choices.length - 1) * Math.random())]; 
 }
 
+rand_index = function(array)
+{
+  return Math.round((array.length - 1) * Math.random()); 
+}
+
 rand_bool = function()
 {
   return (Math.random() < 0.5);

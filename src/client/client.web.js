@@ -91,11 +91,13 @@ socket.on('gameover',function(data)
 {
   if (data.elim) 
   {
-    alert("The humans hacked "+data.score+" robots before being killed by the cops!");
+    alert("The humans hacked " + data.score +
+          " robots before being killed by the cops!");
   } 
   else 
   {
-    alert("The humans hacked "+data.score+" robots but the cops messed up! Human score is 100!");
+    alert("The humans hacked " + data.score + 
+          " robots but the cops messed up! Human score is 100!");
   }
 });
 

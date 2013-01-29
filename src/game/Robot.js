@@ -19,28 +19,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-Robot = function(position_, visual)
+Robot = function(position_, type_i_, skin_i_)
 {
-  this.init(position_, visual);
+  this.init(position_, type_i_, skin_i_);
   return this;
 }
 
 //! ----------------------------------------------------------------------------
-//! CLASS -- ATTRIBUTES 
+//! CLASS ATTRIBUTES 
 //! ----------------------------------------------------------------------------
 
-Robot.prototype.MAX_INTERACT_DISTANCE2 = 96*96;
+Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
 Robot.prototype.TYP_CIVILLIAN = 0;
 Robot.prototype.TYP_POLICE = 1;
 Robot.prototype.TYP_IMPOSTER = 2;
 
 //! ----------------------------------------------------------------------------
-//! CREATION
+//! INITIALISATION
 //! ----------------------------------------------------------------------------
 
 Robot.prototype.initSecret = function()
 {
-  // ONLY SERVER-SIDE HUMAN PLAYERS: nearest human
+  // ONLY SERVER-SIDE
   if(this.humanControlled)
   {
     this.nearestHuman =
@@ -57,12 +57,15 @@ Robot.prototype.initSecret = function()
   
 }
 
-Robot.prototype.init = function(position_, visual)
+Robot.prototype.init = function(position_, type_i_, skin_i_)
 {
+  //! FIXME -- replace with state
   this.killed = false;
   this.timeToDie = 0;
   this.dying = 0;
   this.dead = false;
+  
+  //! FIXME -- replace with type
   this.humanControlled = false;
   this.robotTeam = true;
 
@@ -71,11 +74,8 @@ Robot.prototype.init = function(position_, visual)
   this.radius2 = this.radius * this.radius;
   
   // skin
-  this.skin = 
-  if(!visual) 
-    visual = (is_server) ? Math.round(2 * Math.random()) : 0;
-  if(!is_server)
-    this.animset = anims[visual];
+  if(!skin_i_)
+    this.skin_i = (is_server) ? rand_index(this.SKINS) : 0;
      
   // interactions
   this.interactPeer = null;
@@ -105,7 +105,7 @@ Robot.prototype.init = function(position_, visual)
 //! MOVEMENT AND COLLISIONS
 //! ----------------------------------------------------------------------------
 
-Robot.prototype.move = function(x, y)
+Robot.prototype.tryMove = function(x, y)
 {
   x = bound(x, -1, 1);
   y = bound(y, -1, 1);

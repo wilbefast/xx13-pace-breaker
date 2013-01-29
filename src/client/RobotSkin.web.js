@@ -21,56 +21,56 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 function buildSkin(image, i)
 {
-  this.prototype.skin[i] = 
+  this.prototype.SKINS[i] = 
   {
-    walk_N : new Animation(image, new V2(32, 32), new V2(0, 0), 3),
-    walk_E : new Animation(image, new V2(32, 32), new V2(0, 32), 3),
-    walk_W : new Animation(image, new V2(32, 32), new V2(0, 32), 3, FLIP_X),
-    walk_S : new Animation(image, new V2(32, 32), new V2(0, 64), 3),
-    die : new Animation(image, new V2(32, 32), new V2(0, 96), 3)
+    WALK_N : new Animation(image, new V2(32, 32), new V2(0, 0), 3),
+    WALK_E : new Animation(image, new V2(32, 32), new V2(0, 32), 3),
+    WALK_W : new Animation(image, new V2(32, 32), new V2(0, 32), 3, FLIP_X),
+    WALK_S : new Animation(image, new V2(32, 32), new V2(0, 64), 3),
+    DIE : new Animation(image, new V2(32, 32), new V2(0, 96), 3)
   }
 }
 
 //!-----------------------------------------------------------------------------
 //! CIVILLIAN SKINS 
 //!-----------------------------------------------------------------------------
-RobotCivillian.prototype.images =
+RobotCivillian.prototype.IMAGES =
 [
   load_image('sheet_tron.png'),
   load_image('sheet_george.png'),
   load_image('sheet_mary.png')
 ];
-RobotCivillian.prototype.skins = 
+RobotCivillian.prototype.SKINS = 
 [
 ];
-RobotCivillian.prototype.images.forEach(createRobotAnimation, RobotCivillian);
+RobotCivillian.prototype.IMAGES.forEach(createRobotAnimation, RobotCivillian);
 
 
 //!-----------------------------------------------------------------------------
 //! POLICE SKINS 
 //!-----------------------------------------------------------------------------
 
-RobotPolice.prototype.images = 
+RobotPolice.prototype.IMAGES = 
 [
   load_image('sheet_arnold.png');
 ];
-RobotPolice.prototype.skins =
+RobotPolice.prototype.SKINS =
 [
 ];
-RobotPolice.prototype.images.forEach(createRobotAnimation, RobotPolice);
+RobotPolice.prototype.IMAGES.forEach(createRobotAnimation, RobotPolice);
 
 //!-----------------------------------------------------------------------------
 //! IMPOSTER SKINS 
 //!-----------------------------------------------------------------------------
 
-RobotImposter.prototype.images = 
+RobotImposter.prototype.IMAGES = 
 [
   load_image('sheet_imposter.png');
 ];
-RobotImposter.prototype.skins =
+RobotImposter.prototype.SKINS =
 [
 ];
-RobotImposter.prototype.images.forEach(createRobotAnimation, RobotPolice);
+RobotImposter.prototype.IMAGES.forEach(createRobotAnimation, RobotPolice);
 
     
 /*animWifi = new Animation(imgWifi, new V2(32, 32), new V2(0, 0), 3);
@@ -98,13 +98,13 @@ Robot.prototype.draw = function()
   // set sprite to face in the robot's direction
   this.facing.setV2(this.movement).mapToXY(Math.round);
   if(this.facing.x < 0)
-    this.view.setAnimation(this.skin.walk_W);
+    this.view.setAnimation(this.skin.WALK_W);
   else if(this.facing.x > 0)
-    this.view.setAnimation(this.skin.walk_E);
+    this.view.setAnimation(this.skin.WALK_E);
   else if (this.facing.y < 0)
-    this.view.setAnimation(this.skin.walk_N);
+    this.view.setAnimation(this.skin.WALK_N);
   else if (this.facing.y > 0)
-    this.view.setAnimation(this.skin.walk_S);
+    this.view.setAnimation(this.skin.WALK_S);
   
   // don't animate if not moving
   if(this.facing.isNull())
@@ -113,7 +113,7 @@ Robot.prototype.draw = function()
   // don't animate if dead
   if(dead)
   {
-    this.view.setAnimation(this.animset.die);
+    this.view.setAnimation(this.animset.DIE);
     this.view.setSubimage(2);
   }
   
