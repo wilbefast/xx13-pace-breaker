@@ -16,106 +16,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //! ----------------------------------------------------------------------------
-//! CONSTANTS
-//! ----------------------------------------------------------------------------
-
-MAX_INTERACT_DISTANCE2 = 96*96;
-
-//! ----------------------------------------------------------------------------
-//! CLASS -- ATTRIBUTES 
-//! ----------------------------------------------------------------------------
-if(!is_server)
-{
-  var imgTron = load_image('sheet_tron.png');
-  var imgGeorge = load_image('sheet_george.png');
-  var imgMarie = load_image('sheet_marie_antoinette.png');
-  var imgFlic = load_image('sheet_flic.png');
-  var imgWifi = load_image('wifi.png');
-  var imgSmoke = load_image('smoke.png');
-  var imgElectrocution = load_image('electrocution.png');
-  var imgExplosion = load_image('explosion.png');
-
-  var animTron =
-  {
-    walk_N : new Animation(imgTron, new V2(32, 32), new V2(0, 0), 3),
-    walk_E : new Animation(imgTron, new V2(32, 32), new V2(0, 32), 3),
-    walk_W : new Animation(imgTron, new V2(32, 32), new V2(0, 32), 3, 
-                           FLIP_HORIZONTAL),
-    walk_S : new Animation(imgTron, new V2(32, 32), new V2(0, 64), 3),
-    die : new Animation(imgTron, new V2(32, 32), new V2(0, 96), 3)
-  }
-  
-  var animGeorge =
-  {
-    walk_N : new Animation(imgGeorge, new V2(32, 32), new V2(0, 0), 3),
-    walk_E : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3),
-    walk_W : new Animation(imgGeorge, new V2(32, 32), new V2(0, 32), 3, 
-                           FLIP_HORIZONTAL),
-    walk_S : new Animation(imgGeorge, new V2(32, 32), new V2(0, 64), 3),
-    die : new Animation(imgGeorge, new V2(32, 32), new V2(0, 96), 3)
-  }
-
-  var animMarie =
-  {
-    walk_N : new Animation(imgMarie, new V2(32, 32), new V2(0, 0), 3),
-    walk_E : new Animation(imgMarie, new V2(32, 32), new V2(0, 32), 3),
-    walk_W : new Animation(imgMarie, new V2(32, 32), new V2(0, 32), 3, 
-                           FLIP_HORIZONTAL),
-    walk_S : new Animation(imgMarie, new V2(32, 32), new V2(0, 64), 3),
-    die : new Animation(imgMarie, new V2(32, 32), new V2(0, 96), 3)
-  }
-
-  var animFlic =
-  {
-    walk_N : new Animation(imgFlic, new V2(32, 32), new V2(0, 0), 3),
-    walk_E : new Animation(imgFlic, new V2(32, 32), new V2(0, 32), 3),
-    walk_W : new Animation(imgFlic, new V2(32, 32), new V2(0, 32), 3, 
-                           FLIP_HORIZONTAL),
-    walk_S : new Animation(imgFlic, new V2(32, 32), new V2(0, 64), 3),
-    die : new Animation(imgFlic, new V2(32, 32), new V2(0, 96), 3)
-  }
-  
-  animWifi = new Animation(imgWifi, new V2(32, 32), new V2(0, 0), 3);
-  animSmoke = new Animation(imgSmoke, new V2(32, 32), new V2(0, 0), 5);
-  animExplosion = new Animation(imgExplosion, new V2(32, 32), new V2(0, 0), 8);
-  imgElectrocution = new Animation(imgElectrocution, new V2(32, 32), new V2(0, 0), 8);
-
-  anims = [animMarie, animGeorge, animTron, animFlic];
-
-}
-
-visuals = {
-  MARIE: 0,
-  GEORGE: 1,
-  TRON: 2,
-  FLIC: 3
-};
-  
-
-//! ----------------------------------------------------------------------------
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-Robot = function(position_,visual)
+Robot = function(position_, visual)
 {
   this.init(position_, visual);
   return this;
 }
 
+//! ----------------------------------------------------------------------------
+//! CLASS -- ATTRIBUTES 
+//! ----------------------------------------------------------------------------
 
-/*
-copyBot = function(bot) {
-	bot.__proto__ = Robot.prototype;
-	bot.position.__proto__ = V2.prototype;
-    bot.movement.__proto__ = V2.prototype;
-	var b = new Robot(new V2(bot.position.x, bot.position.y));
-    b.movement = bot.movement;
-	return b;
-}
-*/
+Robot.prototype.MAX_INTERACT_DISTANCE2 = 96*96;
+Robot.prototype.TYP_CIVILLIAN = 0;
+Robot.prototype.TYP_POLICE = 1;
+Robot.prototype.TYP_IMPOSTER = 2;
 
 //! ----------------------------------------------------------------------------
-//! PROTOTYPE
+//! CREATION
 //! ----------------------------------------------------------------------------
 
 Robot.prototype.initSecret = function()
@@ -151,6 +71,7 @@ Robot.prototype.init = function(position_, visual)
   this.radius2 = this.radius * this.radius;
   
   // skin
+  this.skin = 
   if(!visual) 
     visual = (is_server) ? Math.round(2 * Math.random()) : 0;
   if(!is_server)
@@ -176,11 +97,13 @@ Robot.prototype.init = function(position_, visual)
   {
     this.view 
       = new AnimationView(this.animset.walk_E, new V2(32, 32), 0.005, REVERSE_AT_END);
-      
-    this.buff_view
-      = new AnimationView(animWifi, new V2(32, 32), 0.005, REVERSE_AT_END);
   }
 }
+
+
+//! ----------------------------------------------------------------------------
+//! MOVEMENT AND COLLISIONS
+//! ----------------------------------------------------------------------------
 
 Robot.prototype.move = function(x, y)
 {
@@ -189,13 +112,16 @@ Robot.prototype.move = function(x, y)
   this.movement.setXY(x * 0.1, y * 0.1);
 };
 
-Robot.prototype.toString = function() 
+Robot.prototype.collision = function(other)
 {
-	return ("robot(" + this.id + ")");
-};
+  // move out of contact
+  var manifold = new V2().setFromTo(other.position, this.position);
+  manifold.normalise();
+  this.position.addV2(manifold);
+}
 
 //! ----------------------------------------------------------------------------
-//! ROBOT CONVERSATIONS
+//! INTERACTIONS
 //! ----------------------------------------------------------------------------
 
 Robot.prototype.consentToInteract = function(otherRobot) 
@@ -241,9 +167,7 @@ Robot.prototype.forceInteractPeer = function(newPeer)
   
   // unlink from previous
   if(this.interactPeer != null)
-  {
     this.interactPeer.cancelInteract();
-  }
   
   // cancel if passed a null
   if(newPeer == null)
@@ -337,59 +261,7 @@ Robot.prototype.update = function(delta_t)
   }
 };
 
-Robot.prototype.draw = function() 
+Robot.prototype.toString = function() 
 {
-  // only one of the two need draw the connection
-  if(this.interactPeer && this.id > this.interactPeer.id)
-  {
-    var where = new V2().setBetween(this.position, this.interactPeer.position, 
-                                    0.2 + Math.random()*0.6 );
-    context.strokeStyle = 'rgb(82,176,36)';
-    context.lineWidth = 1.0;
-    context.strokeText(rand_bool() ? '0' : '1', where.x, where.y);
-  }
-  
-  // set sprite to face in the robot's direction
-  this.facing.setV2(this.movement).mapToXY(Math.round);
-  if(this.facing.x < 0)
-    this.view.setAnimation(this.animset.walk_W);
-  else if(this.facing.x > 0)
-    this.view.setAnimation(this.animset.walk_E);
-	else if (this.facing.y < 0)
-    this.view.setAnimation(this.animset.walk_N);
-	else if (this.facing.y > 0)
-		this.view.setAnimation(this.animset.walk_S);
-  
-  // don't animate if not moving
-  if(this.facing.isNull())
-    this.view.setSubimage(1);
-  
-	// draw the sprite 
-  if (!this.dead) 
-  {
-    this.view.draw(this.position);
-    
-    //this.buff_view.draw(this.position);
-  } 
-  else // dead
-  {
-    this.view.setAnimation(this.animset.die);
-        
-    this.view.setSubimage(2);
-    this.view.draw(this.position);
-  }
-  
-  
-  
-  //! FIXME -- DEBUG STUFF
-  //context.lineWidth = 1;
-  //context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
+  return ("robot(" + this.id + ")");
 };
-
-Robot.prototype.collision = function(other)
-{
-  // move out of contact
-  var manifold = new V2().setFromTo(other.position, this.position);
-  manifold.normalise();
-  this.position.addV2(manifold);
-}
