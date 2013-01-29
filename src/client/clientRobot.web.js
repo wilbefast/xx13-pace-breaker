@@ -19,28 +19,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! SKIN BUILDER FUNCTION
 //!-----------------------------------------------------------------------------
 
-function addSkin(skin_array, image_file, is_cop) //! is_cop is a kludge
+function addSkin(skin_array, image_file, size)
 {
   var image = load_image(image_file);
-  if (!is_cop) {
 	skin_array.push
-		({
-			WALK_N : new Animation(image, new V2(32, 32), new V2(0, 0), 3),
-			WALK_E : new Animation(image, new V2(32, 32), new V2(0, 32), 3),
-			WALK_W : new Animation(image, new V2(32, 32), new V2(0, 32), 3, FLIP_X),
-			WALK_S : new Animation(image, new V2(32, 32), new V2(0, 64), 3),
-			DIE : new Animation(image, new V2(32, 32), new V2(0, 96), 3)
-		});
-	} else {
-	skin_array.push
-		({
-			WALK_N : new Animation(image, new V2(64, 64), new V2(0, 0), 3),
-			WALK_E : new Animation(image, new V2(64, 64), new V2(0, 64), 3),
-			WALK_W : new Animation(image, new V2(64, 64), new V2(0, 64), 3, FLIP_X),
-			WALK_S : new Animation(image, new V2(64, 64), new V2(0, 128), 3),
-			DIE : new Animation(image, new V2(64, 64), new V2(0, 192), 3)
-		});
-	}
+  ({
+    WALK_N : new Animation(image, new V2(size, size), new V2(0, 0), 3),
+    WALK_E : new Animation(image, new V2(size, size), new V2(0, size), 3),
+    WALK_W : new Animation(image, new V2(size, size), new V2(0, size), 3, FLIP_X),
+    WALK_S : new Animation(image, new V2(size, size), new V2(0, 2*size), 3),
+    DIE : new Animation(image, new V2(size, size), new V2(0, 3*size), 3)
+  });
 }
 
 
@@ -48,23 +37,23 @@ function addSkin(skin_array, image_file, is_cop) //! is_cop is a kludge
 //! CIVILLIAN SKINS 
 //!-----------------------------------------------------------------------------
 RobotCivillian.prototype.SKINS = [];
-addSkin(RobotCivillian.prototype.SKINS, 'sheet_george.png');
-addSkin(RobotCivillian.prototype.SKINS, 'sheet_mary.png');
-addSkin(RobotCivillian.prototype.SKINS, 'sheet_tron.png');
+addSkin(RobotCivillian.prototype.SKINS, 'sheet_george.png', 32);
+addSkin(RobotCivillian.prototype.SKINS, 'sheet_mary.png', 32);
+addSkin(RobotCivillian.prototype.SKINS, 'sheet_tron.png', 32);
 
 
 //!-----------------------------------------------------------------------------
 //! POLICE SKINS 
 //!-----------------------------------------------------------------------------
 RobotPolice.prototype.SKINS  = [];
-addSkin(RobotPolice.prototype.SKINS , 'sheet_arnold.png');
+addSkin(RobotPolice.prototype.SKINS , 'sheet_arnold.png', 64);
 
 
 //!-----------------------------------------------------------------------------
 //! IMPOSTER SKINS 
 //!-----------------------------------------------------------------------------
 RobotImposter.prototype.SKINS  = [];
-addSkin(RobotImposter.prototype.SKINS , 'sheet_imposter.png');
+addSkin(RobotImposter.prototype.SKINS , 'sheet_imposter.png', 32);
 
 
 
@@ -76,14 +65,17 @@ addSkin(RobotImposter.prototype.SKINS , 'sheet_imposter.png');
 //! CLIENT-ONLY -- INITIALISE ROBOTS' ANIMATIONS
 //!-----------------------------------------------------------------------------
 
+Robot.prototype.SPRITE_SIZE = new V2(32, 32);
+RobotPolice.prototype.SPRITE_SIZE = new V2(64, 64);
+
 Robot.prototype.specialInit = function()
 {
   // initialise visual stuff on the client only
   this.skin = this.SKINS[this.skin_i];
   
   this.facing = new V2(0, 1);
-  this.view = new AnimationView(this.skin.WALK_E, 
-                                new V2(32, 32), 0.4, REVERSE_AT_END);
+  this.view = 
+    new AnimationView(this.skin.WALK_E, this.SPRITE_SIZE, 0.4, REVERSE_AT_END);
 }
 
 //!-----------------------------------------------------------------------------
@@ -105,8 +97,10 @@ Robot.prototype.draw = function()
   this.view.draw(this.position);
   
   //! FIXME -- DEBUG STUFF
-  //context.lineWidth = 1;
-  //context.strokeText(this.id+"->"+(this.interactPeer?this.interactPeer.id:"null"), this.position.x + 32, this.position.y);
+  /*context.lineWidth = 1;
+  context.strokeText(this.id+"->"
+              +(this.interactPeer ? this.interactPeer.id : "null"), 
+              this.position.x + 32, this.position.y);*/
 };
 
 //!-----------------------------------------------------------------------------

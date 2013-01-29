@@ -10,8 +10,8 @@ var local_id = -1;
 var local_bot = undefined;
 
 // interface images
-var meSelector = load_image("cercle.png")
-var arrowSelector = load_image("fleche.png")
+var meSelector = load_image("cercle.png");
+var arrowSelector = load_image("fleche.png");
 
 G = new game();
 

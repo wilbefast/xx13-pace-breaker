@@ -180,9 +180,6 @@ io.sockets.on('connection', function (socket)
     otherSocket.get('id', function(err, otherId)
     {
       var otherBot = G.robots[otherId];
-      if(!otherBot)
-        console.log("there is no robot " + otherId);
-      else
       otherSocket.emit('newBot', 
                           { pos: sockBot.position, 
                             id: sockId, 
