@@ -55,6 +55,10 @@ function synchronise(synchData)
   synchPos.setXY(synchData.x, synchData.y);
   synchPosDelta.setXY(synchData.dx, synchData.dy); // NB - dx & dy are optional
   
+  // infection -- may not be present in packet (ie. if we are a cop)
+  if(synchData.sick)
+    bot.infection = sick;
+  
   // move -- smoothe transition to avoid ugly snapping
   bot.speed.setFromTo(bot.position, synchPos).scale(0.4).addV2(synchPosDelta);
   

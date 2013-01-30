@@ -83,12 +83,9 @@ connected = [];
 
 setInterval(function()
 {
-  nbPlayers = 0;
-  
   //! FOREACH player (socket) connected to the server
-  connected.forEach(function(synchSock, synchSockId)
+  connected.forEach(function(listenSock, listenSockId)
   {
-    nbPlayers++;
     //! FOREACH robot in the game
     G.robots.forEach(function(synchBot, synchBotId)
     {
@@ -109,9 +106,15 @@ setInterval(function()
       // -- interaction
       if(synchBot.interactPeer)
         synchData.peer = synchBot.interactPeer.id;
+      // -- infection: send only to the hacker/imposter team
+      if(synchBot.infection)
+      {
+        if(G.robots[listenSockId].type == Robot.prototype.TYPE_IMPOSTER)
+          synchData.sick = synchBot.infection;
+      }
       
       // send packet
-      synchSock.emit('synch', synchData);
+      listenSock.emit('synch', synchData);
       
     });
     
@@ -131,8 +134,6 @@ setInterval(function()
     sock.emit('heartbeat',{vol: Math.floor(vol*100)});
     */
   });
-
-  gameOn = nbPlayers > 1;
 },100);
 
 //! ----------------------------------------------------------------------------
