@@ -118,29 +118,24 @@ function treatUserInput()
   if(!local_bot)
     return;
     
-  //! SEND INTERACTION REQUEST
+  //! INTERACTION REQUEST ?
   var request_interact = (keyboard.action && keyboard.direction.isNull()),
-      request_interact_id, 
-      current_interact = local_bot.interactPeer;
-  
+      current_interact = local_bot.interactPeer,
+      inputData = { };
   // keep same interaction target ?
   if(request_interact && current_interact != null)
-    request_interact_id = current_interact.id;
-  
+    inputData.peer = current_interact.id; 
   // acquire a new interaction target ?
   else if(request_interact && selected)
-    request_interact_id = selected.id
+    inputData.peer = selected.id
     
-  // cancel interaction ?
-  else
-    request_interact_id = -1;
+  //! MOVEMENT REQUEST ?
+  if(keyboard.direction.x != 0)
+    inputData.x = Math.round(keyboard.direction.x);
+  if(keyboard.direction.y != 0)
+    inputData.y = Math.round(keyboard.direction.y);
  
-  //! SEND MOVEMENT REQUEST
-  socket.emit('input', 
-  {
-    x: Math.round(keyboard.direction.x),
-    y: Math.round(keyboard.direction.y),
-    who: request_interact_id
-  });
+  //! SEND INPUT
+  socket.emit('input', inputData);
 }
 setInterval(treatUserInput, 100);

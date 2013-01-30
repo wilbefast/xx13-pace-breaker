@@ -236,19 +236,19 @@ io.sockets.on('connection', function (socket)
   })
 
   // -- client sending user input to server
-  socket.on('input', function(data)
+  socket.on('input', function(inputData)
   {
     socket.get('id', function(err, inputId)
     {
       var inputBot = G.robots[inputId];
       
       // SET MOVEMENT
-      inputBot.trySetSpeed(data.x, data.y);
+      inputBot.trySetSpeed(inputData.x || 0, inputData.y || 0);
       
       // SET INTERACTION (if applicable)
-      if (data.who != -1)
+      if (inputData.peer)
       {
-        var interactTarget = G.robots[data.who];
+        var interactTarget = G.robots[inputData.peer];
         if (interactTarget && interactTarget.TYPE != Robot.TYPE_POLICE)
         {
           if (inputBot.position.dist2(inputBot.position) 
