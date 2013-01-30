@@ -181,14 +181,18 @@ io.sockets.on('connection', function (socket)
     {
       var otherBot = G.robots[otherId];
       if(otherBot)
-      otherSocket.emit('newBot', 
-                          { pos: sockBot.position, 
-                            id: sockId, 
-                            typ: otherBot.getPerceivedTypeOf(sockBot),
-                            skn: sockBot.skin_i
-                          });
+      {
+        otherSocket.emit('newBot', { 
+                                      pos: sockBot.position, 
+                                      id: sockId, 
+                                      typ: otherBot.getPerceivedTypeOf(sockBot),
+                                      skn: sockBot.skin_i
+                                    });
+      }
       else
-        console.log("Can't find Robot number " + otherId);
+        //! FIXME -- should never happen
+        console.log("Can't find Robot number " + otherId); 
+        
     });
   });
   

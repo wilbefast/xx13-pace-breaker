@@ -217,11 +217,15 @@ Robot.prototype.update = function(delta_t)
   this.position.setXY(this.position.x + this.speed.x * dt,  //! FIXME -- why not delta_t?
                       this.position.y + this.speed.y * dt); //! FIXME -- why not delta_t?
 
-  // update peer distance
+  // if interacting
   if(this.interactPeer != null)
   {
-    this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
+    // special update ?
+    if(this.whileInteracting)
+      this.whileInteracting(dt); //! FIXME -- why not delta_t?
     
+    // update peer distance
+    this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
     // cancel if too far away
     if(this.interactPeer_dist2 > this.MAX_INTERACT_DISTANCE2)
       this.tryInteractPeer(null);

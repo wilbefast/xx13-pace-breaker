@@ -92,6 +92,7 @@ var bit_pos = new V2();
 RobotCivillian.prototype.DRAW_PRIORITY = 0; // lowest
 RobotCivillian.prototype.drawInteraction = function()
 {
+  //! FIXME -- factorise
   bit_pos.setBetween(this.position, this.interactPeer.position, 
                                   0.2 + Math.random() * 0.6 );
   context.strokeStyle = 'rgb(82,176,36)';
@@ -102,7 +103,7 @@ RobotCivillian.prototype.drawInteraction = function()
 RobotImposter.prototype.DRAW_PRIORITY = 1; // middle
 RobotImposter.prototype.drawInteraction = function()
 {
-  //! FIXME
+  //! FIXME -- factorise
   bit_pos.setBetween(this.position, this.interactPeer.position, 
                                   0.2 + Math.random() * 0.6 );
   context.strokeStyle = 'violet';
@@ -113,7 +114,7 @@ RobotImposter.prototype.drawInteraction = function()
 RobotPolice.prototype.DRAW_PRIORITY = 2; // highest
 RobotPolice.prototype.drawInteraction = function()
 {
-  //! FIXME
+  //! FIXME -- factorise
   bit_pos.setBetween(this.position, this.interactPeer.position, 
                                   0.2 + Math.random() * 0.6 );
   context.strokeStyle = 'blue';
@@ -156,6 +157,9 @@ Robot.prototype.draw = function()
     context.strokeStyle = 'red';
     context.strokeCircle(this.position.x, this.position.y, this.radius);
   }
+  
+  context.lineWidth = 1.0;
+  context.strokeText(""+this.infection, this.position.x, this.position.y);
   
   
   //! FIXME -- DEBUG STUFF
