@@ -245,7 +245,7 @@ io.sockets.on('connection', function (socket)
       // SET MOVEMENT
       inputBot.trySetSpeed(inputData.x || 0, inputData.y || 0);
       
-      // SET INTERACTION (if applicable)
+      // SET/MAINTAIN INTERACTION (if one is specified)
       if (inputData.peer)
       {
         var interactTarget = G.robots[inputData.peer];
@@ -258,6 +258,9 @@ io.sockets.on('connection', function (socket)
           }
         }
       }
+      // CANCEL INTERACTION (if none is specified)
+      else
+        inputBot.forceInteractPeer(null);
     });
   });
   
