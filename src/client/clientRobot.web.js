@@ -86,17 +86,49 @@ Robot.prototype.specialInit = function()
 //!-----------------------------------------------------------------------------
 //! CLIENT-ONLY -- DRAW ROBOTS
 //!-----------------------------------------------------------------------------
+
+var bit_pos = new V2();
+
+RobotCivillian.prototype.DRAW_PRIORITY = 0; // lowest
+RobotCivillian.prototype.drawInteraction = function()
+{
+  bit_pos.setBetween(this.position, this.interactPeer.position, 
+                                  0.2 + Math.random() * 0.6 );
+  context.strokeStyle = 'rgb(82,176,36)';
+  context.lineWidth = 1.0;
+  context.strokeText(rand_bool() ? '0' : '1', bit_pos.x, bit_pos.y);
+}
+
+RobotImposter.prototype.DRAW_PRIORITY = 1; // middle
+RobotImposter.prototype.drawInteraction = function()
+{
+  //! FIXME
+  bit_pos.setBetween(this.position, this.interactPeer.position, 
+                                  0.2 + Math.random() * 0.6 );
+  context.strokeStyle = 'violet';
+  context.lineWidth = 1.0;
+  context.strokeText('2', bit_pos.x, bit_pos.y);
+}
+
+RobotPolice.prototype.DRAW_PRIORITY = 2; // highest
+RobotPolice.prototype.drawInteraction = function()
+{
+  //! FIXME
+  bit_pos.setBetween(this.position, this.interactPeer.position, 
+                                  0.2 + Math.random() * 0.6 );
+  context.strokeStyle = 'blue';
+  context.lineWidth = 1.0;
+  context.strokeText(rand_bool() ? '0' : '1', bit_pos.x, bit_pos.y);
+}
+
 Robot.prototype.draw = function() 
 {
   // only one of the two need draw the connection
-  if(this.interactPeer && this.id > this.interactPeer.id)
-  {
-    var where = new V2().setBetween(this.position, this.interactPeer.position, 
-                                    0.2 + Math.random() * 0.6 );
-    context.strokeStyle = 'rgb(82,176,36)';
-    context.lineWidth = 1.0;
-    context.strokeText(rand_bool() ? '0' : '1', where.x, where.y);
-  }
+  if(this.interactPeer
+    && (this.DRAW_PRIORITY > this.interactPeer.DRAW_PRIORITY 
+        || (this.DRAW_PRIORITY == this.interactPeer.DRAW_PRIORITY 
+            && this.id > this.interactPeer.id)))
+              this.drawInteraction();
   
   // draw the sprite
   this.view.draw(this.position);

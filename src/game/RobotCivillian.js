@@ -153,8 +153,13 @@ RobotCivillian.prototype.doWander = function(delta_t)
   
   // change state after a certain amount of time
   if(this.wander_timer.update(dt))
-  { 
-    rand_call([this.startWander, this.tryInteract], this);
+  {
+    // more likely to wander than to interact
+    var dice_roll = rand(12);
+    if(dice_roll >= 10)
+      this.tryInteract();
+    else
+      this.startWander();
   }
 }
 
@@ -162,12 +167,5 @@ RobotCivillian.prototype.doInteract = function(delta_t)
 {
   // stop interacting after a certain amount of time
   if(this.interact_timer.update(dt) && !this.interactPeer.humanControlled)
-  { 
-    //console.log(this.id + ' stopped interacting becaused BORED!');
     this.startWander();
-    //console.log(this.id + ' FINISHED BOREDOM DISCONNECT');
-    //console.log();
-    //console.log();
-    
-  }
 }

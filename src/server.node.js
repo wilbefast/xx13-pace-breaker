@@ -170,8 +170,8 @@ io.sockets.on('connection', function (socket)
   // create robot -- place a new robot object at this position
   
   var sockBot = (sockId % 2) 
-                    ? new RobotImposter(sockId, pos) 
-                    : new RobotPolice(sockId, pos);
+                    ? new RobotPolice(sockId, pos) 
+                    : new RobotImposter(sockId, pos);
   G.addRobot(sockBot);
   
   // tell OTHER PLAYERS about NEW PLAYER
