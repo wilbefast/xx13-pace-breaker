@@ -92,18 +92,26 @@ setInterval(function()
     //! FOREACH robot in the game
     G.robots.forEach(function(synchBot, synchBotId)
     {
-      synchSock.emit('synch', 
-      {
-        pos: { x: Math.round(synchBot.position.x), 
-               y:Math.round(synchBot.position.y) },
-        mov: { x: Math.round(synchBot.speed.x * 10), 
-               y:Math.round(synchBot.speed.y * 10) },
-        id: synchBotId,
-        interact: ((synchBot.interactPeer != null) 
-                            ? synchBot.interactPeer.id 
-                            : -1),
-        dead: synchBot.dead
-      });
+      // obligatory packet data
+      var synchData = 
+      { 
+        id : synchBotId,
+        x : Math.round(synchBot.position.x), 
+        y : Math.round(synchBot.position.y)        
+      };
+      
+      // optional packet data --
+      // -- speed
+      if(synchBot.speed.x)
+        synchData.dx = Math.round(synchBot.speed.x * 10);
+      if(synchBot.speed.y)
+        synchData.dy = Math.round(synchBot.speed.y * 10);
+      // -- interaction
+      if(synchBot.interactPeer)
+        synchData.peer = synchBot.interactPeer.id;
+      
+      // send packet
+      synchSock.emit('synch', synchData);
       
     });
     
