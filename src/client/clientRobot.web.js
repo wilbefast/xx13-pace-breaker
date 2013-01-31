@@ -158,8 +158,11 @@ Robot.prototype.draw = function()
     context.strokeCircle(this.position.x, this.position.y, this.radius);
   }
   
-  context.lineWidth = 1.0;
-  context.strokeText(""+this.infection, this.position.x, this.position.y);
+  if(this.infect)
+  {
+    context.lineWidth = 1.0;
+    context.strokeText(""+this.infection, this.position.x, this.position.y);
+  }
   
   
   //! FIXME -- DEBUG STUFF

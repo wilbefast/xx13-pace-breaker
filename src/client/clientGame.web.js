@@ -32,6 +32,7 @@ GameView = function()
 GameView.prototype.GUI_ME = load_image("cercle.png");
 GameView.prototype.GUI_TARGET = load_image("fleche.png");
 GameView.prototype.BACKGROUND = load_image("map.png");
+GameView.prototype.FOREGROUND = load_image("fore.png");
 
 GameView.prototype.addRobot = function(newBot)
 {
@@ -80,4 +81,7 @@ GameView.prototype.draw = function()
                       selected.position.x - 6,
                       selected.position.y - 24);
   } 
+  
+  // draw the foreground
+  context.drawImage(this.FOREGROUND, 0, 0);
 };

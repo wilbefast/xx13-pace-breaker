@@ -103,6 +103,7 @@ Game.prototype.addRobot = function(newBot)
   this.robots[newBot.id] = newBot;
   if(this.view)
     this.view.addRobot(newBot);
+  return newBot;
 }
 
 Game.prototype.unpackRobot = function(packet)
@@ -127,7 +128,7 @@ Game.prototype.unpackRobot = function(packet)
       return null;
       
   }
-  return this.addRobot(newBot)
+  this.addRobot(newBot);
 };
 
 Game.prototype.update = function(delta_t) 
