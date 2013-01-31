@@ -174,7 +174,11 @@ RobotCivillian.prototype.doInteract = function(delta_t)
 {
   // become infected by virus
   if(this.interactPeer.TYPE == Robot.prototype.TYPE_IMPOSTER)
+  {
     this.infection += dt; //! FIXME -- why not delta_t?
+    if(this.infection > this.MAX_INFECTION)
+      this.infection = this.MAX_INFECTION;
+  }
   
   // stop interacting after a certain amount of time
   if(this.interact_timer.update(dt) && !this.interactPeer.humanControlled)
