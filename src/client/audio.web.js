@@ -21,6 +21,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */  // add a / to uncomment
 
+
+for (var i=1;i<=6;i++) {
+  load_audio('Civilbot_chatter_'+i+'.ogg');
+}
+for (var i=1;i<=3;i++) {
+  load_audio('Civilbot_death_'+i+'.ogg');
+}
+for (var i=1;i<=4;i++) {
+  load_audio('Copbot_chatter_'+i+'.ogg');
+}
+load_audio('Copbot_death_1.ogg');
+load_audio('Copbot_reward_1.ogg');
+
+
 window.onload = initialise;
 var AudioContext;
 var bufferLoader;
@@ -29,14 +43,13 @@ function initialise()
 {
 
   AudioContext = new webkitAudioContext();
-
+  var load_list = [];
+  load_list.push(DATA_LOCATION + 'sounds/Battements_coeur.ogg');
+  load_list.push(DATA_LOCATION + 'sounds/DarkBounty.ogg');
   bufferLoader = new BufferLoader
   (
     AudioContext,
-    [
-      DATA_LOCATION + 'sounds/Battements_coeur.ogg',
-      DATA_LOCATION + 'sounds/bumpy.ogg'
-    ],
+    load_list,
     finishedLoading
   );
   bufferLoader.load();
@@ -113,9 +126,9 @@ function finishedLoading(bufferList)
     changeVolume(VolumeSample.gainNode[i],0);  
   }
   
-  if(local_bot)
+  //if(local_bot)
   {
-    var sample_index = (local_bot.isPolice) ? 0 : 1;
+    var sample_index = (local_bot.isPolice ? 0 : 1);
     VolumeSample.source[sample_index].noteOn(0);
     VolumeSample.source[sample_index].loop = true;
   }

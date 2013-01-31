@@ -125,7 +125,7 @@ Robot.prototype.cancelInteract = function()
 
 Robot.prototype.startInteract = function()
 {
-  // override me
+  // Override me, modafocka!
 }
 
 Robot.prototype.forceInteractPeer = function(newPeer)
