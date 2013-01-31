@@ -81,6 +81,7 @@ Robot.prototype.specialInit = function()
   this.facing = new V2(0, 1);
   this.view = 
     new AnimationView(this.skin.WALK_E, this.SPRITE_SIZE, 0.4, REVERSE_AT_END);
+  this.view.setOffset(new V2(0, -this.SPRITE_SIZE.y * 0.3));
 }
 
 //!-----------------------------------------------------------------------------
@@ -130,12 +131,8 @@ Robot.prototype.draw = function()
         || (this.DRAW_PRIORITY == this.interactPeer.DRAW_PRIORITY 
             && this.id > this.interactPeer.id)))
               this.drawInteraction();
-  
-  // draw the sprite
-  this.view.draw(this.position);
-  
-  // draw GUI stuff
-  
+        
+  // draw a circle around the character's feet
   // -- self (green)
   if(this.id == local_id)
   {
@@ -158,6 +155,11 @@ Robot.prototype.draw = function()
     context.strokeCircle(this.position.x, this.position.y, this.radius);
   }
   
+  // draw the sprite
+  this.view.draw(this.position);
+  
+  
+  // draw infection (if present)
   if(this.infect)
   {
     context.lineWidth = 1.0;
