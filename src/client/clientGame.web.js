@@ -16,37 +16,67 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //!-----------------------------------------------------------------------------
-//! GUI ELEMENTS
+//! GAMEVIEW -- CONSTRUCTOR 
 //!-----------------------------------------------------------------------------
 
-Game.prototype.meSelector = load_image("cercle.png");
-Game.prototype.arrowSelector = load_image("fleche.png");
+GameView = function()
+{
+  this.draw_list = [];
+  return this;
+}
 
 //!-----------------------------------------------------------------------------
-//! CLIENT-ONLY -- DRAW GUI
+//! GAMEVIEW -- CONSTANTS 
 //!-----------------------------------------------------------------------------
 
-Game.prototype.draw = function()
+GameView.prototype.GUI_ME = load_image("cercle.png");
+GameView.prototype.GUI_TARGET = load_image("fleche.png");
+GameView.prototype.BACKGROUND = load_image("map.png");
+
+GameView.prototype.addRobot = function(newBot)
+{
+  console.log("added bot " + newBot);
+  this.draw_list.push(newBot);
+}
+
+GameView.prototype.draw = function()
 {
   // draw the background
-  context.drawImage(this.map, 0, 0);
+  context.drawImage(this.BACKGROUND, 0, 0);
   
   // draw a circle around the controlled robot
    
   /*if (local_bot) 
   {
-    context.drawImage(this.meSelector, 
+    context.drawImage(this.GUI_ME, 
                       local_bot.position.x - local_bot.SPRITE_SIZE.x * 0.2,
                       local_bot.position.y + local_bot.SPRITE_SIZE.y * 0.2);
   }*/
   
   // draw each robot
-  this.robots.forEach(function(bot) { bot.draw(); });
+  for(var i = 0; i < this.draw_list.length; i++)
+  {
+    // draw each object
+    var current = this.draw_list[i];
+    current.draw();
+    
+    // re-sort the list based on y value
+    if(i)
+    {
+      var previous = this.draw_list[i-1];
+      if(current.position.y < previous.position.y)
+      {
+        // perform on step of bubble sort
+        this.draw_list[i-1] = current;
+        this.draw_list[i] = previous;
+      }
+    }
+  }
   
   // draw the targeter
   if (selected) 
   {
-    context.drawImage(this.arrowSelector,
+    context.drawImage(this.GUI_TARGET,
                       selected.position.x - 6,
                       selected.position.y - 24);
   } 

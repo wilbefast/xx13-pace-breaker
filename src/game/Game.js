@@ -77,10 +77,6 @@ Game = function()
 	{
     playable_area : new Rect(36, 68, 724, 364)
   }; 
-  
-  
-	if (!is_server)
-		this.map = load_image("map.png");
 }
 
 Game.prototype.toString = function()
@@ -105,6 +101,8 @@ Game.prototype.reset = function()
 Game.prototype.addRobot = function(newBot)
 {
   this.robots[newBot.id] = newBot;
+  if(this.view)
+    this.view.addRobot(newBot);
 }
 
 Game.prototype.unpackRobot = function(packet)
@@ -129,8 +127,7 @@ Game.prototype.unpackRobot = function(packet)
       return null;
       
   }
-	this.robots[packet.id] = newBot;
-  return newBot;
+  return this.addRobot(newBot)
 };
 
 Game.prototype.update = function(delta_t) 

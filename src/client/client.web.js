@@ -10,6 +10,8 @@ var local_id = -1;
 var local_bot = undefined;
 
 G = new Game();
+G.view = new GameView();
+G.draw = function() { this.view.draw() };
 
 //! ----------------------------------------------------------------------------
 //! MANAGE CONNECTION

@@ -31,7 +31,7 @@ Robot = function(id_, position_, skin_i_)
 
 // collisions and interactions
 Robot.prototype.SPEED = 0.1;
-Robot.prototype.radius = 16;
+Robot.prototype.radius = 12;
 Robot.prototype.radius2 = Robot.prototype.radius * Robot.prototype.radius;
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
 // types enumeration

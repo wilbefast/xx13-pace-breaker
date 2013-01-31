@@ -32,7 +32,7 @@ RobotPolice = function(id_, position_, skin_i_)
 RobotPolice.prototype = new Robot();
 RobotPolice.prototype.TYPE = Robot.prototype.TYPE_POLICE;
 RobotPolice.prototype.SPEED = 0.15; // 1.5 times faster than others
-RobotPolice.prototype.radius = 32;
+RobotPolice.prototype.radius = 24;
 RobotPolice.prototype.radius2 = 
   RobotPolice.prototype.radius * RobotPolice.prototype.radius;
 
