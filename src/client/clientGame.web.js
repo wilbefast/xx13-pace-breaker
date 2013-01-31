@@ -50,4 +50,5 @@ Game.prototype.draw = function()
                       selected.position.x - 6,
                       selected.position.y - 24);
   } 
+  context.drawImage(this.foreground, 0, 0);
 };

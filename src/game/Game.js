@@ -79,8 +79,10 @@ Game = function()
   }; 
   
   
-	if (!is_server)
-		this.map = load_image("map.png");
+	if (!is_server) {
+    this.map = load_image("map.png");
+    this.foreground = load_image("fore.png");
+  }
 }
 
 Game.prototype.toString = function()
