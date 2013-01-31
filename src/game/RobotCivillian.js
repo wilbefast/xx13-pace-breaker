@@ -86,6 +86,10 @@ RobotCivillian.prototype.perceiveObstacle = function(side)
 
 RobotCivillian.prototype.update = function(delta_t) 
 {
+  // do nothing if dead
+  if(this.health == this.DEAD)
+    return;
+  
   // call state method, whatever that may be
   this.state.call(this, delta_t);
   
@@ -103,6 +107,7 @@ RobotCivillian.prototype.update = function(delta_t)
     && this.infection_lethality_timer.update(dt))
   {
     this.health = this.setHealth(this.DEAD);
+    
   }
   
   // update position

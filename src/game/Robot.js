@@ -188,6 +188,10 @@ Robot.prototype.tryInteractPeer = function(newPeer)
 Robot.prototype.setHealth = function(new_health)
 {
   this.health = new_health;
+  
+  // cancel interactions if dead
+  if(new_health == this.DEAD)
+    this.forceInteractPeer(null);
 }
 
 Robot.prototype.perceiveObstacle = function(side)
