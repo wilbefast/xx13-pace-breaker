@@ -95,11 +95,7 @@ RobotImposter.prototype.DRAW_PRIORITY = 1; // middle
 RobotPolice.prototype.DRAW_PRIORITY = 2; // highest
 Robot.prototype.draw = function() 
 {
-  // 1. draw a shadow
-  context.fillStyle = 'rgba(0, 0, 0, 128)';
-  context.fillCircle(this.position.x, this.position.y, this.radius * 0.5);
-          
-  // 2. draw a circle around the character's feet
+  // 1. draw a circle around the character's feet
   context.lineWidth = 2.0;
   context.strokeStyle = 
       (this.id == local_id)           
@@ -125,10 +121,10 @@ Robot.prototype.draw = function()
   else
     context.strokeCircle(this.position.x, this.position.y, this.radius);
   
-  // 3. draw the sprite
+  // 2. draw the sprite
   this.view.draw(this.position);
   
-  // 4. direction interaction (if applicable)
+  // 3. direction interaction (if applicable)
   if(this.interactPeer
     && (this.DRAW_PRIORITY > this.interactPeer.DRAW_PRIORITY 
         || (this.DRAW_PRIORITY == this.interactPeer.DRAW_PRIORITY 
