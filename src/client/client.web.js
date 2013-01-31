@@ -9,9 +9,13 @@ var is_server = false;
 var local_id = -1;
 var local_bot = undefined;
 
+// game object
 G = new Game();
 G.view = new GameView();
 G.draw = function() { this.view.draw() };
+
+// hints
+var MAX_HINT_RANGE = 300;
 
 //! ----------------------------------------------------------------------------
 //! MANAGE CONNECTION
@@ -109,12 +113,15 @@ socket.on('gameover',function(data)
 //! ----------------------------------------------------------------------------
 //! PLAY HEARTBEAT SOUND AT THE SPECIFIED VOLUME
 //! ----------------------------------------------------------------------------
-socket.on('heartbeat', function(data)
+socket.on('hint', function(data)
 {
   if(window.VolumeSample)
   {
-    var sample_index = (local_bot.TYPE == RobotPolice.TYPE ? 0 : 1);
-    changeVolume(VolumeSample.gainNode[sample_index], data.vol * 0.01);   
+    var sample_index = (local_bot.isPolice ? 0 : 1),
+        sample_volume = (data.dist > MAX_HINT_RANGE) 
+                              ? 0 : 1 - (data.dist / MAX_HINT_RANGE);
+        
+    changeVolume(VolumeSample.gainNode[sample_index], sample_volume);   
   }
 });
 

@@ -175,7 +175,10 @@ RobotCivillian.prototype.doInteract = function(delta_t)
   {
     this.infection += dt; //! FIXME -- why not delta_t?
     if(this.infection > this.MAX_INFECTION)
+    {
+      this.health = this.INFECTED;
       this.infection = this.MAX_INFECTION;
+    }
   }
   
   // stop interacting after a certain amount of time

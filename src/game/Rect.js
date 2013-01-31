@@ -125,3 +125,13 @@ Rect.prototype.collapse = function()
   this.x = this.y = this.w = this.h = 0;
   return this;
 }
+
+Rect.prototype.getDiagonalLength = function()
+{
+  return Math.sqrt(this.w*this.w + this.h*this.h);
+}
+
+Rect.prototype.getDiagonalLength2 = function()
+{
+  return (this.w*this.w + this.h*this.h);
+}

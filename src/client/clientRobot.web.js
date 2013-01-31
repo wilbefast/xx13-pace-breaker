@@ -137,6 +137,11 @@ Robot.prototype.draw = function()
                         0.2 + 0.6*Math.random());
     context.strokeText(rand_bool() ? '0' : '1', bit_pos.x, bit_pos.y);
   }
+  
+    
+  
+  if(this.health != this.HEALTHY)
+    context.strokeText("YERP!", this.position.x, this.position.y);
         
 };
 

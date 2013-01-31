@@ -86,7 +86,12 @@ setInterval(function()
   //! FOREACH player (socket) connected to the server
   connected.forEach(function(listenSock, listenSockId)
   {
+    // the Robot whose owner will be sent the synchronisation/hint messages
     var listenBot = G.robots[listenSockId];
+    
+//! ----------------------------------------------------------------------------
+//! SYNCHRONISE CLIENT AND SERVER (SEND THE STATE OF EACH ROBOT)
+//! ----------------------------------------------------------------------------
     
     //! FOREACH robot in the game
     G.robots.forEach(function(synchBot, synchBotId)
@@ -111,7 +116,7 @@ setInterval(function()
       // -- infection: send only to the hacker/imposter team
       if(synchBot.infection)
       {
-        if(listenBot && listenBot.TYPE == Robot.prototype.TYPE_IMPOSTER)
+        if(listenBot && listenBot.isImposter)
           synchData.sick = synchBot.infection;
       }
       
@@ -120,21 +125,16 @@ setInterval(function()
       
     });
     
-    //! FIXME
-    /*
-    var distance = Infinity;
-    if (G.robots[id] != null && G.robots[id].robotTeam)
+//! ----------------------------------------------------------------------------
+//! SEND EACH PLAYER A 'HINT' TELLING THEM HOW NEAR THE NEAREST ENEMY IS
+//! ----------------------------------------------------------------------------
+    
+    if(listenBot && listenBot.nearestFoe && listenBot.nearestFoe.dist2 != Infinity)
     {
-      distance = (G.robots[id])
-                      ? Math.sqrt(G.robots[id].nearestHuman.dist2)
-    } 
-    else 
-    {
-      distance = (G.robots[id]?Math.sqrt(G.robots[id].nearestCop.dist2):Infinity);
+      listenSock.emit('hint', { 
+          dist: Math.round(Math.sqrt(listenBot.nearestFoe.dist2)) 
+      });
     }
-    var vol = 1 - Math.min(   1,      Math.max( 0, ((distance - 20)/300)   )       );
-    sock.emit('heartbeat',{vol: Math.floor(vol*100)});
-    */
   });
 },100);
 
