@@ -113,6 +113,14 @@ socket.on('gameover',function(data)
 //! ----------------------------------------------------------------------------
 //! PLAY HEARTBEAT SOUND AT THE SPECIFIED VOLUME
 //! ----------------------------------------------------------------------------
+socket.on('death', function(data)
+{
+  G.robots[data.id].setHealth(Robot.prototype.DEAD);
+});
+
+//! ----------------------------------------------------------------------------
+//! PLAY HEARTBEAT SOUND AT THE SPECIFIED VOLUME
+//! ----------------------------------------------------------------------------
 socket.on('hint', function(data)
 {
   if(window.VolumeSample)

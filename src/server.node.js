@@ -254,7 +254,7 @@ io.sockets.on('connection', function (socket)
       });
     });
   })
-
+ 
   // -- client sending user input to server
   socket.on('input', function(inputData)
   {
@@ -287,3 +287,15 @@ io.sockets.on('connection', function (socket)
   // tell NEW PLAYER what their id is
   socket.emit('you', {id: sockId});
 });
+
+//! ----------------------------------------------------------------------------
+//! KILL A ROBOT
+//! ----------------------------------------------------------------------------
+
+reportDeath = function(deadId)
+{  
+  connected.forEach(function(sock, challengeId)
+  {
+    sock.emit('death', { id : deadId });
+  });
+}
