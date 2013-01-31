@@ -42,6 +42,7 @@ RobotPolice.prototype.radius * RobotPolice.prototype.radius;
 
 // this is redundant, but makes code a lot easier to read
 RobotPolice.prototype.isPolice = true;
+RobotPolice.prototype.isHumanControlled = true;
   
 //! ----------------------------------------------------------------------------
 //! INITIALISATION

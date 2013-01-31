@@ -49,12 +49,10 @@ RobotCivillian.prototype.init = function(id_, position_, skin_i_)
 {
   Robot.prototype.init.call(this, id_, position_, skin_i_);
   
-  this.timeToDie = 5000; //! FIXME
-  
   // timers
   this.wander_timer = new Timer(1500);
   this.interact_timer = new Timer(3500);
-  this.state = this.doWander; //! FIXME -- masks Robot.state
+  this.state = this.doWander;
   
   // health
   this.infection = 0;
@@ -181,6 +179,6 @@ RobotCivillian.prototype.doInteract = function(delta_t)
   }
   
   // stop interacting after a certain amount of time
-  if(this.interact_timer.update(dt) && !this.interactPeer.humanControlled)
+  if(this.interact_timer.update(dt) && !this.interactPeer.isHumanControlled)
     this.startWander();
 }

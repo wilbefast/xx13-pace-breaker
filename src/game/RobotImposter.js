@@ -39,6 +39,7 @@ RobotImposter.prototype.TYPE = Robot.prototype.TYPE_IMPOSTER;
 
 // this is redundant, but makes code a lot easier to read
 RobotImposter.prototype.isImposter = true;
+RobotImposter.prototype.isHumanControlled = true;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION

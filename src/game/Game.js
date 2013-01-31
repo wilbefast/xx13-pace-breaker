@@ -18,47 +18,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! ----------------------------------------------------------------------------
 //! UTILITY FUNCTIONS
 //! ----------------------------------------------------------------------------
-canHearHeartbeat = function(subject, object)
+areFoes = function(a, b)
 {
-  return (subject.humanControlled && !object.killed
-          && !object.robotTeam);
-}
-
-canHearMusic = function(subject, object)
-{
-  return (subject.humanControlled 
-          && object.robotTeam && object.humanControlled);
+  return(!a.isCivillian && !b.isCivillian && a.TYPE != b.TYPE);
 }
 
 canInteractWith = function(subject, object)
 {
-  // NOBODY can interact with the dead
-  if(subject.dead || object.dead)
+  // NOBODY can interact with the dying or dead
+  if(subject.health == subject.DEAD || object.health == object.DEAD
+  || subject.health == subject.DYING || object.health == object.DYING)
     return false;
   
   // NOBODY can interact with people already interacting
   if(object.interactPeer)
     return false;
-  
+ 
   // NOBODY can interact with cops
-  if(object.humanControlled && object.robotTeam)
+  if(object.isPolice)
     return false;
   
   // EVERYONE can interact with CIVILLIANS
-  if(!object.humanControlled)
+  if(object.isCivillian)
     return true;
-  
-  // PLAYERS can interact ...
-  if(subject.humanControlled)
-  {
-    // ... COPS can interact with HUMANS
-    if(subject.robotTeam && !object.robotTeam)
-      return true;
-    
-    // ... HUMANS can interact with CIVILLIANS
-      // (already covered)
-  }
-  
+
+  // POLICE can't interact with eachother
+  if(subject.isPolice)
+    return (!object.isPolice);
+
   // all other situations -- impossible
   return false;
 }
@@ -146,19 +133,17 @@ Game.prototype.update = function(delta_t)
     
    
     // reset nearest -- ONLY ON CLIENT OR FOR NON-PLAYER CHARACTERS
-    if(!is_server || !bot.humanControlled)
+    if(!is_server || !bot.isHumanControlled)
     {
       bot.nearest.bot = null;
       bot.nearest.dist2 = Infinity;
     }
     
     // reset nearestHuman -- ONLY ON SERVER AND FOR PLAYER CHARACTERS 
-    else if(is_server && bot.humanControlled)
+    else if(is_server && bot.isHumanControlled)
     {
-      bot.nearestHuman.bot = null;
-      bot.nearestHuman.dist2 = Infinity;
-      bot.nearestCop.bot = null;
-      bot.nearestCop.dist2 = Infinity;
+      bot.nearestFoe.bot = null;
+      bot.nearestFoe.dist2 = Infinity;
     }
 
     // pair functions
@@ -177,10 +162,7 @@ Game.prototype.update = function(delta_t)
       
       // get nearest human -- FOR HEARBEATS
       if(is_server)
-      {
-        generateNearest(bot, other_bot, bot.nearestHuman, canHearHeartbeat);
-        generateNearest(bot, other_bot, bot.nearestCop, canHearMusic);
-      }
+        generateNearest(bot, other_bot, bot.nearestFoe, areFoes);
     }
     
     // update the robots

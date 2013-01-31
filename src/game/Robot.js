@@ -40,10 +40,10 @@ Robot.prototype.TYPE_POLICE = 1;
 Robot.prototype.TYPE_IMPOSTER = 2;
 Robot.prototype.TYPE_NAMES = [ "Civillian", "Police", "Imposter" ];
 // states enumeration
-Robot.prototype.STATE_IDLE = 0;
-Robot.prototype.STATE_INTERACT = 1;
-Robot.prototype.STATE_DYING = 2;
-Robot.prototype.STATE_DEAD = 3;
+Robot.prototype.HEALTHY = 0;
+Robot.prototype.SICK = 1;
+Robot.prototype.DYING = 2;
+Robot.prototype.DEAD = 3;
 // health and infection
 Robot.prototype.MAX_INFECTION = 10000;
 
@@ -56,20 +56,9 @@ Robot.prototype.init = function(id_, position_, skin_i_)
   // identifier
   this.id = id_;
   
-  //! FIXME -- replace with state
-  this.killed = false;
-  this.timeToDie = 0;
-  this.dying = 0;
-  this.dead = false;
-  
-  //! FIXME -- replace with type
-  this.humanControlled = false;
-  this.robotTeam = true;
-  
   // state
-  this.state_i = this.STATE_IDLE;
+  this.health = this.HEALTHY;
   
-  //! FIXME
   // skin
   this.skin_i = (skin_i_ || rand(3)); // arbitrarily 3 skins maximum
      

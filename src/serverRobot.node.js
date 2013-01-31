@@ -15,17 +15,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// server-only Robot code
 Robot.prototype.specialInit = function()
 {
   // only human-controlled Robots need care about displaying a proximity 'hint'
-  if(this.TYPE == this.TYPE_POLICE || this.TYPE == this.TYPE_IMPOSTER)
+  if(this.isHumanControlled)
   {
-    this.nearestHuman =
-    {
-      bot : null,
-      dist2 : Infinity,
-    };
-    this.nearestCop =
+    this.nearestFoe =
     {
       bot : null,
       dist2 : Infinity,
