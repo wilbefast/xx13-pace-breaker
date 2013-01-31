@@ -125,19 +125,7 @@ Robot.prototype.cancelInteract = function()
 
 Robot.prototype.startInteract = function()
 {
-  // override if needed
-  if (this.interactPeer.humanControlled) 
-  {
-    if (this.interactPeer.robotTeam && this.robotTeam)
-    { 
-      // Cop kills robot
-      this.interactPeer.dead = true;
-    } 
-    else
-    {
-      this.killed = true;
-    }
-  }
+  // Override me, modafocka!
 }
 
 Robot.prototype.forceInteractPeer = function(newPeer)

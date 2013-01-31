@@ -207,3 +207,33 @@ Robot.prototype.updateSpecial = function(delta_t)
 animSmoke = new Animation(imgSmoke, new V2(32, 32), new V2(0, 0), 5);
 animExplosion = new Animation(imgExplosion, new V2(32, 32), new V2(0, 0), 8);
 imgElectrocution = new Animation(imgElectrocution, new V2(32, 32), new V2(0, 0), 8);*/
+
+var civilian_chatter_sample = 0;
+var civilian_death_sample = 0;
+var cop_chatter_sample = 0;
+var playing_a_sound = false;
+
+RobotImposter.prototype.startInteract = function(){
+  if (!playing_a_sound) {
+    if (this.id == local_id) {
+      play_audio('Civilbot_chatter_'+(civilian_chatter_sample%6+1)+'.ogg')
+      civilian_chatter_sample++;
+      playing_a_sound = true;
+      setTimeout(function(){
+        playing_a_sound = false;
+      },3000);
+    }
+  }
+}
+
+setInterval(function(){
+  if (!playing_a_sound) {
+    play_audio('Copbot_chatter_'+(cop_chatter_sample%4+1)+'.ogg')
+    cop_chatter_sample++;
+    playing_a_sound = true;
+    setTimeout(function(){
+      playing_a_sound = false;
+    },3000);
+  }
+},15000);
+

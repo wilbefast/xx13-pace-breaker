@@ -60,8 +60,8 @@ function load_audio(file_name)
   var audio = new Audio();
   audio.preload = true;
   audio.src = DATA_LOCATION + "sounds/"  + file_name;
-  audio.volume = 0
-  audio.play()
+  audio.volume = 0;
+  audio.play();
   
   // make sure we wait till its loaded
   audio.addEventListener('canplaythrough', resourceLoaded);

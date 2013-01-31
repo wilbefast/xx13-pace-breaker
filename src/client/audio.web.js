@@ -23,17 +23,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 for (var i=1;i<=6;i++) {
-  load_audio('sounds/Civilbot_chatter_'+i+'.ogg');
+  load_audio('Civilbot_chatter_'+i+'.ogg');
 }
 for (var i=1;i<=3;i++) {
-  load_audio('sounds/Civilbot_death_'+i+'.ogg');
+  load_audio('Civilbot_death_'+i+'.ogg');
 }
 for (var i=1;i<=4;i++) {
-  load_audio('sounds/Copbot_chatter_'+i+'.ogg');
+  load_audio('Copbot_chatter_'+i+'.ogg');
 }
-load_audio('sounds/Copbot_death_1.ogg');
-load_audio('sounds/Copbot_reward_1.ogg');
-
+load_audio('Copbot_death_1.ogg');
+load_audio('Copbot_reward_1.ogg');
 
 
 window.onload = initialise;
