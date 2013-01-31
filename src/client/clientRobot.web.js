@@ -132,6 +132,10 @@ Robot.prototype.draw = function()
             && this.id > this.interactPeer.id)))
               this.drawInteraction();
         
+  // draw a shadow
+  context.fillStyle = 'rgba(0, 0, 0, 128)';
+  context.fillCircle(this.position.x, this.position.y, this.radius * 0.5);
+          
   // draw a circle around the character's feet
   // -- self (green)
   if(this.id == local_id)
