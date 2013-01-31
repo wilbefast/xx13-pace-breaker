@@ -34,8 +34,15 @@ RobotPolice.prototype.TYPE = Robot.prototype.TYPE_POLICE;
 RobotPolice.prototype.SPEED = 0.15; // 1.5 times faster than others
 RobotPolice.prototype.radius = 16;
 RobotPolice.prototype.radius2 = 
-  RobotPolice.prototype.radius * RobotPolice.prototype.radius;
+RobotPolice.prototype.radius * RobotPolice.prototype.radius;
 
+//! ----------------------------------------------------------------------------
+//! TYPE CHECKING
+//! ----------------------------------------------------------------------------
+
+// this is redundant, but makes code a lot easier to read
+RobotPolice.prototype.isPolice = true;
+  
 //! ----------------------------------------------------------------------------
 //! INITIALISATION
 //! ----------------------------------------------------------------------------

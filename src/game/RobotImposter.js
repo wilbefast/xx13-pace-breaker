@@ -33,6 +33,12 @@ RobotImposter = function(id_, position_, skin_i_)
 RobotImposter.prototype = new Robot();
 RobotImposter.prototype.TYPE = Robot.prototype.TYPE_IMPOSTER;
 
+//! ----------------------------------------------------------------------------
+//! TYPE CHECKING
+//! ----------------------------------------------------------------------------
+
+// this is redundant, but makes code a lot easier to read
+RobotImposter.prototype.isImposter = true;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION

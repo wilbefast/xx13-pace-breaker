@@ -137,53 +137,33 @@ Robot.prototype.draw = function()
   context.fillCircle(this.position.x, this.position.y, this.radius * 0.5);
           
   // draw a circle around the character's feet
-  //! TODO -- factorise
-  // -- self (green)
-  if(this.id == local_id)
+  context.lineWidth = 2.0;
+  context.strokeStyle = 
+      (this.id == local_id)           
+        ? 'lime' : 
+      ((local_bot && this.TYPE == local_bot.TYPE)     
+        ? 'blue' : 
+      ((this.isPolice && local_bot.isImposter)
+        ? 'red' : 
+        'violet'));
+  // -- for Civillians : draw infection ...
+  if(this.isCivillian)
   {
-    context.lineWidth = 3.0;
-    context.strokeStyle = 'rgb(82,176,36)';
-    context.strokeCircle(this.position.x, this.position.y, this.radius);
+    // ... only if infection is present
+    if(this.infection)
+    {
+      context.beginPath();
+      context.arc(this.position.x,this.position.y, this.radius, 
+                  0, Math.PI * 2 * (this.infection / 10000), false);
+      context.stroke();
+    }
   }
-  //! TODO -- factorise
-  // -- friends (blue)
-  else if(local_bot && this.TYPE == local_bot.TYPE)
-  {
-    context.lineWidth = 2.0;
-    context.strokeStyle = 'blue';
+  // -- for other : draw team colour
+  else
     context.strokeCircle(this.position.x, this.position.y, this.radius);
-  }
-  //! TODO -- factorise
-  // -- foes (red)
-  else if(this.TYPE == this.TYPE_POLICE && local_bot.TYPE == this.TYPE_IMPOSTER)
-  {
-    context.lineWidth = 2.0;
-    context.strokeStyle = 'red';
-    context.strokeCircle(this.position.x, this.position.y, this.radius);
-  }
   
   // draw the sprite
   this.view.draw(this.position);
-  
-  
-  // draw infection (if present)
-  if(this.infection)
-  {
-    context.strokeStyle = 'violet';
-    context.lineWidth = 3.0;
-    
-    context.beginPath();
-    context.arc(this.position.x,this.position.y, this.radius, 
-                0, Math.PI * 2 * (this.infection / 10000), false);
-    context.stroke();
-  }
-  
-  
-  //! FIXME -- DEBUG STUFF
-  /*context.lineWidth = 1;
-  context.strokeText(this.id+"->"
-              +(this.interactPeer ? this.interactPeer.id : "null"), 
-              this.position.x + 32, this.position.y);*/
 };
 
 //!-----------------------------------------------------------------------------

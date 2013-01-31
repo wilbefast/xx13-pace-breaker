@@ -35,6 +35,13 @@ RobotCivillian.prototype = new Robot();
 RobotCivillian.prototype.TYPE = Robot.prototype.TYPE_CIVILLIAN;
 
 //! ----------------------------------------------------------------------------
+//! TYPE CHECKING
+//! ----------------------------------------------------------------------------
+
+// this is redundant, but makes code a lot easier to read
+RobotCivillian.prototype.isCivillian = true;
+
+//! ----------------------------------------------------------------------------
 //! INITIALISATION
 //! ----------------------------------------------------------------------------
 
