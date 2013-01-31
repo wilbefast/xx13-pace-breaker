@@ -81,8 +81,6 @@ RobotCivillian.prototype.update = function(delta_t)
   // call state method, whatever that may be
   this.state.call(this, delta_t);
   
-  //this.infection--;
-  
   // update position
   Robot.prototype.update.call(this);
 };
@@ -154,7 +152,7 @@ RobotCivillian.prototype.doWander = function(delta_t)
   // wander around
   
   // change state after a certain amount of time
-  if(this.wander_timer.update(dt))
+  if(this.wander_timer.update(dt)) //! FIXME -- why not delta_t?
   {
     // more likely to wander than to interact
     var dice_roll = rand(12);
@@ -169,7 +167,7 @@ RobotCivillian.prototype.doInteract = function(delta_t)
 {
   // become infected by virus
   if(this.interactPeer.TYPE == Robot.prototype.TYPE_IMPOSTER)
-    this.infection += delta_t;
+    this.infection += dt; //! FIXME -- why not delta_t?
   
   // stop interacting after a certain amount of time
   if(this.interact_timer.update(dt) && !this.interactPeer.humanControlled)

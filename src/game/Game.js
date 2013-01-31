@@ -126,9 +126,16 @@ Game.prototype.unpackRobot = function(packet)
     default:
       console.log("invalid Robot type " + packet.typ);
       return null;
-      
   }
-  this.addRobot(newBot);
+  
+  // packet may contain infection value (if local_bot is an Imposter)
+  if(packet.sick)
+  {
+    console.log("packet contained sick:"+packet.sick);
+    newBot.infection = packet.sick;
+  }
+  
+  return this.addRobot(newBot);
 };
 
 Game.prototype.update = function(delta_t) 

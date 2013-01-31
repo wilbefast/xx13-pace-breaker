@@ -214,10 +214,15 @@ io.sockets.on('connection', function (socket)
   // tell NEW PLAYER about OTHER PLAYERS
   G.robots.forEach(function(otherBot, otherId)
   {
-    socket.emit('newBot', { pos: otherBot.position, 
-                            id: otherId, 
-                            typ: sockBot.getPerceivedTypeOf(otherBot),
-                            skn: otherBot.skin_i});
+    var newBotData = { pos: otherBot.position, 
+                        id: otherId, 
+                        typ: sockBot.getPerceivedTypeOf(otherBot),
+                        skn: otherBot.skin_i }
+    // only tell hackers (imposters) about infection
+    if(sockBot.TYPE == Robot.prototype.TYPE_IMPOSTER && otherBot.infection)
+      newBotData.sick = otherBot.infection;
+
+    socket.emit('newBot', newBotData);
   })
 
   //! --------------------------------------------------------------------------

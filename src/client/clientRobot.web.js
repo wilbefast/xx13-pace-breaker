@@ -93,7 +93,7 @@ var bit_pos = new V2();
 RobotCivillian.prototype.DRAW_PRIORITY = 0; // lowest
 RobotCivillian.prototype.drawInteraction = function()
 {
-  //! FIXME -- factorise
+  //! TODO -- factorise
   bit_pos.setBetween(this.position, this.interactPeer.position, 
                                   0.2 + Math.random() * 0.6 );
   context.strokeStyle = 'rgb(82,176,36)';
@@ -104,7 +104,7 @@ RobotCivillian.prototype.drawInteraction = function()
 RobotImposter.prototype.DRAW_PRIORITY = 1; // middle
 RobotImposter.prototype.drawInteraction = function()
 {
-  //! FIXME -- factorise
+  //! TODO -- factorise
   bit_pos.setBetween(this.position, this.interactPeer.position, 
                                   0.2 + Math.random() * 0.6 );
   context.strokeStyle = 'violet';
@@ -115,7 +115,7 @@ RobotImposter.prototype.drawInteraction = function()
 RobotPolice.prototype.DRAW_PRIORITY = 2; // highest
 RobotPolice.prototype.drawInteraction = function()
 {
-  //! FIXME -- factorise
+  //! TODO -- factorise
   bit_pos.setBetween(this.position, this.interactPeer.position, 
                                   0.2 + Math.random() * 0.6 );
   context.strokeStyle = 'blue';
@@ -137,6 +137,7 @@ Robot.prototype.draw = function()
   context.fillCircle(this.position.x, this.position.y, this.radius * 0.5);
           
   // draw a circle around the character's feet
+  //! TODO -- factorise
   // -- self (green)
   if(this.id == local_id)
   {
@@ -144,6 +145,7 @@ Robot.prototype.draw = function()
     context.strokeStyle = 'rgb(82,176,36)';
     context.strokeCircle(this.position.x, this.position.y, this.radius);
   }
+  //! TODO -- factorise
   // -- friends (blue)
   else if(local_bot && this.TYPE == local_bot.TYPE)
   {
@@ -151,6 +153,7 @@ Robot.prototype.draw = function()
     context.strokeStyle = 'blue';
     context.strokeCircle(this.position.x, this.position.y, this.radius);
   }
+  //! TODO -- factorise
   // -- foes (red)
   else if(this.TYPE == this.TYPE_POLICE && local_bot.TYPE == this.TYPE_IMPOSTER)
   {
@@ -164,10 +167,15 @@ Robot.prototype.draw = function()
   
   
   // draw infection (if present)
-  if(this.infect)
+  if(this.infection)
   {
-    context.lineWidth = 1.0;
-    context.strokeText(""+this.infection, this.position.x, this.position.y);
+    context.strokeStyle = 'violet';
+    context.lineWidth = 3.0;
+    
+    context.beginPath();
+    context.arc(this.position.x,this.position.y, this.radius, 
+                0, Math.PI * 2 * (this.infection / 10000), false);
+    context.stroke();
   }
   
   

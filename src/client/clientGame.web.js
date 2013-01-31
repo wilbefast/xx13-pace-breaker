@@ -36,7 +36,6 @@ GameView.prototype.FOREGROUND = load_image("fore.png");
 
 GameView.prototype.addRobot = function(newBot)
 {
-  console.log("added bot " + newBot);
   this.draw_list.push(newBot);
 }
 
