@@ -45,7 +45,7 @@ Robot.prototype.SICK = 1;
 Robot.prototype.DYING = 2;
 Robot.prototype.DEAD = 3;
 // health and infection
-Robot.prototype.MAX_INFECTION = 10000;
+Robot.prototype.MAX_INFECTION = 8000;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION

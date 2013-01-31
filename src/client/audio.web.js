@@ -103,7 +103,7 @@ function finishedLoading(bufferList)
   VolumeSample.gainNode = new Array();
   VolumeSample.source = new Array();
   
-  for(var i = 0;i < bufferList.length;i++)
+  for(var i = 0; i < bufferList.length;i++)
   {
     VolumeSample.gainNode[i] = AudioContext.createGainNode();
     VolumeSample.source[i] = AudioContext.createBufferSource();
@@ -115,7 +115,7 @@ function finishedLoading(bufferList)
   
   if(local_bot)
   {
-    var sample_index = (local_bot.TYPE == Robot.TYPE_POLICE) ? 0 : 1;
+    var sample_index = (local_bot.isPolice) ? 0 : 1;
     VolumeSample.source[sample_index].noteOn(0);
     VolumeSample.source[sample_index].loop = true;
   }

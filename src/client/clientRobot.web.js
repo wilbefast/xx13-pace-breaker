@@ -89,6 +89,8 @@ Robot.prototype.specialInit = function()
 //!-----------------------------------------------------------------------------
 
 var bit_pos = new V2();
+var ANGLE_START = -Math.PI * 0.25;
+var ANGLE_END = Math.PI * 1.5;
 
 RobotCivillian.prototype.DRAW_PRIORITY = 0; // lowest
 RobotImposter.prototype.DRAW_PRIORITY = 1; // middle
@@ -111,9 +113,13 @@ Robot.prototype.draw = function()
     // ... only if infection is present
     if(this.infection)
     {
+      if(this.health == this.INFECTED)
+        context.lineWidth++; 
+        
       context.beginPath();
       context.arc(this.position.x,this.position.y, this.radius, 
-                  0, Math.PI * 2 * (this.infection / this.MAX_INFECTION), false);
+        ANGLE_START, 
+        ANGLE_START + ANGLE_END * (this.infection / this.MAX_INFECTION), false);
       context.stroke();
     }
   }
@@ -136,13 +142,7 @@ Robot.prototype.draw = function()
     bit_pos.setBetween(this.position, this.interactPeer.position, 
                         0.2 + 0.6*Math.random());
     context.strokeText(rand_bool() ? '0' : '1', bit_pos.x, bit_pos.y);
-  }
-  
-    
-  
-  if(this.health != this.HEALTHY)
-    context.strokeText("YERP!", this.position.x, this.position.y);
-        
+  }     
 };
 
 //!-----------------------------------------------------------------------------
