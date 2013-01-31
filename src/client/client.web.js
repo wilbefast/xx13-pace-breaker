@@ -120,7 +120,7 @@ socket.on('hint', function(data)
     var sample_index = (local_bot.isPolice ? 0 : 1),
         sample_volume = (data.dist > MAX_HINT_RANGE) 
                               ? 0 : 1 - (data.dist / MAX_HINT_RANGE);
-        
+    console.log(sample_index, sample_volume);
     changeVolume(VolumeSample.gainNode[sample_index], sample_volume);   
   }
 });

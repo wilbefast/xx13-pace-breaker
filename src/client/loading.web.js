@@ -59,7 +59,9 @@ function load_audio(file_name)
   // inform the system that we want to load this image
   var audio = new Audio();
   audio.preload = true;
-  audio.src = DATA_LOCATION + "sound/"  + file_name;
+  audio.src = DATA_LOCATION + "sounds/"  + file_name;
+  audio.volume = 0
+  audio.play()
   
   // make sure we wait till its loaded
   audio.addEventListener('canplaythrough', resourceLoaded);
@@ -75,7 +77,7 @@ function play_audio(file_name)
 {
   // create new Audio object: this allows for multiple sounds to overlap
   var audio = new Audio();
-  audio.src = DATA_LOCATION + file_name;
+  audio.src = DATA_LOCATION+ "sounds/" + file_name;
   audio.play();
   // tell the interpretor to delete this object as soon as possible
   //delete audio;
