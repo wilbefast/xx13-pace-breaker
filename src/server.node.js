@@ -83,27 +83,40 @@ connected = [];
 
 setInterval(function()
 {
-  nbPlayers = 0;
-  
   //! FOREACH player (socket) connected to the server
-  connected.forEach(function(synchSock, synchSockId)
+  connected.forEach(function(listenSock, listenSockId)
   {
-    nbPlayers++;
+    var listenBot = G.robots[listenSockId];
+    
     //! FOREACH robot in the game
     G.robots.forEach(function(synchBot, synchBotId)
     {
-      synchSock.emit('synch', 
+      // obligatory packet data
+      var synchData = 
+      { 
+        id : synchBotId,
+        x : Math.round(synchBot.position.x), 
+        y : Math.round(synchBot.position.y)        
+      };
+      
+      // optional packet data --
+      // -- speed
+      if(synchBot.speed.x)
+        synchData.dx = Math.round(synchBot.speed.x * 10);
+      if(synchBot.speed.y)
+        synchData.dy = Math.round(synchBot.speed.y * 10);
+      // -- interaction
+      if(synchBot.interactPeer)
+        synchData.peer = synchBot.interactPeer.id;
+      // -- infection: send only to the hacker/imposter team
+      if(synchBot.infection)
       {
-        pos: { x: Math.round(synchBot.position.x), 
-               y:Math.round(synchBot.position.y) },
-        mov: { x: Math.round(synchBot.speed.x * 10), 
-               y:Math.round(synchBot.speed.y * 10) },
-        id: synchBotId,
-        interact: ((synchBot.interactPeer != null) 
-                            ? synchBot.interactPeer.id 
-                            : -1),
-        dead: synchBot.dead
-      });
+        if(listenBot && listenBot.TYPE == Robot.prototype.TYPE_IMPOSTER)
+          synchData.sick = synchBot.infection;
+      }
+      
+      // send packet
+      listenSock.emit('synch', synchData);
       
     });
     
@@ -123,8 +136,6 @@ setInterval(function()
     sock.emit('heartbeat',{vol: Math.floor(vol*100)});
     */
   });
-
-  gameOn = nbPlayers > 1;
 },100);
 
 //! ----------------------------------------------------------------------------
@@ -170,8 +181,8 @@ io.sockets.on('connection', function (socket)
   // create robot -- place a new robot object at this position
   
   var sockBot = (sockId % 2) 
-                    ? new RobotImposter(sockId, pos) 
-                    : new RobotPolice(sockId, pos);
+                    ? new RobotPolice(sockId, pos) 
+                    : new RobotImposter(sockId, pos);
   G.addRobot(sockBot);
   
   // tell OTHER PLAYERS about NEW PLAYER
@@ -181,14 +192,18 @@ io.sockets.on('connection', function (socket)
     {
       var otherBot = G.robots[otherId];
       if(otherBot)
-      otherSocket.emit('newBot', 
-                          { pos: sockBot.position, 
-                            id: sockId, 
-                            typ: otherBot.getPerceivedTypeOf(sockBot),
-                            skn: sockBot.skin_i
-                          });
+      {
+        otherSocket.emit('newBot', { 
+                                      pos: sockBot.position, 
+                                      id: sockId, 
+                                      typ: otherBot.getPerceivedTypeOf(sockBot),
+                                      skn: sockBot.skin_i
+                                    });
+      }
       else
-        console.log("Can't find Robot number " + otherId);
+        //! FIXME -- should never happen
+        console.log("Can't find Robot number " + otherId); 
+        
     });
   });
   
@@ -236,19 +251,19 @@ io.sockets.on('connection', function (socket)
   })
 
   // -- client sending user input to server
-  socket.on('input', function(data)
+  socket.on('input', function(inputData)
   {
     socket.get('id', function(err, inputId)
     {
       var inputBot = G.robots[inputId];
       
       // SET MOVEMENT
-      inputBot.trySetSpeed(data.x, data.y);
+      inputBot.trySetSpeed(inputData.x || 0, inputData.y || 0);
       
-      // SET INTERACTION (if applicable)
-      if (data.who != -1)
+      // SET/MAINTAIN INTERACTION (if one is specified)
+      if (inputData.peer)
       {
-        var interactTarget = G.robots[data.who];
+        var interactTarget = G.robots[inputData.peer];
         if (interactTarget && interactTarget.TYPE != Robot.TYPE_POLICE)
         {
           if (inputBot.position.dist2(inputBot.position) 
@@ -258,6 +273,9 @@ io.sockets.on('connection', function (socket)
           }
         }
       }
+      // CANCEL INTERACTION (if none is specified)
+      else
+        inputBot.forceInteractPeer(null);
     });
   });
   

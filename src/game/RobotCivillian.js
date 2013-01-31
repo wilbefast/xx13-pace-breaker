@@ -43,9 +43,14 @@ RobotCivillian.prototype.init = function(id_, position_, skin_i_)
   Robot.prototype.init.call(this, id_, position_, skin_i_);
   
   this.timeToDie = 5000; //! FIXME
+  
+  // timers
   this.wander_timer = new Timer(1500);
   this.interact_timer = new Timer(3500);
-  this.state = this.doWander;
+  this.state = this.doWander; //! FIXME -- masks Robot.state
+  
+  // health
+  this.infection = 0;
 }
 
 //! ----------------------------------------------------------------------------
@@ -75,6 +80,8 @@ RobotCivillian.prototype.update = function(delta_t)
 {
   // call state method, whatever that may be
   this.state.call(this, delta_t);
+  
+  //this.infection--;
   
   // update position
   Robot.prototype.update.call(this);
@@ -112,16 +119,11 @@ RobotCivillian.prototype.tryInteract = function()
   if(this.nearest && !this.dead && !this.killed
   && this.nearest.dist2 <= this.MAX_INTERACT_DISTANCE2 
   && this.tryInteractPeer(this.nearest.bot))
-  {
     this.startInteract();
-  }
   
   // otherwise go back to wandering
   else
-  {
-    //console.log(this.id + ' failed interaction with ' + this.nearest.bot.id);
     this.startWander();
-  }
 }
 
 RobotCivillian.prototype.startInteract = function()
@@ -153,21 +155,23 @@ RobotCivillian.prototype.doWander = function(delta_t)
   
   // change state after a certain amount of time
   if(this.wander_timer.update(dt))
-  { 
-    rand_call([this.startWander, this.tryInteract], this);
+  {
+    // more likely to wander than to interact
+    var dice_roll = rand(12);
+    if(dice_roll >= 10)
+      this.tryInteract();
+    else
+      this.startWander();
   }
 }
 
 RobotCivillian.prototype.doInteract = function(delta_t)
 {
+  // become infected by virus
+  if(this.interactPeer.TYPE == Robot.prototype.TYPE_IMPOSTER)
+    this.infection += delta_t;
+  
   // stop interacting after a certain amount of time
   if(this.interact_timer.update(dt) && !this.interactPeer.humanControlled)
-  { 
-    //console.log(this.id + ' stopped interacting becaused BORED!');
     this.startWander();
-    //console.log(this.id + ' FINISHED BOREDOM DISCONNECT');
-    //console.log();
-    //console.log();
-    
-  }
 }

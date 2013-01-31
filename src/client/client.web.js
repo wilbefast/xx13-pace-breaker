@@ -44,19 +44,26 @@ $('body').bind('beforeunload',function() { socket.send("leaving"); });
 //! UPDATE THE GAME
 //! ----------------------------------------------------------------------------
 //! SYNCHRONISED WITH SERVER
-function synchronise(data)
+var synchPos = new V2(), synchPosDelta = new V2();
+function synchronise(synchData)
 {
   // which Robot are we synchronising ? 
-  var bot = G.robots[data.id];
-  var peer = (data.interact == -1) ? null : G.robots[data.interact];
+  var bot = G.robots[synchData.id];
+  var peer = synchData.peer ? null : G.robots[synchData.peer];
+  
+  // read packet
+  synchPos.setXY(synchData.x, synchData.y);
+  synchPosDelta.setXY(synchData.dx, synchData.dy); // NB - dx & dy are optional
+  
+  // infection -- may not be present in packet (ie. if we are a cop)
+  if(synchData.sick)
+    bot.infection = synchData.sick;
   
   // move -- smoothe transition to avoid ugly snapping
-  bot.speed.setFromTo(bot.position, data.pos)
-                    .scale(0.4)
-                    .addV2(data.mov);
+  bot.speed.setFromTo(bot.position, synchPos).scale(0.4).addV2(synchPosDelta);
   
-  // interact
-  bot.forceInteractPeer(peer);
+  // interact -- continue/start/stop (if no peer is specified => interact null)
+  bot.forceInteractPeer(G.robots[synchData.peer]);
 }
 socket.on('synch', synchronise);
 
@@ -118,29 +125,28 @@ function treatUserInput()
   if(!local_bot)
     return;
     
-  //! SEND INTERACTION REQUEST
+  //! INTERACTION REQUEST ?
   var request_interact = (keyboard.action && keyboard.direction.isNull()),
-      request_interact_id, 
-      current_interact = local_bot.interactPeer;
-  
+      current_interact = local_bot.interactPeer,
+      inputData = { };
+      
   // keep same interaction target ?
   if(request_interact && current_interact != null)
-    request_interact_id = current_interact.id;
-  
+    inputData.peer = current_interact.id; 
   // acquire a new interaction target ?
   else if(request_interact && selected)
-    request_interact_id = selected.id
-    
-  // cancel interaction ?
+    inputData.peer = selected.id
+  // break off from current interaction
   else
-    request_interact_id = -1;
- 
-  //! SEND MOVEMENT REQUEST
-  socket.emit('input', 
-  {
-    x: Math.round(keyboard.direction.x),
-    y: Math.round(keyboard.direction.y),
-    who: request_interact_id
-  });
+    local_bot.forceInteractPeer(null);
+    
+  //! MOVEMENT REQUEST ?
+  if(keyboard.direction.x != 0)
+    inputData.x = Math.round(keyboard.direction.x);
+  if(keyboard.direction.y != 0)
+    inputData.y = Math.round(keyboard.direction.y);
+  
+  //! SEND INPUT
+  socket.emit('input', inputData);
 }
 setInterval(treatUserInput, 100);

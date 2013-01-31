@@ -32,7 +32,7 @@ Robot = function(id_, position_, skin_i_)
 // collisions and interactions
 Robot.prototype.SPEED = 0.1;
 Robot.prototype.radius = 16;
-Robot.prototype.radius2 = Robot.prototype.RADIUS * Robot.prototype.RADIUS;
+Robot.prototype.radius2 = Robot.prototype.radius * Robot.prototype.radius;
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
 // types enumeration
 Robot.prototype.TYPE_CIVILLIAN = 0;
@@ -217,11 +217,11 @@ Robot.prototype.update = function(delta_t)
   this.position.setXY(this.position.x + this.speed.x * dt,  //! FIXME -- why not delta_t?
                       this.position.y + this.speed.y * dt); //! FIXME -- why not delta_t?
 
-  // update peer distance
+  // if interacting
   if(this.interactPeer != null)
   {
+    // update peer distance
     this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
-    
     // cancel if too far away
     if(this.interactPeer_dist2 > this.MAX_INTERACT_DISTANCE2)
       this.tryInteractPeer(null);
