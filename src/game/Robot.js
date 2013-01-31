@@ -45,7 +45,7 @@ Robot.prototype.SICK = 1;
 Robot.prototype.DYING = 2;
 Robot.prototype.DEAD = 3;
 // health and infection
-Robot.prototype.MAX_INFECTION = 10000;
+Robot.prototype.MAX_INFECTION = 1000; //6000;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION
@@ -184,6 +184,15 @@ Robot.prototype.tryInteractPeer = function(newPeer)
 }
 
 //! ----------------------------------------------------------------------------
+
+Robot.prototype.setHealth = function(new_health)
+{
+  this.health = new_health;
+  
+  // cancel interactions if dead
+  if(new_health == this.DEAD)
+    this.forceInteractPeer(null);
+}
 
 Robot.prototype.perceiveObstacle = function(side)
 {

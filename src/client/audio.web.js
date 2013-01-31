@@ -116,7 +116,7 @@ function finishedLoading(bufferList)
   VolumeSample.gainNode = new Array();
   VolumeSample.source = new Array();
   
-  for(var i = 0;i < bufferList.length;i++)
+  for(var i = 0; i < bufferList.length;i++)
   {
     VolumeSample.gainNode[i] = AudioContext.createGainNode();
     VolumeSample.source[i] = AudioContext.createBufferSource();
