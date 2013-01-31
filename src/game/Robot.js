@@ -44,6 +44,8 @@ Robot.prototype.STATE_IDLE = 0;
 Robot.prototype.STATE_INTERACT = 1;
 Robot.prototype.STATE_DYING = 2;
 Robot.prototype.STATE_DEAD = 3;
+// health and infection
+Robot.prototype.MAX_INFECTION = 10000;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION

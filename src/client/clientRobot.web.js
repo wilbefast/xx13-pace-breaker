@@ -91,52 +91,15 @@ Robot.prototype.specialInit = function()
 var bit_pos = new V2();
 
 RobotCivillian.prototype.DRAW_PRIORITY = 0; // lowest
-RobotCivillian.prototype.drawInteraction = function()
-{
-  //! TODO -- factorise
-  bit_pos.setBetween(this.position, this.interactPeer.position, 
-                                  0.2 + Math.random() * 0.6 );
-  context.strokeStyle = 'rgb(82,176,36)';
-  context.lineWidth = 1.0;
-  context.strokeText(rand_bool() ? '0' : '1', bit_pos.x, bit_pos.y);
-}
-
 RobotImposter.prototype.DRAW_PRIORITY = 1; // middle
-RobotImposter.prototype.drawInteraction = function()
-{
-  //! TODO -- factorise
-  bit_pos.setBetween(this.position, this.interactPeer.position, 
-                                  0.2 + Math.random() * 0.6 );
-  context.strokeStyle = 'violet';
-  context.lineWidth = 1.0;
-  context.strokeText('2', bit_pos.x, bit_pos.y);
-}
-
 RobotPolice.prototype.DRAW_PRIORITY = 2; // highest
-RobotPolice.prototype.drawInteraction = function()
-{
-  //! TODO -- factorise
-  bit_pos.setBetween(this.position, this.interactPeer.position, 
-                                  0.2 + Math.random() * 0.6 );
-  context.strokeStyle = 'blue';
-  context.lineWidth = 1.0;
-  context.strokeText(rand_bool() ? '0' : '1', bit_pos.x, bit_pos.y);
-}
-
 Robot.prototype.draw = function() 
 {
-  // only one of the two need draw the connection
-  if(this.interactPeer
-    && (this.DRAW_PRIORITY > this.interactPeer.DRAW_PRIORITY 
-        || (this.DRAW_PRIORITY == this.interactPeer.DRAW_PRIORITY 
-            && this.id > this.interactPeer.id)))
-              this.drawInteraction();
-        
-  // draw a shadow
+  // 1. draw a shadow
   context.fillStyle = 'rgba(0, 0, 0, 128)';
   context.fillCircle(this.position.x, this.position.y, this.radius * 0.5);
           
-  // draw a circle around the character's feet
+  // 2. draw a circle around the character's feet
   context.lineWidth = 2.0;
   context.strokeStyle = 
       (this.id == local_id)           
@@ -154,7 +117,7 @@ Robot.prototype.draw = function()
     {
       context.beginPath();
       context.arc(this.position.x,this.position.y, this.radius, 
-                  0, Math.PI * 2 * (this.infection / 10000), false);
+                  0, Math.PI * 2 * (this.infection / this.MAX_INFECTION), false);
       context.stroke();
     }
   }
@@ -162,8 +125,23 @@ Robot.prototype.draw = function()
   else
     context.strokeCircle(this.position.x, this.position.y, this.radius);
   
-  // draw the sprite
+  // 3. draw the sprite
   this.view.draw(this.position);
+  
+  // 4. direction interaction (if applicable)
+  if(this.interactPeer
+    && (this.DRAW_PRIORITY > this.interactPeer.DRAW_PRIORITY 
+        || (this.DRAW_PRIORITY == this.interactPeer.DRAW_PRIORITY 
+            && this.id > this.interactPeer.id)))
+  {
+    context.lineWidth = 1.0;
+    context.strokeStyle = this.isCivillian 
+                            ? 'lime' : (this.isPolice ? 'blue' : 'violet');
+    bit_pos.setBetween(this.position, this.interactPeer.position, 
+                        0.2 + 0.6*Math.random());
+    context.strokeText(rand_bool() ? '0' : '1', bit_pos.x, bit_pos.y);
+  }
+        
 };
 
 //!-----------------------------------------------------------------------------
