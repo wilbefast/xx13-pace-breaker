@@ -86,6 +86,8 @@ setInterval(function()
   //! FOREACH player (socket) connected to the server
   connected.forEach(function(listenSock, listenSockId)
   {
+    var listenBot = G.robots[listenSockId];
+    
     //! FOREACH robot in the game
     G.robots.forEach(function(synchBot, synchBotId)
     {
@@ -109,7 +111,7 @@ setInterval(function()
       // -- infection: send only to the hacker/imposter team
       if(synchBot.infection)
       {
-        if(G.robots[listenSockId].type == Robot.prototype.TYPE_IMPOSTER)
+        if(listenBot && listenBot.TYPE == Robot.prototype.TYPE_IMPOSTER)
           synchData.sick = synchBot.infection;
       }
       

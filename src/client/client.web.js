@@ -57,13 +57,13 @@ function synchronise(synchData)
   
   // infection -- may not be present in packet (ie. if we are a cop)
   if(synchData.sick)
-    bot.infection = sick;
+    bot.infection = synchData.sick;
   
   // move -- smoothe transition to avoid ugly snapping
   bot.speed.setFromTo(bot.position, synchPos).scale(0.4).addV2(synchPosDelta);
   
   // interact -- continue/start/stop (if no peer is specified => interact null)
-  bot.forceInteractPeer(synchData.peer);
+  bot.forceInteractPeer(G.robots[synchData.peer]);
 }
 socket.on('synch', synchronise);
 

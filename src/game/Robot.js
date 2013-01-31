@@ -220,10 +220,6 @@ Robot.prototype.update = function(delta_t)
   // if interacting
   if(this.interactPeer != null)
   {
-    // special update ?
-    if(this.whileInteracting)
-      this.whileInteracting(dt); //! FIXME -- why not delta_t?
-    
     // update peer distance
     this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);
     // cancel if too far away
