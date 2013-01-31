@@ -213,6 +213,17 @@ var civilian_death_sample = 0;
 var cop_chatter_sample = 0;
 var playing_a_sound = false;
 
+function play_dead(){
+  if (!playing_a_sound) {
+    play_audio('Civilbot_death_'+(civilian_death_sample%3+1)+'.ogg')
+    civilian_death_sample++;
+    playing_a_sound = true;
+    setTimeout(function(){
+      playing_a_sound = false;
+    },3000);
+  }
+}
+
 RobotImposter.prototype.startInteract = function(){
   if (!playing_a_sound) {
     if (this.id == local_id) {
