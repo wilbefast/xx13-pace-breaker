@@ -113,9 +113,18 @@ Robot.prototype.draw = function()
     // ... only if infection is present
     if(this.infection)
     {
+      // if fully infected
       if(this.health == this.INFECTED)
-        context.lineWidth++; 
+      {
+        // death timer
+        context.lineWidth = 1; 
+        context.strokeText(Math.round(this.infection_lethality_timer.time.balance / updateRate), 
+                         this.position.x, this.position.y - 32);   
+        // thicker arc 
+        context.lineWidth = 3; 
+      }
         
+      // draw arc
       context.beginPath();
       context.arc(this.position.x,this.position.y, this.radius, 
         ANGLE_START, 

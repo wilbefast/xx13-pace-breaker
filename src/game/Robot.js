@@ -45,7 +45,7 @@ Robot.prototype.SICK = 1;
 Robot.prototype.DYING = 2;
 Robot.prototype.DEAD = 3;
 // health and infection
-Robot.prototype.MAX_INFECTION = 8000;
+Robot.prototype.MAX_INFECTION = 1000; //6000;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION
@@ -125,19 +125,7 @@ Robot.prototype.cancelInteract = function()
 
 Robot.prototype.startInteract = function()
 {
-  // override if needed
-  if (this.interactPeer.humanControlled) 
-  {
-    if (this.interactPeer.robotTeam && this.robotTeam)
-    { 
-      // Cop kills robot
-      this.interactPeer.dead = true;
-    } 
-    else
-    {
-      this.killed = true;
-    }
-  }
+  // override me
 }
 
 Robot.prototype.forceInteractPeer = function(newPeer)
@@ -196,6 +184,11 @@ Robot.prototype.tryInteractPeer = function(newPeer)
 }
 
 //! ----------------------------------------------------------------------------
+
+Robot.prototype.setHealth = function(new_health)
+{
+  this.health = new_health;
+}
 
 Robot.prototype.perceiveObstacle = function(side)
 {
