@@ -111,7 +111,7 @@ setInterval(function()
       if(synchBot.speed.y)
         synchData.dy = Math.round(synchBot.speed.y * 10);
       // -- interaction
-      if(synchBot.interactPeer)
+      if(synchBot.interactPeer != undefined)
         synchData.peer = synchBot.interactPeer.id;
       // -- infection: send only to the hacker/imposter team
       if(synchBot.infection)
@@ -121,7 +121,7 @@ setInterval(function()
       }
       
       // send packet
-      listenSock.emit('synch', synchData);
+      listenSock.volatile.emit('synch', synchData);
       
     });
     
@@ -266,7 +266,7 @@ io.sockets.on('connection', function (socket)
       inputBot.trySetSpeed(inputData.x || 0, inputData.y || 0);
       
       // SET/MAINTAIN INTERACTION (if one is specified)
-      if (inputData.peer)
+      if (inputData.peer != undefined)
       {
         var interactTarget = G.robots[inputData.peer];
         if (interactTarget && interactTarget.TYPE != Robot.TYPE_POLICE)

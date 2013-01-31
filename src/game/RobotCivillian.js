@@ -106,6 +106,7 @@ RobotCivillian.prototype.update = function(delta_t)
   else if (this.health == this.INFECTED
     && this.infection_lethality_timer.update(dt))
   {
+    console.log("DEATH!");
     this.health = this.setHealth(this.DEAD);
     
   }
@@ -117,7 +118,7 @@ RobotCivillian.prototype.update = function(delta_t)
 RobotCivillian.prototype.consentToInteract = function(otherRobot) 
 {
   // civillians are always happy to interact if not already interacting
-  return (!this.dead && !this.killed && this.interactPeer == null);
+  return (this.health != this.DEAD && this.interactPeer == null);
 }
 
 //! ----------------------------------------------------------------------------
@@ -143,7 +144,7 @@ RobotCivillian.prototype.startWander = function()
 RobotCivillian.prototype.tryInteract = function()
 {
   // check if close enough and peer accepts
-  if(this.nearest && !this.dead && !this.killed
+  if(this.nearest && this.health != this.DYING && this.health != this.DEAD
   && this.nearest.dist2 <= this.MAX_INTERACT_DISTANCE2 
   && this.tryInteractPeer(this.nearest.bot))
     this.startInteract();

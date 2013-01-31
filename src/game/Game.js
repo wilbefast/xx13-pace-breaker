@@ -37,15 +37,15 @@ canInteractWith = function(subject, object)
   // NOBODY can interact with cops
   if(object.isPolice)
     return false;
-  
-  // EVERYONE can interact with CIVILLIANS
-  if(object.isCivillian)
-    return true;
 
   // POLICE can't interact with eachother
   if(subject.isPolice)
     return (!object.isPolice);
 
+  // EVERYONE can interact with CIVILLIANS
+  if(object.isCivillian)
+    return true;
+  
   // all other situations -- impossible
   return false;
 }
@@ -57,7 +57,7 @@ canInteractWith = function(subject, object)
 Game = function()
 {
 	this.robots = [];
-  this.STARTING_CIVILLIANS = 20;
+  this.STARTING_CIVILLIANS = 1;
   
   // Replace with "new level()" when THAT's done
 	this.level = 
@@ -149,10 +149,11 @@ Game.prototype.update = function(delta_t)
     // pair functions
     for (other_bid in this.robots)
     {
+      if(other_bid == bid)
+        continue;
+      
       // don't check self
       var other_bot = this.robots[other_bid];
-      if(other_bot == bot)
-        continue;
       
       // get bot collisions
       generateCollision(bot, other_bot);

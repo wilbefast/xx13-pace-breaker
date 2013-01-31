@@ -109,12 +109,7 @@ Robot.prototype.collision = function(other)
 
 Robot.prototype.consentToInteract = function(otherRobot) 
 {
-  // override to accept interactions
-  this.dead = true;
-  if ((otherRobot.humanControlled && otherRobot.robotTeam))
-    this.killed = true;
-
-  return (otherRobot.humanControlled && otherRobot.robotTeam);
+  return false; // refuse by default
 }
 
 Robot.prototype.cancelInteract = function()
@@ -158,7 +153,7 @@ Robot.prototype.forceInteractPeer = function(newPeer)
 }
 
 Robot.prototype.tryInteractPeer = function(newPeer)
-{
+{  
   // skip if already interacting with this peer
   if(this.interactPeer == newPeer)
     return false;
