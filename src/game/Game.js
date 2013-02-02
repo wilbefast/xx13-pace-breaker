@@ -168,7 +168,8 @@ Game.prototype.update = function(delta_t)
    
     // snap the robots inside the map
     var borderCollision = boundObject(bot, this.level.playable_area);
-    if(!borderCollision.isNull())
+    if(!borderCollision.isNull() 
+    && bot.health != bot.DYING && bot.health != bot.DEAD)
       // also inform the AI that it has been snapped (if it has been snapped)
       bot.perceiveObstacle(borderCollision);
 	}

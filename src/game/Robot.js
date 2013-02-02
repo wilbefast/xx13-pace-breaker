@@ -45,7 +45,7 @@ Robot.prototype.INFECTED = 1;
 Robot.prototype.DYING = 2;
 Robot.prototype.DEAD = 3;
 // health and infection
-Robot.prototype.MAX_INFECTION = 1000; //6000;
+Robot.prototype.MAX_INFECTION = 6000;
 
 //! ----------------------------------------------------------------------------
 //! INITIALISATION
@@ -182,12 +182,12 @@ Robot.prototype.tryInteractPeer = function(newPeer)
 
 Robot.prototype.setHealth = function(new_health)
 {
-  console.log(this + " setting health to " + new_health);
   this.health = new_health;
   
   // cancel interactions if dead
-  if(new_health == this.DEAD)
+  if(new_health == this.DYING || new_health == this.DEAD)
   {
+    this.speed.setXY(0, 0);
     this.forceInteractPeer(null);
     if(is_server)
       reportDeath(this.id);

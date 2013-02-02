@@ -66,7 +66,7 @@ RobotCivillian.prototype.init = function(id_, position_, skin_i_)
 //! ----------------------------------------------------------------------------
 
 RobotCivillian.prototype.perceiveObstacle = function(side)
-{
+{ 
   // flip a coin ...
   if(rand_bool())
   {

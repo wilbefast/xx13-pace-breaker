@@ -288,7 +288,6 @@ reportDeath = function(deadId)
   
   connected.forEach(function(sock, challengeId)
   {
-    console.log("SENDING DEAD " + deadId);
     sock.emit('death', { id : deadId });
   });
 }
