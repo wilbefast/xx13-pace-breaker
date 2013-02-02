@@ -87,7 +87,7 @@ RobotCivillian.prototype.perceiveObstacle = function(side)
 RobotCivillian.prototype.update = function(delta_t) 
 {
   // perform standard update
-  Robot.prototype.update.call(this);
+  Robot.prototype.update.call(this, delta_t);
    
   // stop if dead
   if(this.health == this.DEAD)

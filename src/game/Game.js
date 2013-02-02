@@ -95,6 +95,7 @@ Game.prototype.addRobot = function(newBot)
 
 Game.prototype.unpackRobot = function(packet)
 {
+  // parse new Robot from packet
   var newBot;
   switch(packet.typ)
   {
@@ -123,12 +124,12 @@ Game.prototype.unpackRobot = function(packet)
 };
 
 Game.prototype.update = function(delta_t) 
-{
+{ 
+  // for each Robot id
 	for (bid in this.robots)
   {
 		var bot = this.robots[bid];
     
-   
     // reset nearest -- ONLY ON CLIENT OR FOR NON-PLAYER CHARACTERS
     if(!is_server || !bot.isHumanControlled)
     {
@@ -136,7 +137,7 @@ Game.prototype.update = function(delta_t)
       bot.nearest.dist2 = Infinity;
     }
     
-    // reset nearestHuman -- ONLY ON SERVER AND FOR PLAYER CHARACTERS 
+    // reset nearestFoe -- ONLY ON SERVER AND FOR PLAYER CHARACTERS 
     else if(is_server && bot.isHumanControlled)
     {
       bot.nearestFoe.bot = null;
@@ -146,10 +147,9 @@ Game.prototype.update = function(delta_t)
     // pair functions
     for (other_bid in this.robots)
     {
+      // don't check self
       if(other_bid == bid)
         continue;
-      
-      // don't check self
       var other_bot = this.robots[other_bid];
       
       // get bot collisions
@@ -169,8 +169,7 @@ Game.prototype.update = function(delta_t)
     // snap the robots inside the map
     var borderCollision = boundObject(bot, this.level.playable_area);
     if(!borderCollision.isNull())
-    {
+      // also inform the AI that it has been snapped (if it has been snapped)
       bot.perceiveObstacle(borderCollision);
-    }
 	}
 }

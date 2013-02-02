@@ -21,7 +21,12 @@ main.init = function() {
 *	Called each time the state is entered.
 *	Useful to prepare the environment.
 */
-main.enter = function(previous) {
+main.enter = function(previous) 
+{  
+  // timing concerns
+  this.prev_tick = this.curr_tick = (new Date()).getTime();
+  
+  // repopulate the Game world
   G.reset();
 };
 
@@ -40,47 +45,13 @@ main.leave = function()
 *	The contents of your main loop goes here.
 */
 main.update = function() 
-{
-	// Simulate
-	G.update();
-
-	if (gameOn) 
-  {
-		var humansLeft = 0;
-		var robotsLeft = 0;
-		for (bot in G.robots) 
-    {
-			r = G.robots[bot];
-			if (r.humanControlled && !r.dead) 
-      {
-				if (r.robotTeam) 
-        {
-					robotsLeft++;
-				} 
-				else 
-        {
-					humansLeft++;
-				}
-			}
-		}
-		
-		//! FIXME Game end conditions
-		/**
-		if (humansLeft == 0 || robotsLeft == 0) 
-    {
-			var elim = humansLeft==0;
-			connected.forEach(function(sock, id)
-  			{
-  				sock.emit('gameover',{elim: elim, score: score});
-  				sock.disconnect();
-  			});
-  			G.reset();
-		}
-		/**/
-	}
-
-
-	// Draw
+{  
+   // Deal with timing
+  this.prev_tick = this.curr_tick;
+  this.curr_tick = (new Date()).getTime();
+ 
+	// Perform server-side ('true') update
+	G.update(this.curr_tick - this.prev_tick);
 };
 
 /**	Called when events happen

@@ -103,7 +103,7 @@ Robot.prototype.draw = function()
       (this.id == local_id)           
         ? 'lime' : 
       ((local_bot && this.TYPE == local_bot.TYPE)     
-        ? 'blue' : 
+        ? 'yellow' : 
       ((this.isPolice && local_bot.isImposter)
         ? 'red' : 
         'violet'));

@@ -1,9 +1,9 @@
 is_server = true;
 
-mime = require('mime')
-  , app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
-  , fs = require('fs');
+mime = require('mime'), 
+  app = require('http').createServer(handler)
+  io = require('socket.io').listen(app)
+  fs = require('fs');
 
 require("./game/utility.js");
 require("./game/objects.js");
@@ -24,7 +24,6 @@ require("./main.node.js");
 
 var UPDATES_PER_SECOND = 60;
 var MILLISECONDS_PER_UPDATE = 1000 / UPDATES_PER_SECOND;
-round = 1;
 
 gs.switchstate(main);
 setInterval(function(){ gs.update(); }, MILLISECONDS_PER_UPDATE);
@@ -49,8 +48,6 @@ rep.on('exit', function () {
 io.set('log level',1)
 
 app.listen(1986);
-
-gameOn = false;
 
 function handler (req, res) 
 {

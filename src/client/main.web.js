@@ -20,6 +20,7 @@ main.init = function()
 */
 main.enter = function(previous) 
 {
+  // timing concerns
   this.prev_tick = this.curr_tick = (new Date()).getTime();
 };
 
@@ -39,14 +40,18 @@ main.leave = function()
 */
 main.update = function() 
 {
-  // deal with timing
+   // Deal with timing
   this.prev_tick = this.curr_tick;
   this.curr_tick = (new Date()).getTime();
 
+  // Perform client-side ead-reckoning
+  G.update(this.curr_tick - this.prev_tick);
+
+  // Select the Robot nearest to the player
   var local_bot = G.robots[local_id];
   if(local_bot)
   {
-    // select a nearby bot
+    // who is the nearest bot ?
     if(local_bot.nearest.dist2 <= local_bot.MAX_INTERACT_DISTANCE2)
     {
       // 'nearest.dist2' is set to Infinity whenever 'nearest.bot' is null 
@@ -57,14 +62,9 @@ main.update = function()
       // select nobody is nobody is close enough
       selected = null;
   }
-
-	// Dead-reckoning
-  G.update(this.curr_tick - this.prev_tick);
 	
-	// Draw
-	context.fillStyle = '#131313';
-	context.fillRect(0,0,canvas.width,canvas.height);
-	G.draw();
+	// Draw the game
+  G.draw();
 }
 
 /**	Called when events happen

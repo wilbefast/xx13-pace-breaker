@@ -30,7 +30,7 @@ Robot = function(id_, position_, skin_i_)
 //! ----------------------------------------------------------------------------
 
 // collisions and interactions
-Robot.prototype.SPEED = 0.1;
+Robot.prototype.SPEED = 45 / 1000; // 45 pixels per second
 Robot.prototype.radius = 12;
 Robot.prototype.radius2 = Robot.prototype.radius * Robot.prototype.radius;
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
@@ -204,6 +204,7 @@ Robot.prototype.update = function(delta_t)
   // update position
   this.position.setXY(this.position.x + this.speed.x * delta_t,
                       this.position.y + this.speed.y * delta_t); 
+   
 
   // if interacting
   if(this.interactPeer != null)

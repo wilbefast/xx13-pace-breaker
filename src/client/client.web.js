@@ -66,8 +66,11 @@ function synchronise(synchData)
     bot.infection = synchData.sick;
   
   // move -- smoothe transition to avoid ugly snapping
-  bot.speed.setFromTo(bot.position, synchPos).scale(0.4).addV2(synchPosDelta);
-  
+  //bot.speed.setFromTo(bot.position, synchPos).scale(0.4).addV2(synchPosDelta);
+  bot.position.setV2(synchPos);
+  bot.speed.setXY(0,0);
+    
+    
   // interact -- continue/start/stop (if no peer is specified => interact null)
   bot.forceInteractPeer(G.robots[synchData.peer]);
 }
