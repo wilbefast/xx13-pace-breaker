@@ -29,25 +29,26 @@ canInteractWith = function(subject, object)
   if(subject.health == subject.DEAD || object.health == object.DEAD
   || subject.health == subject.DYING || object.health == object.DYING)
     return false;
-  
-  // NOBODY can interact with people already interacting
-  if(object.interactPeer)
-    return false;
  
   // NOBODY can interact with cops
-  if(object.isPolice)
+  else if(object.isPolice)
     return false;
-
-  // POLICE can't interact with eachother
-  if(subject.isPolice)
-    return (!object.isPolice);
-
+    
+  // POLICE can interact with anyone who isn't Police
+  else if(subject.isPolice)
+    return true;
+    
+  // NOBODY but police can interact with people already interacting
+  else if(object.interactPeer)
+    return false;
+  
   // EVERYONE can interact with CIVILLIANS
-  if(object.isCivillian)
+  else if(object.isCivillian)
     return true;
   
-  // all other situations -- impossible
-  return false;
+  // in all other situations interaction is impossible
+  else
+    return false;
 }
 
 //! ----------------------------------------------------------------------------

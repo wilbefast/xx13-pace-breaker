@@ -50,5 +50,10 @@ RobotPolice.prototype.isHumanControlled = true;
 
 RobotPolice.prototype.init = function(id_, position_, skin_i_)
 {
+  // default stuff
   Robot.prototype.init.call(this, id_, position_, skin_i_);
+  
+  // Police can fire their LAZOR
+  this.lock_on = new Bank(0, 0, 2000);
+  this.target = null;
 }

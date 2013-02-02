@@ -158,10 +158,6 @@ RobotCivillian.prototype.startInteract = function()
   // default stuff
   Robot.prototype.startInteract.call(this);
   
-  // dead!
-  if(this.interactPeer.isPolice)
-    this.setHealth(this.DEAD);
-  
   // also reset state
   this.interact_timer.reset();
   this.state = this.doInteract;

@@ -73,8 +73,8 @@ GameView.prototype.draw = function()
     }
   }
   
-  // draw the targeter
-  if (selected) 
+  // draw an arrow over potential targets, unless a target is already acquired
+  if (selected && (!local_bot || !local_bot.target)) 
   {
     context.drawImage(this.GUI_TARGET,
                       selected.position.x - 6,

@@ -171,7 +171,7 @@ io.sockets.on('connection', function (socket)
   
   // create robot -- place a new robot object at this position
   
-  var sockBot = (sockId % 2) 
+  var sockBot = true //(sockId % 2) 
                     ? new RobotPolice(sockId, pos) 
                     : new RobotImposter(sockId, pos);
   G.addRobot(sockBot);

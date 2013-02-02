@@ -151,21 +151,28 @@ Robot.prototype.draw = function()
   // 2. draw the sprite
   this.view.draw(this.position);
   
-  // 3. direction interaction (if applicable)
+  // 3a. direction interaction (if applicable)
   if(this.interactPeer
     && (this.DRAW_PRIORITY > this.interactPeer.DRAW_PRIORITY 
         || (this.DRAW_PRIORITY == this.interactPeer.DRAW_PRIORITY 
             && this.id > this.interactPeer.id)))
   {
     context.lineWidth = 1.0;
-    context.strokeStyle = this.isCivillian 
-                            ? 'lime' : (this.isPolice ? 'blue' : 'violet');
+    context.strokeStyle = this.isCivillian ? 'lime' : 'violet';
     bit_pos.setBetween(this.position, this.interactPeer.position, 
                         0.2 + 0.6*Math.random());
+    
     context.strokeText(rand_bool() ? '0' : '1', bit_pos.x, bit_pos.y);
-  }    
+  } 
   
-  //context.strokeText(""+this.health, this.position.x, this.position.y); 
+  // 3b. draw target lock-on (if applicable)
+  else if (this.target)
+  {
+    context.lineWidth = 3.0;
+    context.strokeStyle = 'red';
+    context.strokeTriangle(this.target.position.x, this.target.position.y, 32);
+    //context.strokeLine(this.position.x, this.position.y, this.target.position.x, this.target.position.y);
+  }
 };
 
 //!-----------------------------------------------------------------------------
@@ -174,7 +181,6 @@ Robot.prototype.draw = function()
 
 Robot.prototype.resetSprite = function()
 {
-
   // set sprite to face in the robot's direction
   
   // horizontal
@@ -217,10 +223,11 @@ Robot.prototype.updateSpecial = function(delta_t)
   }
   
   // interacting ?
-  if(this.interactPeer)
+  if(this.interactPeer || this.target)
   {
     // update direction from interact
-    this.facing.setFromTo(this.position, this.interactPeer.position);
+    var who = (this.interactPeer || this.target);
+    this.facing.setFromTo(this.position, who.position);
     this.resetSprite();
     this.view.setSubimage(1);
   }
@@ -239,45 +246,81 @@ animSmoke = new Animation(imgSmoke, new V2(32, 32), new V2(0, 0), 5);
 animExplosion = new Animation(imgExplosion, new V2(32, 32), new V2(0, 0), 8);
 imgElectrocution = new Animation(imgElectrocution, new V2(32, 32), new V2(0, 0), 8);*/
 
+
+//!-----------------------------------------------------------------------------
+//! CLIENT-ONLY -- TREAT INPUT
+//!-----------------------------------------------------------------------------
+
+RobotPolice.prototype.update = function(delta_t) 
+{
+  // perform standard update
+  Robot.prototype.update.call(this, delta_t);
+   
+  // stop if dead
+  if(!this.isHealthy())
+    return;
+ 
+  // lock on to new target
+  if(keyboard.action && keyboard.direction.isNull() && selected && !this.target)
+  {
+    // play sound
+    if(this.lock_on.isEmpty())
+      play_police_interact();
+    
+    // lock on
+    this.target = selected;
+    this.lock_on.deposit(delta_t);
+  }
+  // lose target if key is released
+  else if(!keyboard.action || !keyboard.direction.isNull())
+  {
+    // lock off
+    this.target = null;
+    this.lock_on.setEmpty();
+  }
+}
+
+//!-----------------------------------------------------------------------------
+//! CLIENT-ONLY -- PLAY SOUND EFFECTS
+//!-----------------------------------------------------------------------------
+
 var civilian_chatter_sample = 0;
 var civilian_death_sample = 0;
 var cop_chatter_sample = 0;
 var playing_a_sound = false;
 
-function play_dead(){
-  if (!playing_a_sound) {
+function play_dead()
+{
+  if (!playing_a_sound) 
+  {
     play_audio('Civilbot_death_'+(civilian_death_sample%3+1)+'.ogg')
     civilian_death_sample++;
     playing_a_sound = true;
-    setTimeout(function(){
-      playing_a_sound = false;
-    },3000);
+    setTimeout(function() { playing_a_sound = false; }, 3000); //! FIXME -- use callback
   }
 }
 
-RobotImposter.prototype.startInteract = function(){
-  if (!playing_a_sound) {
-    if (this.id == local_id) {
+RobotImposter.prototype.startInteract = function()
+{
+  if (!playing_a_sound) 
+  {
+    if (this.id == local_id) 
+    {
       play_audio('Civilbot_chatter_'+(civilian_chatter_sample%6+1)+'.ogg')
       civilian_chatter_sample++;
       playing_a_sound = true;
-      setTimeout(function(){
-        playing_a_sound = false;
-      },3000);
+      setTimeout(function() { playing_a_sound = false; }, 3000); //! FIXME -- use callback
     }
   }
 }
 
-///! FIXME -- copbot chatter
-/*
-setInterval(function(){
-  if (!playing_a_sound) {
+function play_police_interact()
+{
+  if (!playing_a_sound) 
+  {
     play_audio('Copbot_chatter_'+(cop_chatter_sample%4+1)+'.ogg')
     cop_chatter_sample++;
     playing_a_sound = true;
-    setTimeout(function(){
-      playing_a_sound = false;
-    },3000);
+    setTimeout(function() { playing_a_sound = false; }, 3000); //! FIXME -- use callback
   }
-},15000);
-*/
+}
