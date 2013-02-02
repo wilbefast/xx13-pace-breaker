@@ -138,7 +138,7 @@ socket.on('hint', function(data)
 function treatUserInput()
 {
   //! SKIP IF THERE IS NO LOCALLY-CONTROLLED ROBOT DEFINED
-  if(!local_bot)
+  if(!local_bot || !local_bot.isHealthy())
     return;
   
   //! BUILD THE PACKET TO SEND PROCEDURALLY

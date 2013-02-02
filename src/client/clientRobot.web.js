@@ -271,7 +271,6 @@ RobotPolice.prototype.update = function(delta_t)
       // play sound
       if(this.lock_on.isEmpty())
         play_police_interact();
-      
       // lock on
       this.target = selected;
       tellServerLockon(this.target);

@@ -171,7 +171,7 @@ io.sockets.on('connection', function (socket)
   
   // create robot -- place a new robot object at this position
   
-  var sockBot = true //(sockId % 2) 
+  var sockBot = (sockId % 2) 
                     ? new RobotPolice(sockId, pos) 
                     : new RobotImposter(sockId, pos);
   G.addRobot(sockBot);
@@ -251,7 +251,10 @@ io.sockets.on('connection', function (socket)
   {
     socket.get('id', function(err, inputId)
     {
+      //! MAKE SURE THE CLIENT CONTROLS A LIVING ROBOT
       var inputBot = G.robots[inputId];
+      if(!inputBot || !inputBot.isHealthy())
+        return;
       
       // SET MOVEMENT
       inputBot.trySetSpeed(inputData.x || 0, inputData.y || 0);
@@ -280,8 +283,15 @@ io.sockets.on('connection', function (socket)
   {    
     socket.get('id', function(err, lockonId)
     {
+      
+    //! FIXME
       var inputBot = G.robots[lockonId];
-        inputBot.tryTarget(G.robots[lockonData ? lockonData.dest : null]);
+      if(!inputBot.isPolice)
+      {
+        console.log(inputBot + " sent lockon message: wtf?");
+        return;
+      }
+      inputBot.tryTarget(G.robots[lockonData ? lockonData.dest : null]);
     });
   });
   
