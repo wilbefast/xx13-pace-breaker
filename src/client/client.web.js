@@ -83,15 +83,24 @@ setInterval(function() { gs.update(); }, MILLISECONDS_PER_UPDATE);
 //! ----------------------------------------------------------------------------
 //! CREATE NEW ROBOTS ONLY WHEN SERVER SAYS SO
 //! ----------------------------------------------------------------------------
-socket.on('newBot', function(data)
+socket.on('newBot', function(newBotData)
 {
   // parse new Robot object from data
-  var newBot = G.unpackRobot(data);
+  var newBot = G.unpackRobot(newBotData);
   
   // assume control of the new Robot (if it's ours)
   if(newBot.id == local_id)
     local_bot = newBot;
-})
+});
+
+//! ----------------------------------------------------------------------------
+//! HAVE POLICE LOCK-ON AND -OFF WHEN THE SERVER SAYS SO
+//! ----------------------------------------------------------------------------
+socket.on('lockon', function(lockonData)
+{
+  G.robots[lockonData.src].setTarget(lockonData.dest ? 
+                                    G.robots[lockonData.dest] : null);
+});
 
 //! ----------------------------------------------------------------------------
 //! END THE GAME WHEN SERVER SAYS SO

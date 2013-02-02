@@ -67,5 +67,8 @@ RobotPolice.prototype.update = function(delta_t)
 RobotPolice.prototype.tryTarget = function(object)
 {
   if(this.isHealthy && (!object || !object.isPolice))
-    this.target = object;
+  {
+    this.setTarget(object);
+    reportLockon(this, object);
+  }
 }

@@ -57,3 +57,20 @@ RobotPolice.prototype.init = function(id_, position_, skin_i_)
   this.lock_on = new Bank(0, 0, 2000);
   this.target = null;
 }
+
+//! ----------------------------------------------------------------------------
+//! TARGETTING
+//! ----------------------------------------------------------------------------
+
+RobotPolice.prototype.setTarget = function(newTarget)
+{
+  if(this.target == newTarget)
+    return;
+  
+  this.lock_on.setEmpty();
+  this.target = newTarget;
+}
+
+RobotPolice.prototype.update = function(delta_t)
+{
+}

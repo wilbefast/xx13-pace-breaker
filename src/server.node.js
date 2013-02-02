@@ -310,3 +310,15 @@ reportDeath = function(deadId)
     sock.emit('death', { id : deadId });
   });
 }
+
+reportLockon = function(subject, object)
+{  
+  var packet = { src : subject.id };
+  if(object)
+    packet.dest = object.id;
+  
+  connected.forEach(function(sock, challengeId)
+  {
+    sock.emit('lockon', packet);
+  });
+}

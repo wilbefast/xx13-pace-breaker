@@ -259,10 +259,17 @@ RobotPolice.prototype.update = function(delta_t)
   // perform standard update
   Robot.prototype.update.call(this, delta_t);
    
-  // stop if dead or no locally controlled
-  if(!this.isHealthy() || this.id != local_id)
+  // stop if dead
+  if(!this.isHealthy())
     return;
-   
+  
+  // lock on progressively if already locked on 
+  if(this.target)
+    this.lock_on.deposit(delta_t);
+  
+  // only treat input for local bot
+  if(this.id != local_id)
+    return;
   if(keyboard.action && keyboard.direction.isNull())
   {
     // lock on to new target
@@ -275,17 +282,14 @@ RobotPolice.prototype.update = function(delta_t)
       this.target = selected;
       tellServerLockon(this.target);
     }
-    // lock on progressively if already locked on 
-    else if(this.target)
-      this.lock_on.deposit(delta_t);
   }
   // lose target if key is released
   else
   {
     // lock off
     this.target = null;
-    tellServerLockon(null);
     this.lock_on.setEmpty();
+    tellServerLockon(null);
   }
 }
 
