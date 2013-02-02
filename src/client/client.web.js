@@ -141,21 +141,28 @@ function treatUserInput()
   if(!local_bot)
     return;
     
+  //! BUILD THE PACKET TO SEND
+  var inputData = { };
+  
   //! INTERACTION REQUEST ?
-  var request_interact = (keyboard.action && keyboard.direction.isNull()),
-      current_interact = local_bot.interactPeer,
-      inputData = { };
-      
-  // keep same interaction target ?
-  if(request_interact && current_interact != null)
-    inputData.peer = current_interact.id; 
-  // acquire a new interaction target ?
-  else if(request_interact && selected)
-    inputData.peer = selected.id
-  // break off from current interaction
-  else
-    local_bot.forceInteractPeer(null);
-    
+  
+  // Police can't interact per-se
+  if(!local_bot.isPolice)
+  {
+    var request_interact = (keyboard.action && keyboard.direction.isNull()),
+        current_interact = local_bot.interactPeer;
+            
+    // keep same interaction target ?
+    if(request_interact && current_interact != null)
+      inputData.peer = current_interact.id; 
+    // acquire a new interaction target ?
+    else if(request_interact && selected)
+      inputData.peer = selected.id
+    // break off from current interaction
+    else
+      local_bot.forceInteractPeer(null);
+    } 
+  
   //! MOVEMENT REQUEST ?
   if(keyboard.direction.x != 0)
     inputData.x = Math.round(keyboard.direction.x);
@@ -163,6 +170,6 @@ function treatUserInput()
     inputData.y = Math.round(keyboard.direction.y);
   
   //! SEND INPUT
-  socket.emit('input', inputData);
+  socket.volatile.emit('input', inputData);
 }
 setInterval(treatUserInput, 100);
