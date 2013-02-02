@@ -103,44 +103,50 @@ RobotImposter.prototype.DRAW_PRIORITY = 1; // middle
 RobotPolice.prototype.DRAW_PRIORITY = 2; // highest
 Robot.prototype.draw = function() 
 {
-  // 1. draw a circle around the character's feet
-  context.lineWidth = 2.0;
-  context.strokeStyle = 
-      (this.id == local_id)           
-        ? 'lime' : 
-      ((local_bot && this.TYPE == local_bot.TYPE)     
-        ? 'yellow' : 
-      ((this.isPolice && local_bot.isImposter)
-        ? 'red' : 
-        'violet'));
-  // -- for Civillians : draw infection ...
-  if(this.isCivillian)
+  // 1. draw a circle around the character's feet (if alive)
+  if(this.isHealthy())
   {
-    // ... only if infection is present
-    if(this.infection)
+    context.lineWidth = 2.0;
+    context.strokeStyle = 
+        (this.id == local_id)           
+          ? 'lime' : 
+        ((local_bot && this.TYPE == local_bot.TYPE)     
+          ? 'yellow' : 
+        ((this.isPolice && local_bot.isImposter)
+          ? 'red' : 
+          'violet'));
+    // -- for Civillians : draw infection ...
+    if(this.isCivillian)
     {
-      // if fully infected
-      if(this.health == this.INFECTED)
+      // ... only if infection is present
+      if(this.infection)
       {
-        // death timer
-        context.lineWidth = 1; 
-        context.strokeText(Math.round(this.infection_incubation.time.balance / MILLISECONDS_PER_UPDATE), 
-                         this.position.x, this.position.y - 32);   
-        // thicker arc 
-        context.lineWidth = 3; 
+        // if fully infected
+        if(this.health == this.INFECTED)
+        {
+          // death timer
+          context.lineWidth = 1; 
+          context.textBaseline = 'middle';
+          context.textAlign = 'center';
+          context.strokeText(
+            Math.round(this.infection_incubation.time.balance / 1000), 
+                        this.position.x, this.position.y - 32);   
+          // thicker arc 
+          context.lineWidth = 3; 
+        }
+          
+        // draw arc
+        context.beginPath();
+        context.arc(this.position.x,this.position.y, this.radius, 
+          ANGLE_START, 
+          ANGLE_START + ANGLE_END * (this.infection / this.MAX_INFECTION), false);
+        context.stroke();
       }
-        
-      // draw arc
-      context.beginPath();
-      context.arc(this.position.x,this.position.y, this.radius, 
-        ANGLE_START, 
-        ANGLE_START + ANGLE_END * (this.infection / this.MAX_INFECTION), false);
-      context.stroke();
     }
+    // -- for other : draw team colour
+    else
+      context.strokeCircle(this.position.x, this.position.y, this.radius);
   }
-  // -- for other : draw team colour
-  else
-    context.strokeCircle(this.position.x, this.position.y, this.radius);
   
   // 2. draw the sprite
   this.view.draw(this.position);
@@ -168,6 +174,7 @@ Robot.prototype.draw = function()
 
 Robot.prototype.resetSprite = function()
 {
+  console.log(this.facing);
   // set sprite to face in the robot's direction
   
   // horizontal
@@ -194,13 +201,13 @@ Robot.prototype.resetSprite = function()
 
 Robot.prototype.updateSpecial = function(delta_t)
 {
-  if(this.health == this.DEAD)
+  if(!this.isHealthy())
   {
     this.view.setAnimation(this.skin.DIE);
     this.view.setSubimage(2); // dead image
     return;
-      ///! FIXME -- kludge
   }
+  
   // moving ?
   if (this.speed.x != 0 || this.speed.y != 0)
   {

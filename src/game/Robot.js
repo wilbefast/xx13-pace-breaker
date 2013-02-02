@@ -180,17 +180,26 @@ Robot.prototype.tryInteractPeer = function(newPeer)
 
 //! ----------------------------------------------------------------------------
 
+Robot.prototype.isHealthy = function()
+{
+  return (this.health != this.DYING && this.health != this.DEAD);
+}
+
 Robot.prototype.setHealth = function(new_health)
 {
   this.health = new_health;
   
   // cancel interactions if dead
-  if(new_health == this.DYING || new_health == this.DEAD)
+  if(!this.isHealthy())
   {
-    this.speed.setXY(0, 0);
     this.forceInteractPeer(null);
+    
+    // tell clients about the death
     if(is_server)
       reportDeath(this.id);
+    // play a death sound
+    else
+      play_dead();
   }
 }
 
@@ -204,10 +213,13 @@ Robot.prototype.update = function(delta_t)
   // update position
   this.position.setXY(this.position.x + this.speed.x * delta_t,
                       this.position.y + this.speed.y * delta_t); 
-   
-
+  
+  // stop moving if dead
+  if(!this.isHealthy())
+    this.speed.setXY(0, 0);
+    
   // if interacting
-  if(this.interactPeer != null)
+  else if(this.interactPeer != null)
   {
     // update peer distance
     this.interactPeer_dist2 = this.position.dist2(this.interactPeer.position);

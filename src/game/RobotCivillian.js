@@ -90,7 +90,7 @@ RobotCivillian.prototype.update = function(delta_t)
   Robot.prototype.update.call(this, delta_t);
    
   // stop if dead
-  if(this.health == this.DEAD)
+  if(!this.isHealthy())
     return;
   
   // call state method, whatever that may be

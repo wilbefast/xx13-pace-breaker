@@ -115,7 +115,6 @@ socket.on('gameover',function(data)
 //! ----------------------------------------------------------------------------
 socket.on('death', function(data)
 {
-  console.log("DEATH " + data.id);
   G.robots[data.id].setHealth(Robot.prototype.DEAD);
 });
 
