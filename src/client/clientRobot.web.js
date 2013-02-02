@@ -259,10 +259,10 @@ RobotPolice.prototype.update = function(delta_t)
   // perform standard update
   Robot.prototype.update.call(this, delta_t);
    
-  // stop if dead
-  if(!this.isHealthy())
+  // stop if dead or no locally controlled
+  if(!this.isHealthy() || this.id != local_id)
     return;
- 
+   
   if(keyboard.action && keyboard.direction.isNull())
   {
     // lock on to new target
