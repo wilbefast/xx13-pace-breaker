@@ -170,3 +170,15 @@ function treatUserInput()
   socket.emit('input', inputData);
 }
 setInterval(treatUserInput, 100);
+
+//! ----------------------------------------------------------------------------
+//! TELL SERVER WHEN THE LOCALLY-CONTROLLED POLICE-BOT LOCKS-ON OR -OFF
+//! ----------------------------------------------------------------------------
+
+function tellServerLockon(object)
+{
+  if(object == null)
+    socket.emit('lockon');
+  else
+    socket.emit('lockon', { dest : object.id }); 
+}

@@ -168,12 +168,13 @@ Robot.prototype.draw = function()
   // 3b. draw target lock-on (if applicable)
   else if (this.target)
   {
-    context.lineWidth = 3.0;
+    // draw targeting reticule!
+    var lock = this.lock_on.getFullness();
+    context.lineWidth = 2*lock + 1;
     context.strokeStyle = 'red';
-
-    console.log(this.lock_on.getFullness());
-    context.strokeTriangle(this.target.position.x, this.target.position.y, (1 - this.lock_on.getFullness())*32);
-    //context.strokeLine(this.position.x, this.position.y, this.target.position.x, this.target.position.y);
+    context.strokeTriangle(this.target.position.x, 
+                           this.target.position.y - this.target.SPRITE_SIZE.y/2, 
+                           (1 - lock) * 48);
   }
 };
 
@@ -273,6 +274,7 @@ RobotPolice.prototype.update = function(delta_t)
       
       // lock on
       this.target = selected;
+      tellServerLockon(this.target);
     }
     // lock on progressively if already locked on 
     else if(this.target)
@@ -283,6 +285,7 @@ RobotPolice.prototype.update = function(delta_t)
   {
     // lock off
     this.target = null;
+    tellServerLockon(null);
     this.lock_on.setEmpty();
   }
 }

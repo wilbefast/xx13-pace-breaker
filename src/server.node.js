@@ -275,6 +275,16 @@ io.sockets.on('connection', function (socket)
     });
   });
   
+  // -- client telling server that he want
+  socket.on('lockon', function(lockonData)
+  {    
+    socket.get('id', function(err, lockonId)
+    {
+      var inputBot = G.robots[lockonId];
+        inputBot.tryTarget(G.robots[lockonData ? lockonData.dest : null]);
+    });
+  });
+  
   // tell NEW PLAYER what their id is
   socket.emit('you', {id: sockId});
 });
@@ -285,7 +295,6 @@ io.sockets.on('connection', function (socket)
 
 reportDeath = function(deadId)
 {  
-  
   connected.forEach(function(sock, challengeId)
   {
     sock.emit('death', { id : deadId });

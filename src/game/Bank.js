@@ -55,7 +55,6 @@ Bank.prototype.getBalance = function()
 
 Bank.prototype.getFullness = function()
 { 
-  console.log(this.balance + "-" + this.min + " / " + this.max + "-" + this.min);
   return (this.balance - this.min) / (this.max - this.min);
 }
 

@@ -16,6 +16,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // server-only Robot code
+
+//! ----------------------------------------------------------------------------
+//! INITIALISATION
+//! ----------------------------------------------------------------------------
+
 Robot.prototype.specialInit = function()
 {
   // only human-controlled Robots need care about displaying a proximity 'hint'
@@ -27,4 +32,40 @@ Robot.prototype.specialInit = function()
       dist2 : Infinity,
     };
   }  
+}
+
+//! ----------------------------------------------------------------------------
+//! TARGETTING
+//! ----------------------------------------------------------------------------
+
+RobotPolice.prototype.update = function(delta_t) 
+{
+  // perform standard update
+  Robot.prototype.update.call(this, delta_t);
+   
+  // stop if dead
+  if(!this.isHealthy())
+    return;
+ 
+  // lock on progressively if already locked on 
+  if(this.target)
+  {
+    this.lock_on.deposit(delta_t);
+    if(this.lock_on.isFull())
+    {
+      // kill target
+      this.target.setHealth(this.target.DEAD);
+      
+      // lock-off
+      this.tryTarget(null);
+    }
+  }
+  else
+    this.lock_on.setEmpty();
+}
+
+RobotPolice.prototype.tryTarget = function(object)
+{
+  if(this.isHealthy && (!object || !object.isPolice))
+    this.target = object;
 }
