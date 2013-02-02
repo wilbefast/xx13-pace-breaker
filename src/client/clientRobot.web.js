@@ -16,6 +16,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //!-----------------------------------------------------------------------------
+//! CONSTANTS
+//!-----------------------------------------------------------------------------
+var ANIM_SPEED = 6 / 1000; // 6 images per second 
+
+
+//!-----------------------------------------------------------------------------
 //! SKIN BUILDER FUNCTION
 //!-----------------------------------------------------------------------------
 
@@ -80,7 +86,7 @@ Robot.prototype.specialInit = function()
   
   this.facing = new V2(0, 1);
   this.view = 
-    new AnimationView(this.skin.WALK_E, this.SPRITE_SIZE, 0.4, REVERSE_AT_END);
+    new AnimationView(this.skin.WALK_E, this.SPRITE_SIZE, ANIM_SPEED, REVERSE_AT_END);
   this.view.setOffset(new V2(0, -this.SPRITE_SIZE.y * 0.3));
 }
 
@@ -118,7 +124,7 @@ Robot.prototype.draw = function()
       {
         // death timer
         context.lineWidth = 1; 
-        context.strokeText(Math.round(this.infection_incubation.time.balance / updateRate), 
+        context.strokeText(Math.round(this.infection_incubation.time.balance / MILLISECONDS_PER_UPDATE), 
                          this.position.x, this.position.y - 32);   
         // thicker arc 
         context.lineWidth = 3; 

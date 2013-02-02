@@ -22,7 +22,7 @@ require("./serverRobot.node.js");
 //require("lobby.node.js");
 require("./main.node.js");
 
-var UPDATES_PER_SECOND = 60;
+var UPDATES_PER_SECOND = 20;
 var MILLISECONDS_PER_UPDATE = 1000 / UPDATES_PER_SECOND;
 
 gs.switchstate(main);
@@ -101,11 +101,6 @@ setInterval(function()
       };
       
       // optional packet data --
-      // -- speed
-      if(synchBot.speed.x)
-        synchData.dx = Math.round(synchBot.speed.x * 10);
-      if(synchBot.speed.y)
-        synchData.dy = Math.round(synchBot.speed.y * 10);
       // -- interaction
       if(synchBot.interactPeer != undefined)
         synchData.peer = synchBot.interactPeer.id;

@@ -50,6 +50,7 @@ $('body').bind('beforeunload',function() { socket.send("leaving"); });
 //! UPDATE THE GAME
 //! ----------------------------------------------------------------------------
 //! SYNCHRONISED WITH SERVER
+var SYNCH_SNAP_SPEED = 5 / 1000; // snap 5 pixels per second per second
 var synchPos = new V2(), synchPosDelta = new V2();
 function synchronise(synchData)
 {
@@ -57,19 +58,15 @@ function synchronise(synchData)
   var bot = G.robots[synchData.id];
   var peer = synchData.peer ? null : G.robots[synchData.peer];
   
-  // read packet
+  // read position from packet
   synchPos.setXY(synchData.x, synchData.y);
-  synchPosDelta.setXY(synchData.dx, synchData.dy); // NB - dx & dy are optional
   
   // infection -- may not be present in packet (ie. if we are a cop)
   if(synchData.sick)
     bot.infection = synchData.sick;
   
   // move -- smoothe transition to avoid ugly snapping
-  //bot.speed.setFromTo(bot.position, synchPos).scale(0.4).addV2(synchPosDelta);
-  bot.position.setV2(synchPos);
-  bot.speed.setXY(0,0);
-    
+  bot.speed.setFromTo(bot.position, synchPos).scale(SYNCH_SNAP_SPEED);
     
   // interact -- continue/start/stop (if no peer is specified => interact null)
   bot.forceInteractPeer(G.robots[synchData.peer]);

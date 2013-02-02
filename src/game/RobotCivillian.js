@@ -106,21 +106,17 @@ RobotCivillian.prototype.update = function(delta_t)
   }
   
   // virus kills civillians
-  else if (this.health == this.INFECTED)
-  {
-    if (this.infection_incubation.update(delta_t))
+  else if (this.health == this.INFECTED 
+  && this.infection_incubation.update(delta_t))
   {
     this.setHealth(this.DEAD); 
-  }
-  else
-    console.log(this.infection_incubation.time.balance);
   }
 };
 
 RobotCivillian.prototype.consentToInteract = function(otherRobot) 
 {
   // civillians are always happy to interact if not already interacting
-  return (this.health != this.DEAD && this.health != DYING 
+  return (this.health != this.DEAD && this.health != this.DYING 
           && this.interactPeer == null);
 }
 

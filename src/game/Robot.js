@@ -30,7 +30,7 @@ Robot = function(id_, position_, skin_i_)
 //! ----------------------------------------------------------------------------
 
 // collisions and interactions
-Robot.prototype.SPEED = 45 / 1000; // 45 pixels per second
+Robot.prototype.SPEED = 80 / 1000; // 80 pixels per second
 Robot.prototype.radius = 12;
 Robot.prototype.radius2 = Robot.prototype.radius * Robot.prototype.radius;
 Robot.prototype.MAX_INTERACT_DISTANCE2 = 96 * 96;
@@ -86,7 +86,7 @@ Robot.prototype.init = function(id_, position_, skin_i_)
 //! ----------------------------------------------------------------------------
 
 Robot.prototype.forceSetSpeed = function(x, y)
-{
+{   
   this.speed.setXY(x, y);
 }
 
