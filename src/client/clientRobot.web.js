@@ -118,7 +118,7 @@ Robot.prototype.draw = function()
       {
         // death timer
         context.lineWidth = 1; 
-        context.strokeText(Math.round(this.infection_lethality_timer.time.balance / updateRate), 
+        context.strokeText(Math.round(this.infection_incubation.time.balance / updateRate), 
                          this.position.x, this.position.y - 32);   
         // thicker arc 
         context.lineWidth = 3; 
@@ -151,7 +151,9 @@ Robot.prototype.draw = function()
     bit_pos.setBetween(this.position, this.interactPeer.position, 
                         0.2 + 0.6*Math.random());
     context.strokeText(rand_bool() ? '0' : '1', bit_pos.x, bit_pos.y);
-  }     
+  }    
+  
+  //context.strokeText(""+this.health, this.position.x, this.position.y); 
 };
 
 //!-----------------------------------------------------------------------------
@@ -186,6 +188,13 @@ Robot.prototype.resetSprite = function()
 
 Robot.prototype.updateSpecial = function(delta_t)
 {
+  if(this.health == this.DEAD)
+  {
+    this.view.setAnimation(this.skin.DIE);
+    this.view.setSubimage(2); // dead image
+    return;
+      ///! FIXME -- kludge
+  }
   // moving ?
   if (this.speed.x != 0 || this.speed.y != 0)
   {

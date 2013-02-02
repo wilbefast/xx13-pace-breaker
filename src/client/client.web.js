@@ -74,10 +74,10 @@ function synchronise(synchData)
 socket.on('synch', synchronise);
 
 //! DEAD RECKONING (CLIENT-SIDE SIMULATION)
-var updateRate = 1000/60;
-var dt = updateRate/60;
+var UPDATES_PER_SECOND = 60;
+var MILLISECONDS_PER_UPDATE = 1000 / UPDATES_PER_SECOND;
 gs.switchstate(main);
-setInterval(function() { gs.update(); }, updateRate);
+setInterval(function() { gs.update(); }, MILLISECONDS_PER_UPDATE);
 
 
 //! ----------------------------------------------------------------------------
@@ -115,6 +115,7 @@ socket.on('gameover',function(data)
 //! ----------------------------------------------------------------------------
 socket.on('death', function(data)
 {
+  console.log("DEATH " + data.id);
   G.robots[data.id].setHealth(Robot.prototype.DEAD);
 });
 

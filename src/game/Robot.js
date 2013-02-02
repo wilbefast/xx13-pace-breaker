@@ -41,7 +41,7 @@ Robot.prototype.TYPE_IMPOSTER = 2;
 Robot.prototype.TYPE_NAMES = [ "Civillian", "Police", "Imposter" ];
 // states enumeration
 Robot.prototype.HEALTHY = 0;
-Robot.prototype.SICK = 1;
+Robot.prototype.INFECTED = 1;
 Robot.prototype.DYING = 2;
 Robot.prototype.DEAD = 3;
 // health and infection
@@ -182,11 +182,16 @@ Robot.prototype.tryInteractPeer = function(newPeer)
 
 Robot.prototype.setHealth = function(new_health)
 {
+  console.log(this + " setting health to " + new_health);
   this.health = new_health;
   
   // cancel interactions if dead
   if(new_health == this.DEAD)
+  {
     this.forceInteractPeer(null);
+    if(is_server)
+      reportDeath(this.id);
+  }
 }
 
 Robot.prototype.perceiveObstacle = function(side)
@@ -197,8 +202,8 @@ Robot.prototype.perceiveObstacle = function(side)
 Robot.prototype.update = function(delta_t) 
 {
   // update position
-  this.position.setXY(this.position.x + this.speed.x * dt,  //! FIXME -- why not delta_t?
-                      this.position.y + this.speed.y * dt); //! FIXME -- why not delta_t?
+  this.position.setXY(this.position.x + this.speed.x * delta_t,
+                      this.position.y + this.speed.y * delta_t); 
 
   // if interacting
   if(this.interactPeer != null)
@@ -212,7 +217,7 @@ Robot.prototype.update = function(delta_t)
   
   // client- or server-specific update code
   if(this.updateSpecial)
-    this.updateSpecial(dt); //! FIXME -- why not delta_t?
+    this.updateSpecial(delta_t);
 }
 
 Robot.prototype.getPerceivedTypeOf = function(otherBot)

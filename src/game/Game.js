@@ -117,10 +117,7 @@ Game.prototype.unpackRobot = function(packet)
   
   // packet may contain infection value (if local_bot is an Imposter)
   if(packet.sick)
-  {
-    console.log("packet contained sick:"+packet.sick);
     newBot.infection = packet.sick;
-  }
   
   return this.addRobot(newBot);
 };

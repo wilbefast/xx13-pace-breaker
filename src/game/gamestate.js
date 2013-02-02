@@ -70,7 +70,8 @@ gs.update = function() {
 *		              ^^^
 *	otherwise you'll feel silly...
 */
-gs.gamestate = function(name) {
+gs.gamestate = function(name) 
+{
 	// Set the attributes
 	this.name = name;
 	this.initialised = false;

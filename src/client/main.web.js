@@ -8,9 +8,9 @@ main = new gs.gamestate('main');
 *	Called once, when the state is first used. Initialise all the objects the 
 *	state will need in here
 */
-main.init = function() {
-	selected = {position: new V2()};
-	
+main.init = function() 
+{
+  selected = null;
 };
 
 /**	Prepares the state for entry
@@ -18,7 +18,9 @@ main.init = function() {
 *	Called each time the state is entered.
 *	Useful to prepare the environment.
 */
-main.enter = function(previous) {
+main.enter = function(previous) 
+{
+  this.prev_tick = this.curr_tick = (new Date()).getTime();
 };
 
 /**	Prepare the state for departure
@@ -27,7 +29,8 @@ main.enter = function(previous) {
 *	Allows the state to clean up after itself.
 *	Be a friendly state and leave things how they were when you found them!
 */
-main.leave = function() {
+main.leave = function() 
+{
 };
 
 /** Called each frame
@@ -36,8 +39,9 @@ main.leave = function() {
 */
 main.update = function() 
 {
-	//! FIXME 
-	var delta_t = 1000/60;
+  // deal with timing
+  this.prev_tick = this.curr_tick;
+  this.curr_tick = (new Date()).getTime();
 
   var local_bot = G.robots[local_id];
   if(local_bot)
@@ -46,7 +50,7 @@ main.update = function()
     if(local_bot.nearest.dist2 <= local_bot.MAX_INTERACT_DISTANCE2)
     {
       // 'nearest.dist2' is set to Infinity whenever 'nearest.bot' is null 
-      // hence selected must be non-null
+      // hence 'selected' should be non-null after this instruction
       selected = local_bot.nearest.bot;
     }
     else
@@ -54,11 +58,8 @@ main.update = function()
       selected = null;
   }
 
-
-  
-  
-	// Simulate
-  	G.update(delta_t);
+	// Dead-reckoning
+  G.update(this.curr_tick - this.prev_tick);
 	
 	// Draw
 	context.fillStyle = '#131313';

@@ -52,8 +52,8 @@ RobotCivillian.prototype.init = function(id_, position_, skin_i_)
   // timers
   this.wander_timer = new Timer(1500);
   this.interact_timer = new Timer(3500);
-  this.infection_lethality_timer = new Timer(120, false);
-  this.infection_lethality_timer.reset();
+  this.infection_incubation = new Timer(6000, false);
+  this.infection_incubation.reset();
   
   this.state = this.doWander;
   
@@ -86,7 +86,10 @@ RobotCivillian.prototype.perceiveObstacle = function(side)
 
 RobotCivillian.prototype.update = function(delta_t) 
 {
-  // do nothing if dead
+  // perform standard update
+  Robot.prototype.update.call(this);
+   
+  // stop if dead
   if(this.health == this.DEAD)
     return;
   
@@ -97,28 +100,28 @@ RobotCivillian.prototype.update = function(delta_t)
   if(this.health == this.HEALTHY 
     && (!this.interactPeer || !this.interactPeer.isImposter))
   {
-    this.infection -= dt;
-    if(this.infection < 0)
+    this.infection -= delta_t;
+    if(this.infection < 0) //! FIXME -- should use 'Bank' for bounded values
       this.infection = 0;
   }
   
   // virus kills civillians
-  else if (this.health == this.INFECTED
-    && this.infection_lethality_timer.update(dt))
+  else if (this.health == this.INFECTED)
   {
-    console.log("DEATH!");
-    this.health = this.setHealth(this.DEAD);
-    
+    if (this.infection_incubation.update(delta_t))
+  {
+    this.setHealth(this.DEAD); 
   }
-  
-  // update position
-  Robot.prototype.update.call(this);
+  else
+    console.log(this.infection_incubation.time.balance);
+  }
 };
 
 RobotCivillian.prototype.consentToInteract = function(otherRobot) 
 {
   // civillians are always happy to interact if not already interacting
-  return (this.health != this.DEAD && this.interactPeer == null);
+  return (this.health != this.DEAD && this.health != DYING 
+          && this.interactPeer == null);
 }
 
 //! ----------------------------------------------------------------------------
@@ -159,6 +162,10 @@ RobotCivillian.prototype.startInteract = function()
   // default stuff
   Robot.prototype.startInteract.call(this);
   
+  // dead!
+  if(this.interactPeer.isPolice)
+    this.setHealth(this.DEAD);
+  
   // also reset state
   this.interact_timer.reset();
   this.state = this.doInteract;
@@ -182,7 +189,7 @@ RobotCivillian.prototype.doWander = function(delta_t)
   // -- WANDER AROUND --
   
   // change state after a certain amount of time
-  if(this.wander_timer.update(dt)) //! FIXME -- why not delta_t?
+  if(this.wander_timer.update(delta_t))
   {
     // more likely to wander than to interact
     var dice_roll = rand(12);
@@ -198,7 +205,7 @@ RobotCivillian.prototype.doInteract = function(delta_t)
   // become infected by virus
   if(this.health == this.HEALTHY && this.interactPeer.isImposter)
   {
-    this.infection += dt; //! FIXME -- why not delta_t?
+    this.infection += delta_t;
     if(this.infection > this.MAX_INFECTION)
     {
       this.health = this.INFECTED;
@@ -207,6 +214,6 @@ RobotCivillian.prototype.doInteract = function(delta_t)
   }
   
   // stop interacting after a certain amount of time
-  if(this.interact_timer.update(dt) && !this.interactPeer.isHumanControlled)
+  if(this.interact_timer.update(delta_t) && !this.interactPeer.isHumanControlled)
     this.startWander();
 }

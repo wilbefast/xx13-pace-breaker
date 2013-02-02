@@ -49,3 +49,10 @@ RobotImposter.prototype.init = function(id_, position_, skin_i_)
 {
   Robot.prototype.init.call(this, id_, position_, skin_i_);
 }
+
+
+RobotImposter.prototype.startInteract = function()
+{
+  if(this.interactPeer.isPolice)
+    this.setHealth(this.DEAD);
+}

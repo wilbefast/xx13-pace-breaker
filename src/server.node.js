@@ -22,13 +22,12 @@ require("./serverRobot.node.js");
 //require("lobby.node.js");
 require("./main.node.js");
 
-
-updateRate = 1000/10;
-dt = updateRate;
+var UPDATES_PER_SECOND = 60;
+var MILLISECONDS_PER_UPDATE = 1000 / UPDATES_PER_SECOND;
 round = 1;
 
 gs.switchstate(main);
-setInterval(function(){ gs.update(); },(updateRate));
+setInterval(function(){ gs.update(); }, MILLISECONDS_PER_UPDATE);
 
 
 /**/
@@ -180,7 +179,7 @@ io.sockets.on('connection', function (socket)
   
   // create robot -- place a new robot object at this position
   
-  var sockBot = (sockId % 2) 
+  var sockBot = false //(sockId % 2) 
                     ? new RobotPolice(sockId, pos) 
                     : new RobotImposter(sockId, pos);
   G.addRobot(sockBot);
@@ -294,8 +293,10 @@ io.sockets.on('connection', function (socket)
 
 reportDeath = function(deadId)
 {  
+  
   connected.forEach(function(sock, challengeId)
   {
+    console.log("SENDING DEAD " + deadId);
     sock.emit('death', { id : deadId });
   });
 }
