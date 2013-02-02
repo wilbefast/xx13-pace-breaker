@@ -170,7 +170,9 @@ Robot.prototype.draw = function()
   {
     context.lineWidth = 3.0;
     context.strokeStyle = 'red';
-    context.strokeTriangle(this.target.position.x, this.target.position.y, 32);
+
+    console.log(this.lock_on.getFullness());
+    context.strokeTriangle(this.target.position.x, this.target.position.y, (1 - this.lock_on.getFullness())*32);
     //context.strokeLine(this.position.x, this.position.y, this.target.position.x, this.target.position.y);
   }
 };
@@ -260,19 +262,24 @@ RobotPolice.prototype.update = function(delta_t)
   if(!this.isHealthy())
     return;
  
-  // lock on to new target
-  if(keyboard.action && keyboard.direction.isNull() && selected && !this.target)
+  if(keyboard.action && keyboard.direction.isNull())
   {
-    // play sound
-    if(this.lock_on.isEmpty())
-      play_police_interact();
-    
-    // lock on
-    this.target = selected;
-    this.lock_on.deposit(delta_t);
+    // lock on to new target
+    if(!this.target && selected)
+    {
+      // play sound
+      if(this.lock_on.isEmpty())
+        play_police_interact();
+      
+      // lock on
+      this.target = selected;
+    }
+    // lock on progressively if already locked on 
+    else if(this.target)
+      this.lock_on.deposit(delta_t);
   }
   // lose target if key is released
-  else if(!keyboard.action || !keyboard.direction.isNull())
+  else
   {
     // lock off
     this.target = null;

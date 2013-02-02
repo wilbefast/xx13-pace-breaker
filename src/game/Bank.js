@@ -28,13 +28,11 @@ bound = function(v, min, max)
 /// INSTANCE ATTRIBUTES/METHODS
 Bank = function(starting_balance, max_balance, min_balance)
 {
-  starting_balance = (starting_balance == undefined ? 0.0 : starting_balance);
-  max_balance = (max_balance == undefined ? 1.0 : max_balance);
-  min_balance = (min_balance == undefined ? 0.0 : min_balance);
+  var starting_balance = (starting_balance == undefined ? 0.0 : starting_balance),
+      max_balance = (max_balance == undefined ? 1.0 : max_balance),
+      min_balance = (min_balance == undefined ? 0.0 : min_balance);
   
-  var min = this.min_balance, 
-      max = max_balance;
-  if(min > max)
+  if(min_balance > max_balance)
   {
     this.min = max_balance;
     this.max = min_balance;
@@ -54,6 +52,13 @@ Bank.prototype.getBalance = function()
 { 
   return this.balance; 
 }
+
+Bank.prototype.getFullness = function()
+{ 
+  console.log(this.balance + "-" + this.min + " / " + this.max + "-" + this.min);
+  return (this.balance - this.min) / (this.max - this.min);
+}
+
 Bank.prototype.isEmpty = function() 
 { 
   return (this.balance == this.min); 
@@ -61,6 +66,16 @@ Bank.prototype.isEmpty = function()
 Bank.prototype.isFull = function() 
 { 
   return (this.balance == this.max); 
+}
+
+Bank.prototype.getMin = function() 
+{
+  return this.min;
+}
+
+Bank.prototype.getMax = function()
+{ 
+  return this.max;
 }
 
 // modification
@@ -108,14 +123,4 @@ Bank.prototype.setFull = function()
 Bank.prototype.setEmpty = function()
 {
   return this.withdraw(this.max);
-}
-
-Bank.prototype.getMin = function() 
-{
-  return this.min;
-}
-
-Bank.prototype.getMax = function()
-{ 
-  return this.max;
 }
