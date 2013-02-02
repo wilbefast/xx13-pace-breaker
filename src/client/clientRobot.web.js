@@ -174,7 +174,7 @@ Robot.prototype.draw = function()
 
 Robot.prototype.resetSprite = function()
 {
-  console.log(this.facing);
+
   // set sprite to face in the robot's direction
   
   // horizontal
@@ -212,7 +212,7 @@ Robot.prototype.updateSpecial = function(delta_t)
   if (this.speed.x != 0 || this.speed.y != 0)
   {
     // update direction from movement
-    this.facing.setV2(this.speed).mapToXY(Math.round);
+    this.facing.setV2(this.speed).scale(10).mapToXY(Math.round);
     this.resetSprite();
   }
   
@@ -268,6 +268,8 @@ RobotImposter.prototype.startInteract = function(){
   }
 }
 
+///! FIXME -- copbot chatter
+/*
 setInterval(function(){
   if (!playing_a_sound) {
     play_audio('Copbot_chatter_'+(cop_chatter_sample%4+1)+'.ogg')
@@ -278,4 +280,4 @@ setInterval(function(){
     },3000);
   }
 },15000);
-
+*/

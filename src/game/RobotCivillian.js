@@ -50,8 +50,8 @@ RobotCivillian.prototype.init = function(id_, position_, skin_i_)
   Robot.prototype.init.call(this, id_, position_, skin_i_);
   
   // timers
-  this.wander_timer = new Timer(1500);
-  this.interact_timer = new Timer(3500);
+  this.wander_timer = new Timer(3000);
+  this.interact_timer = new Timer(3000);
   this.infection_incubation = new Timer(6000, false);
   this.infection_incubation.reset();
   
