@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 GameView = function()
 {
   this.robot_list = [];
+  this.special_effects = [];
   
   return this;
 }
@@ -39,26 +40,27 @@ GameView.prototype.FOREGROUND = load_image("fore.png");
 //! GAMEVIEW -- SPECIAL EFFECTS
 //!-----------------------------------------------------------------------------
 
-GameView.prototype.special_effects = function(delta_t)
+GameView.prototype.addSpecialEffect = function(newEffect)
 {
+  this.special_effects.push(newEffect);
+}
+
+GameView.prototype.update = function(delta_t)
+{
+  // update special effects, remember those in need of deletion
   var cleanUp = [];
-  
-  // update and draw each special effect
-  mapThenSort(this.special_effects, function(object, i) 
-  { 
+  for(var i = 0; i < this.special_effects.length; i++)
+  {
+    var object = this.special_effects[i];
     if(!object || object.update(delta_t))
     {
       cleanUp.push(i);
       this.special_effects[i] = null;
     }
-    else
-      object.draw(); 
-    
-  });
-  
+  }
   // delete the indices in the cleanup list
   for(var i = 0; i < cleanUp.length; i++)
-    obj_array.splice(cleanUp[i], 1);
+    this.special_effects.splice(cleanUp[i], 1);
   
 }
 
@@ -86,6 +88,9 @@ GameView.prototype.draw = function()
                       selected.position.x - 24,
                       selected.position.y - 34);
   } 
+  
+  // draw each special effect
+  mapThenSort(this.special_effects, function(object, i) { object.draw(); } );
   
   // draw the foreground
   context.drawImage(this.FOREGROUND, 0, 0);

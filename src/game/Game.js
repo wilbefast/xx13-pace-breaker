@@ -127,8 +127,8 @@ Game.prototype.unpackRobot = function(packet)
 Game.prototype.update = function(delta_t) 
 { 
   // special update for client/server
-  if(this.updateSpecial)
-    this.updateSpecial(delta_t);
+  if(this.view)
+    this.view.update(delta_t);
   
   // for each Robot id
 	for (bid in this.robots)

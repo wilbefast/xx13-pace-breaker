@@ -249,13 +249,6 @@ Robot.prototype.updateSpecial = function(delta_t)
 }
 
 
-//! FIXME -- unused
-/*animWifi = new Animation(imgWifi, new V2(32, 32), new V2(0, 0), 3);
-animSmoke = new Animation(imgSmoke, new V2(32, 32), new V2(0, 0), 5);
-animExplosion = new Animation(imgExplosion, new V2(32, 32), new V2(0, 0), 8);
-imgElectrocution = new Animation(imgElectrocution, new V2(32, 32), new V2(0, 0), 8);*/
-
-
 //!-----------------------------------------------------------------------------
 //! CLIENT-ONLY -- TREAT INPUT
 //!-----------------------------------------------------------------------------
@@ -328,6 +321,7 @@ RobotImposter.prototype.startInteract = function()
 {
   if (!playing_a_sound) 
   {
+    
     if (this.id == local_id) 
     {
       play_audio('Civilbot_chatter_'+(civilian_chatter_sample%6+1)+'.ogg')

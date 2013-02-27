@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 function AnimationView(_anim, _size, _speed, _flags)
 {
   this.anim = _anim;
-  this.size = _size;
+  this.size = _size; // V2
   this.speed = (_speed || 0.0);
   this.flags = (_flags || NO_FLAGS);
   
@@ -97,8 +97,13 @@ AnimationView.prototype.update = function(delta_t)
   
   // otherwise loop
   if(next < this.anim.getNFrames() && next >= 0)
+  {
     // increment animation
     this.subimage = next;
+    
+    // animation continues
+    return false;
+  }
   else
   {
     if(this.flags & REVERSE_AT_END)
@@ -112,6 +117,9 @@ AnimationView.prototype.update = function(delta_t)
       // loop animation from beginning or end
       this.subimage = (this.speed > 0) ? 0.0 : this.anim.getNFrames()-1;
     }
+    
+    // animation has ended
+    return true;
   }
     
 }

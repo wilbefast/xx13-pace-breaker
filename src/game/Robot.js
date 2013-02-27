@@ -209,6 +209,10 @@ Robot.prototype.setHealth = function(new_health)
       if(local_bot.isPolice && local_bot.target.id == this.id)
         local_bot.setTarget(null);
       
+      // create a smoke special effect
+      G.view.addSpecialEffect(
+        SpecialEffect.smoke(new V2(this.position.x, this.position.y - 32)));
+      
       // play a death sound
       play_dead();
     }
