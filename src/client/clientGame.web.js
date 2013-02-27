@@ -21,7 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 GameView = function()
 {
-  this.draw_list = [];
+  this.robot_list = [];
+  
   return this;
 }
 
@@ -34,9 +35,40 @@ GameView.prototype.GUI_TARGET = load_image("fleche.png");
 GameView.prototype.BACKGROUND = load_image("map.png");
 GameView.prototype.FOREGROUND = load_image("fore.png");
 
+//!-----------------------------------------------------------------------------
+//! GAMEVIEW -- SPECIAL EFFECTS
+//!-----------------------------------------------------------------------------
+
+GameView.prototype.special_effects = function(delta_t)
+{
+  var cleanUp = [];
+  
+  // update and draw each special effect
+  mapThenSort(this.special_effects, function(object, i) 
+  { 
+    if(!object || object.update(delta_t))
+    {
+      cleanUp.push(i);
+      this.special_effects[i] = null;
+    }
+    else
+      object.draw(); 
+    
+  });
+  
+  // delete the indices in the cleanup list
+  for(var i = 0; i < cleanUp.length; i++)
+    obj_array.splice(cleanUp[i], 1);
+  
+}
+
+//!-----------------------------------------------------------------------------
+//! GAMEVIEW -- ROBOTS
+//!-----------------------------------------------------------------------------
+
 GameView.prototype.addRobot = function(newBot)
 {
-  this.draw_list.push(newBot);
+  this.robot_list.push(newBot);
 }
 
 GameView.prototype.draw = function()
@@ -44,41 +76,15 @@ GameView.prototype.draw = function()
   // draw the background
   context.drawImage(this.BACKGROUND, 0, 0);
   
-  // draw a circle around the controlled robot
-   
-  /*if (local_bot) 
-  {
-    context.drawImage(this.GUI_ME, 
-                      local_bot.position.x - local_bot.SPRITE_SIZE.x * 0.2,
-                      local_bot.position.y + local_bot.SPRITE_SIZE.y * 0.2);
-  }*/
-  
   // draw each robot
-  for(var i = 0; i < this.draw_list.length; i++)
-  {
-    // draw each object
-    var current = this.draw_list[i];
-    current.draw();
-    
-    // re-sort the list based on y value
-    if(i)
-    {
-      var previous = this.draw_list[i-1];
-      if(current.position.y < previous.position.y)
-      {
-        // perform on step of bubble sort
-        this.draw_list[i-1] = current;
-        this.draw_list[i] = previous;
-      }
-    }
-  }
+  mapThenSort(this.robot_list, function(object, i) { object.draw(); } );
   
   // draw an arrow over potential targets, unless a target is already acquired
   if (selected && (!local_bot || !local_bot.target)) 
   {
     context.drawImage(this.GUI_TARGET,
-                      selected.position.x - 6,
-                      selected.position.y - 24);
+                      selected.position.x - 24,
+                      selected.position.y - 34);
   } 
   
   // draw the foreground

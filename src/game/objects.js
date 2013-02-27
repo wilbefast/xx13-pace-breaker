@@ -103,3 +103,28 @@ getObjectAt = function(pos, objects, condition) //! 'condition' is optional
   }
   return null;
 }
+
+// update objects, resorting by y as we go
+mapThenSort = function(objects, map_function)
+{
+  // draw object
+  for(var i = 0; i < objects.length; i++)
+  {
+    // apply map function (if applicable)
+    var current = objects[i];
+    if(map_function)
+      map_function(current, i);
+    
+    // re-sort the list based on y value
+    if(i)
+    {
+      var previous = objects[i-1];
+      if(current.position.y < previous.position.y)
+      {
+        // perform on step of bubble sort
+        objects[i-1] = current;
+        objects[i] = previous;
+      }
+    }
+  }
+}
