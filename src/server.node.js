@@ -283,15 +283,8 @@ io.sockets.on('connection', function (socket)
   {    
     socket.get('id', function(err, lockonId)
     {
-      
-    //! FIXME
-      var inputBot = G.robots[lockonId];
-      if(!inputBot.isPolice)
-      {
-        console.log(inputBot + " sent lockon message: wtf?");
-        return;
-      }
-      inputBot.tryTarget(G.robots[lockonData ? lockonData.dest : null]);
+      var lockonBot = G.robots[lockonId];
+      lockonBot.tryTarget(G.robots[lockonData ? lockonData.dest : null]);
     });
   });
   
@@ -303,11 +296,15 @@ io.sockets.on('connection', function (socket)
 //! KILL A ROBOT
 //! ----------------------------------------------------------------------------
 
-reportDeath = function(deadId)
+reportDeath = function(deadBot)
 {  
-  connected.forEach(function(sock, challengeId)
+  var header = 'death'
+  if(deadBot.health == Robot.prototype.EXPLODED)
+    header = 'boom';
+  
+  connected.forEach(function(sock, receiver_id)
   {
-    sock.emit('death', { id : deadId });
+    sock.emit(header, { id : deadBot.id, civ : deadBot.isCivillian });
   });
 }
 
@@ -317,7 +314,7 @@ reportLockon = function(subject, object)
   if(object)
     packet.dest = object.id;
   
-  connected.forEach(function(sock, challengeId)
+  connected.forEach(function(sock, receiver_id)
   {
     sock.emit('lockon', packet);
   });

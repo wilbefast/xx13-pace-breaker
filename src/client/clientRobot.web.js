@@ -176,6 +176,8 @@ Robot.prototype.draw = function()
                            this.target.position.y - this.target.SPRITE_SIZE.y/2, 
                            (1 - lock) * 48);
   }
+  
+  context.lineWidth = 1;
 };
 
 //!-----------------------------------------------------------------------------
@@ -212,8 +214,12 @@ Robot.prototype.updateSpecial = function(delta_t)
 {
   if(!this.isHealthy())
   {
-    this.view.setAnimation(this.skin.DIE);
-    this.view.setSubimage(2); // dead image
+    if(this.view.setAnimation(this.skin.DIE))
+    {
+      this.view.speed = 0.003;
+      this.view.stopNext(2);
+    }
+    this.view.update(delta_t);
     return;
   }
   
@@ -265,7 +271,12 @@ RobotPolice.prototype.update = function(delta_t)
   
   // lock on progressively if already locked on 
   if(this.target)
-    this.lock_on.deposit(delta_t);
+  {
+    if(!this.target.isHealthy())
+      this.setTarget(null);
+    else
+      this.lock_on.deposit(delta_t);
+  }
   
   // only treat input for local bot
   if(this.id != local_id)

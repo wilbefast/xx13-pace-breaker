@@ -120,7 +120,7 @@ socket.on('gameover',function(data)
 });
 
 //! ----------------------------------------------------------------------------
-//! PLAY HEARTBEAT SOUND AT THE SPECIFIED VOLUME
+//! KILL ROBOTS WHEN TOLD TO
 //! ----------------------------------------------------------------------------
 socket.on('death', function(data)
 {

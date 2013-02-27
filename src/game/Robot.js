@@ -44,6 +44,7 @@ Robot.prototype.HEALTHY = 0;
 Robot.prototype.INFECTED = 1;
 Robot.prototype.DYING = 2;
 Robot.prototype.DEAD = 3;
+Robot.prototype.EXPLODED = 4;
 // health and infection
 Robot.prototype.MAX_INFECTION = 6000;
 
@@ -182,7 +183,8 @@ Robot.prototype.tryInteractPeer = function(newPeer)
 
 Robot.prototype.isHealthy = function()
 {
-  return (this.health != this.DYING && this.health != this.DEAD);
+  return (this.health != this.DYING && this.health != this.DEAD 
+          && this.health != this.EXPLODED);
 }
 
 Robot.prototype.setHealth = function(new_health)
@@ -196,10 +198,20 @@ Robot.prototype.setHealth = function(new_health)
     
     // tell clients about the death
     if(is_server)
-      reportDeath(this.id);
-    // play a death sound
+      reportDeath(this);
     else
+    {
+      // deselect dead robots
+      if(selected && selected.id == this.id)
+        selected = null;
+  
+      // unlock Police from dead robots
+      if(local_bot.isPolice && local_bot.target.id == this.id)
+        local_bot.setTarget(null);
+      
+      // play a death sound
       play_dead();
+    }
   }
 }
 

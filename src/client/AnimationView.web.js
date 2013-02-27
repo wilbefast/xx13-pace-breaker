@@ -57,10 +57,11 @@ AnimationView.prototype.getSubimage = function()
 AnimationView.prototype.setAnimation = function(_anim)
 {
   if(this.anim == _anim)
-    return;
+    return false;
   this.anim = _anim;
   this.subimage = 0.0;
   this.stop_next = -1;
+  return true;
 }
 
 AnimationView.prototype.stopNext = function(frame_to_stop_at)
