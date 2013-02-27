@@ -304,7 +304,7 @@ reportDeath = function(deadBot)
   
   connected.forEach(function(sock, receiver_id)
   {
-    sock.emit(header, { id : deadBot.id, civ : deadBot.isCivillian });
+    sock.emit(header, { id : deadBot.id, human : deadBot.isImposter });
   });
 }
 

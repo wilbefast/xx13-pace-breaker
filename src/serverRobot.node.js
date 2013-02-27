@@ -54,7 +54,7 @@ RobotPolice.prototype.update = function(delta_t)
     if(this.lock_on.isFull())
     {
       // kill target
-      this.target.setHealth(this.target.DEAD);
+      this.target.setHealth(this.target.EXPLODED);
       
       // lock-off
       this.tryTarget(null);
@@ -66,7 +66,7 @@ RobotPolice.prototype.update = function(delta_t)
 
 RobotPolice.prototype.tryTarget = function(object)
 {
-  if(this.isHealthy && (!object || !object.isPolice))
+  if(this.isHealthy() && (!object || !object.isPolice))
   {
     this.setTarget(object);
     reportLockon(this, object);

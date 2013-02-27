@@ -71,6 +71,12 @@ RobotPolice.prototype.setTarget = function(newTarget)
   this.target = newTarget;
 }
 
+RobotPolice.prototype.fire = function()
+{
+  //! TODO
+  this.setTarget(null);
+}
+
 RobotPolice.prototype.update = function(delta_t)
 {
 }

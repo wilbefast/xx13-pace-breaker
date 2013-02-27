@@ -26,8 +26,7 @@ areFoes = function(a, b)
 canInteractWith = function(subject, object)
 {
   // NOBODY can interact with the dying or dead
-  if(subject.health == subject.DEAD || object.health == object.DEAD
-  || subject.health == subject.DYING || object.health == object.DYING)
+  if(!subject.isHealthy() || !object.isHealthy())
     return false;
  
   // NOBODY can interact with cops

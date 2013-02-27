@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTOR
 //! ----------------------------------------------------------------------------
 
-function AnimationView(_anim, _size, _speed, _flags)
+function AnimationView(_anim, _size, _speed, _flags, _offset)
 {
   this.anim = _anim;
   this.size = _size; // V2
@@ -28,7 +28,7 @@ function AnimationView(_anim, _size, _speed, _flags)
   
   this.subimage = 0.0;
   this.stop_next = -1;
-  this.offset = new V2(0, 0);
+  this.offset = new V2(_offset);
   this.dest = new Rect();
   
   return this;

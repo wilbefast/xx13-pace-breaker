@@ -284,6 +284,7 @@ RobotPolice.prototype.update = function(delta_t)
         play_police_interact();
       // lock on
       this.target = selected;
+      selected = null;
       tellServerLockon(this.target);
     }
   }
@@ -313,7 +314,7 @@ function play_dead()
     play_audio('Civilbot_death_'+(civilian_death_sample%3+1)+'.ogg')
     civilian_death_sample++;
     playing_a_sound = true;
-    setTimeout(function() { playing_a_sound = false; }, 3000); //! FIXME -- use callback
+    setTimeout(function() { playing_a_sound = false; }, 300); //! FIXME -- use callback
   }
 }
 
@@ -327,7 +328,7 @@ RobotImposter.prototype.startInteract = function()
       play_audio('Civilbot_chatter_'+(civilian_chatter_sample%6+1)+'.ogg')
       civilian_chatter_sample++;
       playing_a_sound = true;
-      setTimeout(function() { playing_a_sound = false; }, 3000); //! FIXME -- use callback
+      setTimeout(function() { playing_a_sound = false; }, 300); //! FIXME -- use callback
     }
   }
 }
@@ -339,6 +340,6 @@ function play_police_interact()
     play_audio('Copbot_chatter_'+(cop_chatter_sample%4+1)+'.ogg')
     cop_chatter_sample++;
     playing_a_sound = true;
-    setTimeout(function() { playing_a_sound = false; }, 3000); //! FIXME -- use callback
+    setTimeout(function() { playing_a_sound = false; }, 300); //! FIXME -- use callback
   }
 }

@@ -20,23 +20,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! ----------------------------------------------------------------------------
 
 var imgSmoke = load_image("smoke.png");
+var imgExplosion = load_image("explosion.png");
+//var imgElectrocution = load_image("electrocution.png");
+
 var animSmoke = new Animation(imgSmoke, new V2(32, 32), new V2(0, 0), 5);
+var animExplosion = new Animation(imgExplosion, new V2(128, 128), new V2(0, 0), 8);
+var animElectrocution = new Animation(imgExplosion, new V2(128, 128), new V2(0, 0), 8); //! FIXME
 
 /*animWifi = new Animation(imgWifi, new V2(32, 32), new V2(0, 0), 3);
-animSmoke = new Animation(imgSmoke, new V2(32, 32), new V2(0, 0), 5);
-animExplosion = new Animation(imgExplosion, new V2(32, 32), new V2(0, 0), 8);
-imgElectrocution = new Animation(imgElectrocution, new V2(32, 32), new V2(0, 0), 8);*/
+*/
 
 //! ----------------------------------------------------------------------------
 //! CLASS
 //! ----------------------------------------------------------------------------
 
-SpecialEffect = function(position_, anim_, vsize_, anim_speed_, loop_reverse_)
+SpecialEffect = function(position_, anim_, vsize_, anim_speed_, offset_)
 {
   this.position = new V2(position_);
   this.destroy_at_end_of_animation = true;
   
-  this.view = new AnimationView(anim_, vsize_, anim_speed_, loop_reverse_);
+  this.view = new AnimationView(anim_, vsize_, anim_speed_, NO_FLAGS, offset_);
   
   return this;
 }
@@ -61,5 +64,15 @@ SpecialEffect.prototype.draw = function()
 
 SpecialEffect.smoke = function(position_)
 {
-  return new SpecialEffect(position_, animSmoke, new V2(32, 32), 0.007, false);
+  return new SpecialEffect(position_, animSmoke, new V2(32, 32), 0.007);
+}
+
+SpecialEffect.explosion = function(position_)
+{
+  return new SpecialEffect(position_, animExplosion, new V2(128, 128), 0.007, new V2(0, -48));
+}
+
+SpecialEffect.electrocution = function(position_)
+{
+  return new SpecialEffec(position_, animElectrocution, new V2(32, 32), 0.007);
 }
