@@ -37,8 +37,6 @@ var animElectrocution = new Animation(imgExplosion, new V2(128, 128), new V2(0, 
 SpecialEffect = function(position_, anim_, vsize_, anim_speed_, offset_)
 {
   this.position = new V2(position_);
-  this.destroy_at_end_of_animation = true;
-  
   this.view = new AnimationView(anim_, vsize_, anim_speed_, NO_FLAGS, offset_);
   
   return this;
@@ -64,15 +62,14 @@ SpecialEffect.prototype.draw = function()
 
 SpecialEffect.smoke = function(position_)
 {
-  return new SpecialEffect(position_, animSmoke, new V2(32, 32), 0.007);
+  var sfx = new SpecialEffect(position_, animSmoke, new V2(32, 32), 0.007);
+  sfx.destroy_at_end_of_animation = true;
+  return sfx;
 }
 
 SpecialEffect.explosion = function(position_)
 {
-  return new SpecialEffect(position_, animExplosion, new V2(128, 128), 0.007, new V2(0, -48));
-}
-
-SpecialEffect.electrocution = function(position_)
-{
-  return new SpecialEffec(position_, animElectrocution, new V2(32, 32), 0.007);
+  var sfx = new SpecialEffect(position_, animExplosion, new V2(134, 128), 0.007, new V2(0, -48));
+  sfx.destroy_at_end_of_animation = true;
+  return sfx;
 }

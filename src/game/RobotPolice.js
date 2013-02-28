@@ -55,6 +55,8 @@ RobotPolice.prototype.init = function(id_, position_, skin_i_)
   
   // Police can fire their LAZOR
   this.lock_on = new Bank(0, 0, 2000);
+  this.firing = new Timer(200, false); // no auto-reset
+  this.firing.unset();
   this.target = null;
 }
 
@@ -71,12 +73,19 @@ RobotPolice.prototype.setTarget = function(newTarget)
   this.target = newTarget;
 }
 
-RobotPolice.prototype.fire = function()
+RobotPolice.prototype.openFire = function()
 {
-  //! TODO
+  // fire!
+  this.firing.reset();
+  if(!is_server)
+  {
+    G.view.addSpecialEffect(SpecialEffect.explosion(this.target.position));
+    this.firing.position = this.target.position;
+  }
+      
+  // kill target
+  this.target.setHealth(this.target.EXPLODED);
+      
+  // lock-off
   this.setTarget(null);
-}
-
-RobotPolice.prototype.update = function(delta_t)
-{
 }

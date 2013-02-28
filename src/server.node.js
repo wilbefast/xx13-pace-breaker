@@ -298,13 +298,9 @@ io.sockets.on('connection', function (socket)
 
 reportDeath = function(deadBot)
 {  
-  var header = 'death'
-  if(deadBot.health == Robot.prototype.EXPLODED)
-    header = 'boom';
-  
   connected.forEach(function(sock, receiver_id)
   {
-    sock.emit(header, { id : deadBot.id, human : deadBot.isImposter });
+    sock.emit('death', { id : deadBot.id });
   });
 }
 
@@ -317,5 +313,13 @@ reportLockon = function(subject, object)
   connected.forEach(function(sock, receiver_id)
   {
     sock.emit('lockon', packet);
+  });
+}
+
+reportFire = function(subject)
+{  
+  connected.forEach(function(sock, receiver_id)
+  {
+    sock.emit('fire', { src : subject.id });
   });
 }

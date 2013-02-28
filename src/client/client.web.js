@@ -103,6 +103,15 @@ socket.on('lockon', function(lockonData)
 });
 
 //! ----------------------------------------------------------------------------
+//! HAVE POLICE FIRE WHEN THE SERVER SAYS SO
+//! ----------------------------------------------------------------------------
+
+socket.on('fire', function(fireData)
+{
+  G.robots[fireData.src].openFire();
+});
+
+//! ----------------------------------------------------------------------------
 //! END THE GAME WHEN SERVER SAYS SO
 //! ----------------------------------------------------------------------------
 socket.on('gameover',function(data)
@@ -126,21 +135,6 @@ socket.on('death', function(data)
 {
   G.robots[data.id].setHealth(Robot.prototype.DEAD);
 });
-
-socket.on('boom', function(data)
-{
-  var explodedBot = G.robots[data.id];
-  explodedBot.setHealth(Robot.prototype.EXPLODED);
-  if(data.human)
-  {
-    G.view.addSpecialEffect(SpecialEffect.electrocution(explodedBot.position));
-  }
-  else
-  {
-    G.view.addSpecialEffect(SpecialEffect.explosion(explodedBot.position));
-  }
-});
-
 
 //! ----------------------------------------------------------------------------
 //! PLAY HEARTBEAT SOUND AT THE SPECIFIED VOLUME

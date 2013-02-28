@@ -98,6 +98,10 @@ Robot.prototype.trySetSpeed = function(x, y)
 
 Robot.prototype.collision = function(other)
 {
+  // ignore exploded robots
+  if(this.health == this.EXPLODED || other.health == other.EXPLODED)
+    return;
+  
   // move out of contact
   var manifold = new V2().setFromTo(other.position, this.position);
   manifold.normalise();
@@ -196,9 +200,12 @@ Robot.prototype.setHealth = function(new_health)
   {
     this.forceInteractPeer(null);
     
-    // tell clients about the death
+    // tell clients about the death -- NOT OF EXPLOSIONS
     if(is_server)
-      reportDeath(this);
+    {
+      if(this.health == this.DEAD)
+        reportDeath(this);
+    }
     else
     {
       // deselect dead robots
@@ -209,12 +216,16 @@ Robot.prototype.setHealth = function(new_health)
       if(local_bot.isPolice && local_bot.target.id == this.id)
         local_bot.setTarget(null);
       
-      // create a smoke special effect
-      G.view.addSpecialEffect(
-        SpecialEffect.smoke(new V2(this.position.x, this.position.y - 32)));
-      
-      // play a death sound
-      play_dead();
+      //! ON DEATH
+      if(this.state == this.DEAD)
+      {
+        // create a smoke special effect
+        G.view.addSpecialEffect(
+          SpecialEffect.smoke(new V2(this.position.x, this.position.y - 32)));
+        
+        // play a death sound
+        play_dead();
+      }
     }
   }
 }

@@ -67,11 +67,6 @@ addSkin(RobotImposter.prototype.SKINS , 'sheet_imposter.png', 32);
 
 // interface images
 
-/*
-var meSelector = load_image("cercle.png");
-var arrowSelector = load_image("fleche.png");
-*/
-
 //!-----------------------------------------------------------------------------
 //! CLIENT-ONLY -- INITIALISE ROBOTS' ANIMATIONS
 //!-----------------------------------------------------------------------------
@@ -94,7 +89,7 @@ Robot.prototype.specialInit = function()
 //! CLIENT-ONLY -- DRAW ROBOTS
 //!-----------------------------------------------------------------------------
 
-var bit_pos = new V2();
+var bit_pos = new V2(), lazor_start = new V2(), lazor_end = new V2();
 var ANGLE_START = -Math.PI * 0.25;
 var ANGLE_END = Math.PI * 1.5;
 
@@ -103,8 +98,12 @@ RobotImposter.prototype.DRAW_PRIORITY = 1; // middle
 RobotPolice.prototype.DRAW_PRIORITY = 2; // highest
 Robot.prototype.draw = function() 
 {
+  // DON'T DRAW EXPLODED ROBOTS
+  if(this.health == this.EXPLODED)
+    return;
+    
   // 1. draw a circle around the character's feet (if alive)
-  if(this.isHealthy())
+  else if(this.isHealthy())
   {
     context.lineWidth = 2.0;
     context.strokeStyle = 
@@ -176,8 +175,15 @@ Robot.prototype.draw = function()
                            this.target.position.y - this.target.SPRITE_SIZE.y/2, 
                            (1 - lock) * 48);
   }
-  
-  context.lineWidth = 1;
+  // 3c. draw "LAZOR!!!" (tm) (if applicable)
+  else if (this.firing && this.firing.isSet())
+  {
+    lazor_start.setBetween(this.position, this.firing.position, 0.2);
+    lazor_end.setBetween(this.position, this.firing.position, 0.9);
+    context.lineWidth = 3;
+    context.strokeStyle = 'red';
+    context.strokeLine(lazor_start.x, lazor_start.y - 24, lazor_end.x, lazor_end.y)
+  }
 };
 
 //!-----------------------------------------------------------------------------
@@ -212,7 +218,8 @@ Robot.prototype.resetSprite = function()
 
 Robot.prototype.updateSpecial = function(delta_t)
 {
-  if(!this.isHealthy())
+  //! DEAD ?
+  if(this.health == this.DEAD)
   {
     if(this.view.setAnimation(this.skin.DIE))
     {
@@ -222,6 +229,10 @@ Robot.prototype.updateSpecial = function(delta_t)
     this.view.update(delta_t);
     return;
   }
+  
+  //! EXPLODED
+  else if(this.health == this.EXPLODED)
+    return;
   
   // moving ?
   if (this.speed.x != 0 || this.speed.y != 0)
@@ -257,6 +268,9 @@ RobotPolice.prototype.update = function(delta_t)
 {
   // perform standard update
   Robot.prototype.update.call(this, delta_t);
+  
+  // finish firing
+  this.firing.update(delta_t);
    
   // stop if dead
   if(!this.isHealthy())
@@ -277,7 +291,7 @@ RobotPolice.prototype.update = function(delta_t)
   if(keyboard.action && keyboard.direction.isNull())
   {
     // lock on to new target
-    if(!this.target && selected)
+    if(!this.target && !this.firing.isSet() && selected)
     {
       // play sound
       if(this.lock_on.isEmpty())

@@ -43,21 +43,21 @@ RobotPolice.prototype.update = function(delta_t)
   // perform standard update
   Robot.prototype.update.call(this, delta_t);
    
+  // finish firing
+  this.firing.update(delta_t);
+  
   // stop if dead
   if(!this.isHealthy())
     return;
- 
+  
   // lock on progressively if already locked on 
   if(this.target)
   {
     this.lock_on.deposit(delta_t);
     if(this.lock_on.isFull())
     {
-      // kill target
-      this.target.setHealth(this.target.EXPLODED);
-      
-      // lock-off
-      this.tryTarget(null);
+      reportFire(this);
+      this.openFire();
     }
   }
   else
@@ -66,9 +66,11 @@ RobotPolice.prototype.update = function(delta_t)
 
 RobotPolice.prototype.tryTarget = function(object)
 {
-  if(this.isHealthy() && (!object || !object.isPolice))
+  if(this.isHealthy() && (!object || !object.isPolice) && !this.firing.isSet())
   {
     this.setTarget(object);
     reportLockon(this, object);
   }
+  else
+    ;//console.log("targetting refused!");
 }
