@@ -154,6 +154,10 @@ Robot.prototype.forceInteractPeer = function(newPeer)
     
     // stop from moving
     this.forceSetSpeed(0, 0);
+    
+    // display wifi graphic
+    if(!is_server)
+      G.view.addSpecialEffect(SpecialEffect.wifi(this.position));
   }
 }
 
@@ -217,7 +221,7 @@ Robot.prototype.setHealth = function(new_health)
         local_bot.setTarget(null);
       
       //! ON DEATH
-      if(this.state == this.DEAD)
+      if(this.health == this.DEAD)
       {
         // create a smoke special effect
         G.view.addSpecialEffect(

@@ -85,7 +85,7 @@ GameView.prototype.draw = function()
   if (selected && (!local_bot || !local_bot.target)) 
   {
     context.drawImage(this.GUI_TARGET,
-                      selected.position.x - 24,
+                      selected.position.x - 25,
                       selected.position.y - 34);
   } 
   
@@ -94,4 +94,12 @@ GameView.prototype.draw = function()
   
   // draw the foreground
   context.drawImage(this.FOREGROUND, 0, 0);
+  
+  // draw the score, etc
+  context.strokeStyle = 'white';
+  context.lineWidth = 1;
+  context.textAlign = 'center';
+  context.strokeText("Civillians: " + G.n_civillians, canvas.width/3, 32);
+  context.strokeText("Hackers: " + G.n_hackers, canvas.width/2, 32);
+  context.strokeText("Police: " + G.n_police, canvas.width*2/3, 32);
 };

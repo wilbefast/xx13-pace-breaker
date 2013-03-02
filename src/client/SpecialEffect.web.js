@@ -21,14 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 var imgSmoke = load_image("smoke.png");
 var imgExplosion = load_image("explosion.png");
+var imgWifi = load_image("wifi.png");
 //var imgElectrocution = load_image("electrocution.png");
 
 var animSmoke = new Animation(imgSmoke, new V2(32, 32), new V2(0, 0), 5);
 var animExplosion = new Animation(imgExplosion, new V2(128, 128), new V2(0, 0), 8);
 var animElectrocution = new Animation(imgExplosion, new V2(128, 128), new V2(0, 0), 8); //! FIXME
+var animWifi = new Animation(imgWifi, new V2(16, 15), new V2(0, 0), 3);
 
-/*animWifi = new Animation(imgWifi, new V2(32, 32), new V2(0, 0), 3);
-*/
 
 //! ----------------------------------------------------------------------------
 //! CLASS
@@ -36,7 +36,7 @@ var animElectrocution = new Animation(imgExplosion, new V2(128, 128), new V2(0, 
 
 SpecialEffect = function(position_, anim_, vsize_, anim_speed_, offset_)
 {
-  this.position = new V2(position_);
+  this.position = position_;
   this.view = new AnimationView(anim_, vsize_, anim_speed_, NO_FLAGS, offset_);
   
   return this;
@@ -70,6 +70,13 @@ SpecialEffect.smoke = function(position_)
 SpecialEffect.explosion = function(position_)
 {
   var sfx = new SpecialEffect(position_, animExplosion, new V2(134, 128), 0.007, new V2(0, -48));
+  sfx.destroy_at_end_of_animation = true;
+  return sfx;
+}
+
+SpecialEffect.wifi = function(position_)
+{
+  var sfx = new SpecialEffect(position_, animWifi, new V2(16, 16), 0.006, new V2(0, -32));
   sfx.destroy_at_end_of_animation = true;
   return sfx;
 }

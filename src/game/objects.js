@@ -110,8 +110,12 @@ mapThenSort = function(objects, map_function)
   // draw object
   for(var i = 0; i < objects.length; i++)
   {
-    // apply map function (if applicable)
+    // skip null objects
     var current = objects[i];
+    if(!current) 
+      continue;
+    
+    // apply map function (if applicable)
     if(map_function)
       map_function(current, i);
     
@@ -119,6 +123,8 @@ mapThenSort = function(objects, map_function)
     if(i)
     {
       var previous = objects[i-1];
+      if(!previous)
+        continue;
       if(current.position.y < previous.position.y)
       {
         // perform on step of bubble sort

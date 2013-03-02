@@ -182,7 +182,7 @@ Robot.prototype.draw = function()
     lazor_end.setBetween(this.position, this.firing.position, 0.9);
     context.lineWidth = 3;
     context.strokeStyle = 'red';
-    context.strokeLine(lazor_start.x, lazor_start.y - 24, lazor_end.x, lazor_end.y)
+    context.strokeLine(lazor_start.x, lazor_start.y - 16, lazor_end.x, lazor_end.y)
   }
 };
 

@@ -64,6 +64,8 @@ Game = function()
 	{
     playable_area : new Rect(36, 68, 724, 364)
   }; 
+  
+  this.n_civillians = this.n_hackers = this.n_police = 0;
 }
 
 Game.prototype.toString = function()
@@ -73,6 +75,8 @@ Game.prototype.toString = function()
 
 Game.prototype.reset = function()
 {
+  //! *NOT* CALLED CLIENT-SIDE!!!!
+  
   this.robots = [];
   connected = [];
   
