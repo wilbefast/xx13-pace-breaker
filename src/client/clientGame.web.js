@@ -16,6 +16,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //!-----------------------------------------------------------------------------
+//! CLIENT-SIDE GAME METHODS
+//!-----------------------------------------------------------------------------
+
+Game.prototype.unpackRobot = function(packet)
+{
+  // parse new Robot from packet
+  var newBot;
+  switch(packet.typ)
+  {
+    case RobotCivillian.prototype.TYPE:
+      newBot = new RobotCivillian(packet.id, packet.pos, packet.skn);
+      break;
+      
+    case RobotPolice.prototype.TYPE:
+      newBot = new RobotPolice(packet.id, packet.pos, packet.skn);
+      break;
+      
+    case RobotImposter.prototype.TYPE:
+      newBot = new RobotImposter(packet.id, packet.pos, packet.skn);
+      break;
+      
+    default:
+      console.log("invalid Robot type " + packet.typ);
+      return null;
+  }
+  
+  // packet may contain infection value (if local_bot is an Imposter)
+  if(packet.sick)
+    newBot.infection = packet.sick;
+  
+  return this.addRobot(newBot);
+};
+
+//!-----------------------------------------------------------------------------
 //! GAMEVIEW -- CONSTRUCTOR 
 //!-----------------------------------------------------------------------------
 

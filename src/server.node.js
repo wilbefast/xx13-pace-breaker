@@ -19,6 +19,7 @@ require("./game/RobotImposter.js");
 require("./game/gamestate.js");
 
 require("./serverRobot.node.js");
+require("./serverGame.node.js");
 //require("lobby.node.js");
 require("./main.node.js");
 
@@ -323,3 +324,23 @@ reportFire = function(subject)
     sock.emit('fire', { src : subject.id });
   });
 }
+
+//! ----------------------------------------------------------------------------
+//! INFORM CLIENTS OF NUMBER OF REMAINING BOTS EVERY SECOND
+//! ----------------------------------------------------------------------------
+
+reportCount = function(game)
+{  
+  connected.forEach(function(sock, receiver_id)
+  {
+    sock.emit('count', { civ : game.n_civillians, 
+                          hax : game.n_hackers, 
+                          pol : game.n_police });
+  });
+}
+
+setInterval(function()
+{
+  G.recountBotTypes();
+  reportCount(G);
+},1000);

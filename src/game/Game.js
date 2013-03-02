@@ -73,22 +73,6 @@ Game.prototype.toString = function()
   return "Game(" + this.robots.length + " Robots)";
 }
 
-Game.prototype.reset = function()
-{
-  //! *NOT* CALLED CLIENT-SIDE!!!!
-  
-  this.robots = [];
-  connected = [];
-  
-  // create Civillians
-  var spawn_pos = new V2();
-  for (var i=0; i < this.STARTING_CIVILLIANS; i++)
-  {
-    this.level.playable_area.randomWithin(spawn_pos);
-    this.addRobot(new RobotCivillian(nextid(), spawn_pos));
-  }
-}
-  
 Game.prototype.addRobot = function(newBot)
 {
   this.robots[newBot.id] = newBot;
@@ -96,36 +80,6 @@ Game.prototype.addRobot = function(newBot)
     this.view.addRobot(newBot);
   return newBot;
 }
-
-Game.prototype.unpackRobot = function(packet)
-{
-  // parse new Robot from packet
-  var newBot;
-  switch(packet.typ)
-  {
-    case RobotCivillian.prototype.TYPE:
-      newBot = new RobotCivillian(packet.id, packet.pos, packet.skn);
-      break;
-      
-    case RobotPolice.prototype.TYPE:
-      newBot = new RobotPolice(packet.id, packet.pos, packet.skn);
-      break;
-      
-    case RobotImposter.prototype.TYPE:
-      newBot = new RobotImposter(packet.id, packet.pos, packet.skn);
-      break;
-      
-    default:
-      console.log("invalid Robot type " + packet.typ);
-      return null;
-  }
-  
-  // packet may contain infection value (if local_bot is an Imposter)
-  if(packet.sick)
-    newBot.infection = packet.sick;
-  
-  return this.addRobot(newBot);
-};
 
 Game.prototype.update = function(delta_t) 
 { 

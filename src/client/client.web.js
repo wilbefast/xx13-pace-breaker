@@ -137,6 +137,17 @@ socket.on('death', function(data)
 });
 
 //! ----------------------------------------------------------------------------
+//! RECEIVE THE COUNT OF SURVIVING ROBOTS
+//! ----------------------------------------------------------------------------
+
+socket.on('count', function(data)
+{
+  G.n_civillians = data.civ;
+  G.n_hackers = data.hax;
+  G.n_police = data.pol;
+});
+
+//! ----------------------------------------------------------------------------
 //! PLAY HEARTBEAT SOUND AT THE SPECIFIED VOLUME
 //! ----------------------------------------------------------------------------
 socket.on('hint', function(data)
