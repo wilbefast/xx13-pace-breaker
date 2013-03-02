@@ -344,3 +344,15 @@ setInterval(function()
   G.recountBotTypes();
   reportCount(G);
 },1000);
+
+//! ----------------------------------------------------------------------------
+//! TELL CLIENTS TO RESET
+//! ----------------------------------------------------------------------------
+
+reportReset = function()
+{  
+  connected.forEach(function(sock, receiver_id)
+  {
+    sock.emit('reset');
+  });
+}

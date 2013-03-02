@@ -56,7 +56,6 @@ canInteractWith = function(subject, object)
 
 Game = function()
 {
-	this.robots = [];
   this.STARTING_CIVILLIANS = 20;
   
   // Replace with "new level()" when THAT's done
@@ -65,7 +64,7 @@ Game = function()
     playable_area : new Rect(36, 68, 724, 364)
   }; 
   
-  this.n_civillians = this.n_hackers = this.n_police = 0;
+  this.reset();
 }
 
 Game.prototype.toString = function()

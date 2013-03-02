@@ -19,6 +19,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CLIENT-SIDE GAME METHODS
 //!-----------------------------------------------------------------------------
 
+Game.prototype.reset = function()
+{
+  this.robots = [];
+  this.n_civillians = this.n_hackers = this.n_police = 0;
+}
+
 Game.prototype.unpackRobot = function(packet)
 {
   // parse new Robot from packet

@@ -21,8 +21,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Game.prototype.reset = function()
 {
+  // reset
   this.robots = [];
+  this.n_civillians = this.n_hackers = this.n_police = 0;
   connected = [];
+  
+  // tell cliens to reset
+  reportReset();
   
   // create Civillians
   var spawn_pos = new V2();
