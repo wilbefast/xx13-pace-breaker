@@ -203,6 +203,9 @@ io.sockets.on('connection', function (socket)
   connected[sockId] = socket;
   socket.set('id', sockId);
   
+  // tell NEW PLAYER to REST
+  socket.emit('reset');
+  
   // tell NEW PLAYER about OTHER PLAYERS
   G.robots.forEach(function(otherBot, otherId)
   {

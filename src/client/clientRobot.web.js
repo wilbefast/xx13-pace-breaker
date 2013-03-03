@@ -106,7 +106,7 @@ Robot.prototype.draw = function()
   else if(this.isHealthy())
   {
     context.lineWidth = 2.0;
-    context.strokeStyle = 
+    context.strokeStyle = context.fillStyle = 
         (this.id == local_id)           
           ? 'lime' : 
         ((local_bot && this.TYPE == local_bot.TYPE)     
@@ -127,7 +127,7 @@ Robot.prototype.draw = function()
           context.lineWidth = 1; 
           context.textBaseline = 'middle';
           context.textAlign = 'center';
-          context.strokeText(
+          context.fillText(
             Math.round(this.infection_incubation.time.balance / 1000), 
                         this.position.x, this.position.y - 32);   
           // thicker arc 

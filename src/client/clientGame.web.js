@@ -136,10 +136,10 @@ GameView.prototype.draw = function()
   context.drawImage(this.FOREGROUND, 0, 0);
   
   // draw the score, etc
-  context.strokeStyle = 'white';
+  context.fillStyle = 'white';
   context.lineWidth = 1;
   context.textAlign = 'center';
-  context.strokeText("Civillians: " + G.n_civillians, canvas.width/3, 32);
-  context.strokeText("Hackers: " + G.n_hackers, canvas.width/2, 32);
-  context.strokeText("Police: " + G.n_police, canvas.width*2/3, 32);
+  context.fillText("Hackers: " + G.n_hackers, canvas.width/4, 32);
+  context.fillText("Civillians: " + G.n_civillians, canvas.width/2, 32);
+  context.fillText("Police: " + G.n_police, canvas.width*3/4, 32);
 };

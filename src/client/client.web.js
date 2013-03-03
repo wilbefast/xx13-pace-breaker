@@ -14,6 +14,8 @@ G = new Game();
 G.view = new GameView();
 G.draw = function() { this.view.draw() };
 
+context.font = "12pt monospace"
+
 // hints
 var MAX_HINT_RANGE = 300;
 

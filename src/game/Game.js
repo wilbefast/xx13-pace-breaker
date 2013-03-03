@@ -58,7 +58,7 @@ Game = function()
 {
   this.STARTING_CIVILLIANS = 20;
   
-  // Replace with "new level()" when THAT's done
+  // Replace with "new Level()" when THAT's done
 	this.level = 
 	{
     playable_area : new Rect(36, 68, 724, 364)
