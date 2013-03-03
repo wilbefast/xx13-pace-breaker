@@ -61,7 +61,7 @@ Game.prototype.unpackRobot = function(packet)
 
 GameView = function()
 {
-  this.robot_list = [];
+  this.draw_list = [];
   this.special_effects = [];
   
   return this;
@@ -71,7 +71,7 @@ GameView = function()
 //! GAMEVIEW -- CONSTANTS 
 //!-----------------------------------------------------------------------------
 
-GameView.prototype.GUI_ME = load_image("cercle.png");
+//GameView.prototype.GUI_ME = load_image("cercle.png");
 GameView.prototype.GUI_TARGET = load_image("fleche.png");
 GameView.prototype.BACKGROUND = load_image("map.png");
 GameView.prototype.FOREGROUND = load_image("fore.png");
@@ -110,7 +110,7 @@ GameView.prototype.update = function(delta_t)
 
 GameView.prototype.addRobot = function(newBot)
 {
-  this.robot_list.push(newBot);
+  this.draw_list.push(newBot);
 }
 
 GameView.prototype.draw = function()
@@ -119,7 +119,7 @@ GameView.prototype.draw = function()
   context.drawImage(this.BACKGROUND, 0, 0);
   
   // draw each robot
-  mapThenSort(this.robot_list, function(object, i) { object.draw(); } );
+  mapThenSort(this.draw_list, function(object, i) { object.draw(); } );
   
   // draw an arrow over potential targets, unless a target is already acquired
   if (selected && (!local_bot || !local_bot.target)) 

@@ -125,7 +125,7 @@ socket.on('lockon', function(lockonData)
 
 socket.on('fire', function(fireData)
 {
-  G.robots[fireData.src].openFire();
+  G.robots[fireData.src].openFire(fireData.hit_hax);
 });
 
 //! ----------------------------------------------------------------------------

@@ -84,7 +84,7 @@ RobotPolice.prototype.setTarget = function(newTarget)
   }
 }
 
-RobotPolice.prototype.openFire = function()
+RobotPolice.prototype.openFire = function(hit_hax)
 {
   // fire!
   this.firing.reset();
@@ -95,6 +95,7 @@ RobotPolice.prototype.openFire = function()
     play_audio("zap_explosion.ogg");
     G.view.addSpecialEffect(SpecialEffect.explosion(this.target.position));
     this.firing.position = this.target.position;
+    this.target.hacker_corpse = (hit_hax || false);
   }
       
   // kill target

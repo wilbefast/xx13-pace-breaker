@@ -324,7 +324,7 @@ reportFire = function(subject)
 {  
   connected.forEach(function(sock, receiver_id)
   {
-    sock.emit('fire', { src : subject.id });
+    sock.emit('fire', { src : subject.id, hit_hax : subject.target.isImposter });
   });
 }
 

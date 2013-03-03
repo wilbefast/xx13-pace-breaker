@@ -20,7 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! ----------------------------------------------------------------------------
 areFoes = function(a, b)
 {
-  return(!a.isCivillian && !b.isCivillian && a.TYPE != b.TYPE);
+  return(a.isHealthy() && b.isHealthy() && !a.isCivillian 
+          && !b.isCivillian && a.TYPE != b.TYPE);
 }
 
 canInteractWith = function(subject, object)

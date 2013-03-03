@@ -31,7 +31,7 @@ var animWifi = new Animation(imgWifi, new V2(16, 15), new V2(0, 0), 3);
 
 
 //! ----------------------------------------------------------------------------
-//! CLASS
+//! SPECIAL EFFECT -- CLASS
 //! ----------------------------------------------------------------------------
 
 SpecialEffect = function(position_, anim_, vsize_, anim_speed_, offset_)
@@ -57,8 +57,30 @@ SpecialEffect.prototype.draw = function()
 }
 
 //! ----------------------------------------------------------------------------
+//! DECAL -- CLASS
+//! ----------------------------------------------------------------------------
+
+Decal = function(position_, img_)
+{
+  this.position = position_;
+  this.img = img_;
+  
+  return this;
+}
+
+Decal.prototype.draw = function()
+{
+  context.drawImage(this.img, this.position.x, this.position.y);
+}
+
+//! ----------------------------------------------------------------------------
 //! SHORTCUT CONSTRUCTORS
 //! ----------------------------------------------------------------------------
+
+Decal.corpse = function(position_, hacker)
+{
+  return new Decal(position_, hacker ? imgCorpseHax : imgCorpseCiv);
+}
 
 SpecialEffect.smoke = function(position_)
 {

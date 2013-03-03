@@ -96,6 +96,9 @@ var bit_pos = new V2(), lazor_start = new V2(), lazor_end = new V2();
 var ANGLE_START = -Math.PI * 0.25;
 var ANGLE_END = Math.PI * 1.5;
 
+var imgCorpseCiv = load_image("civillian_corpse.png");
+var imgCorpseHax = load_image("imposter_corpse.png");
+
 RobotCivillian.prototype.DRAW_PRIORITY = 0; // lowest
 RobotImposter.prototype.DRAW_PRIORITY = 1; // middle
 RobotPolice.prototype.DRAW_PRIORITY = 2; // highest
@@ -103,7 +106,11 @@ Robot.prototype.draw = function()
 {
   // DON'T DRAW EXPLODED ROBOTS
   if(this.health == this.EXPLODED)
+  {
+    context.drawImage(this.hacker_corpse ? imgCorpseHax : imgCorpseCiv,
+                      this.position.x - 32, this.position.y);
     return;
+  }
     
   // 1. draw a circle around the character's feet (if alive)
   else if(this.isHealthy())
