@@ -64,6 +64,9 @@ Animation.prototype.getNFrames = function()
 
 Animation.prototype.draw = function(subimage, dest)
 { 
+  //! NB - flipping images doesn't work on firefox
+  
+  
   // flip
   if(this.flags & FLIP_X)
     context.scale(-1, 1);
@@ -74,9 +77,13 @@ Animation.prototype.draw = function(subimage, dest)
   context.drawImage(this.img, 
     // source
     (~~subimage) * this.size.x + this.offset.x, this.offset.y,  
-    this.size.x, this.size.y,
+    this.size.x, 
+    this.size.y,
     // destination
-    this.flipx*dest.x, this.flipy*dest.y, this.flipx*dest.w, this.flipy*dest.h);
+    this.flipx * dest.x, 
+    this.flipy * dest.y, 
+    this.flipx * dest.w, 
+    this.flipy * dest.h);
   
   // unflip
   if(this.flags & FLIP_X)

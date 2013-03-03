@@ -92,6 +92,7 @@ RobotPolice.prototype.openFire = function()
   // client-side
   if(!is_server)
   {
+    play_audio("zap_explosion.ogg");
     G.view.addSpecialEffect(SpecialEffect.explosion(this.target.position));
     this.firing.position = this.target.position;
   }

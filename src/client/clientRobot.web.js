@@ -32,9 +32,12 @@ function addSkin(skin_array, image_file, size)
   ({
     WALK_N : new Animation(image, new V2(size, size), new V2(0, 0), 3),
     WALK_E : new Animation(image, new V2(size, size), new V2(0, size), 3),
-    WALK_W : new Animation(image, new V2(size, size), new V2(0, size), 3, FLIP_X),
-    WALK_S : new Animation(image, new V2(size, size), new V2(0, 2*size), 3),
-    DIE : new Animation(image, new V2(size, size), new V2(0, 3*size), 3)
+    WALK_W : new Animation(image, new V2(size, size), new V2(0, 2*size), 3),
+    //WALK_W : new Animation(image, new V2(size, size), new V2(0, size), 3, FLIP_X),
+    //WALK_S : new Animation(image, new V2(size, size), new V2(0, 2*size), 3),
+    //DIE : new Animation(image, new V2(size, size), new V2(0, 3*size), 3)
+    WALK_S : new Animation(image, new V2(size, size), new V2(0, 3*size), 3),
+    DIE : new Animation(image, new V2(size, size), new V2(0, 4*size), 3)
   });
 }
 
