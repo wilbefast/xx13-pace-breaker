@@ -71,12 +71,25 @@ RobotPolice.prototype.setTarget = function(newTarget)
   
   this.lock_on.setEmpty();
   this.target = newTarget;
+  
+  // client-side
+  if(!is_server)
+  {
+    // play sound
+    if(this.lock_on.isEmpty())
+      play_police_interact();
+    // lock on
+    this.target = selected;
+    selected = null;
+  }
 }
 
 RobotPolice.prototype.openFire = function()
 {
   // fire!
   this.firing.reset();
+  
+  // client-side
   if(!is_server)
   {
     G.view.addSpecialEffect(SpecialEffect.explosion(this.target.position));

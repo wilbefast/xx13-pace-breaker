@@ -100,6 +100,8 @@ socket.on('newBot', function(newBotData)
 //! ----------------------------------------------------------------------------
 socket.on('lockon', function(lockonData)
 {
+  if(lockonData.dest)
+    console.log("lockon " + lockonData);
   G.robots[lockonData.src].setTarget(lockonData.dest ? 
                                     G.robots[lockonData.dest] : null);
 });
