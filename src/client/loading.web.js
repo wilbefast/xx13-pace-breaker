@@ -73,11 +73,14 @@ function load_audio(file_name)
 }
 
 // simple audio-playing API
-function play_audio(file_name)
+function play_audio(file_name, loop, volume)
 {
   // create new Audio object: this allows for multiple sounds to overlap
   var audio = new Audio();
   audio.src = DATA_LOCATION+ "sounds/" + file_name;
+  audio.loop = (loop || false);
+  //if(volume)
+    //audio.volume = volume;
   audio.play();
   // tell the interpretor to delete this object as soon as possible
   //delete audio;

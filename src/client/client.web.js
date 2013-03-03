@@ -14,7 +14,20 @@ G = new Game();
 G.view = new GameView();
 G.draw = function() { this.view.draw() };
 
-context.font = "12pt monospace"
+// client GUI + shiny stuff
+context.font = "12pt monospace";
+
+
+function play_music()
+{
+  var music = new Audio();
+  music.src = DATA_LOCATION + "/sounds/DarkBounty.ogg";
+  music.volume = 0.2;
+  music.addEventListener('ended', function() { play_music(); } );
+  music.play();
+}
+play_music();
+
 
 // hints
 var MAX_HINT_RANGE = 300;

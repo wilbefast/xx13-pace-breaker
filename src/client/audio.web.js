@@ -44,7 +44,7 @@ function initialise()
 
   AudioContext = new webkitAudioContext();
   var load_list = [];
-  load_list.push(DATA_LOCATION + 'sounds/Battements_coeur.ogg');
+  load_list.push(DATA_LOCATION + 'sounds/heart.ogg');
   load_list.push(DATA_LOCATION + 'sounds/DarkBounty.ogg');
   bufferLoader = new BufferLoader
   (
@@ -128,13 +128,14 @@ function finishedLoading(bufferList)
   
   //if(local_bot)
   {
-    var sample_index = (local_bot.isPolice ? 0 : 1);
+    // ALWAYS HEARTBEAT
+    var sample_index = 0; //(local_bot.isPolice ? 0 : 1);
     VolumeSample.source[sample_index].noteOn(0);
     VolumeSample.source[sample_index].loop = true;
   }
 }
 
-var changeVolume = function(gn,value) 
+var changeVolume = function(gn, value) 
 {
   gn.gain.value = value;
 }
