@@ -111,6 +111,12 @@ RobotCivillian.prototype.update = function(delta_t)
   {
     this.setHealth(this.DEAD); 
   }
+  else if(!is_server && this.infection_incubation.time.balance < 2000 
+    && !this.goodbye_cruel_world)
+  {
+    this.goodbye_cruel_world = true;
+    play_dead();
+  }
 };
 
 RobotCivillian.prototype.consentToInteract = function(otherRobot) 

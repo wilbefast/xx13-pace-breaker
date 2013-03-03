@@ -228,7 +228,7 @@ Robot.prototype.setHealth = function(new_health)
           SpecialEffect.smoke(new V2(this.position.x, this.position.y - 32)));
         
         // play a death sound
-        play_dead();
+        play_audio("Civilbot_die.ogg");
       }
     }
   }
