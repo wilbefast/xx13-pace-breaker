@@ -78,9 +78,10 @@ RobotPolice.prototype.setTarget = function(newTarget)
     // play sound
     if(this.lock_on.isEmpty())
       play_police_interact();
-    // lock on
-    this.target = selected;
-    selected = null;
+    
+    // PLAYER-CONTROLLED ONLY lock on
+    if(local_id == this.id)
+      selected = null;
   }
 }
 

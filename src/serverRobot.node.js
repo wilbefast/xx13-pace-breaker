@@ -69,8 +69,8 @@ RobotPolice.prototype.tryTarget = function(object)
   if(this.isHealthy() && (!object || !object.isPolice) && !this.firing.isSet())
   {
     this.setTarget(object);
-    reportLockon(this, object);
+    return true;
   }
   else
-    ;//console.log("targetting refused!");
+    return false;
 }

@@ -282,13 +282,26 @@ io.sockets.on('connection', function (socket)
     });
   });
   
-  // -- client telling server that he want
+  // -- client telling server that he wants to lock on
   socket.on('lockon', function(lockonData)
   {    
     socket.get('id', function(err, lockonId)
     {
       var lockonBot = G.robots[lockonId];
-      lockonBot.tryTarget(G.robots[lockonData ? lockonData.dest : null]);
+      
+      // try to lock on to desired target
+      if(lockonBot.tryTarget(G.robots[lockonData ? lockonData.dest : null]))
+      {
+        // if successful tell everyone!
+        var packet = { src : lockonId };
+        if(lockonData)
+          packet.dest = lockonData.dest;
+        
+        connected.forEach(function(sock, receiver_id)
+        {
+          sock.emit('lockon', packet);
+        });
+      }
     });
   });
   
@@ -305,18 +318,6 @@ reportDeath = function(deadBot)
   connected.forEach(function(sock, receiver_id)
   {
     sock.emit('death', { id : deadBot.id });
-  });
-}
-
-reportLockon = function(subject, object)
-{  
-  var packet = { src : subject.id };
-  if(object)
-    packet.dest = object.id;
-  
-  connected.forEach(function(sock, receiver_id)
-  {
-    sock.emit('lockon', packet);
   });
 }
 
