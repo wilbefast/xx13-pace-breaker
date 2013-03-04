@@ -159,18 +159,18 @@ score = 0
 //! ADD NEW PLAYER TO THE GAME ON CONNECTION
 //! ----------------------------------------------------------------------------
 
-function tell_others_about(bot, sockId)
+function tell_others_about(bot)
 {
   connected.forEach(function(otherSocket)
   {
     otherSocket.get('id', function(err, otherId)
     {
       var otherBot = G.robots[otherId];
-      if(otherBot)
+      if(otherBot && otherBot.id != bot.id)
       {
         otherSocket.emit('newBot', { 
                                       pos: bot.position, 
-                                      id: sockId, 
+                                      id: bot.id, 
                                       typ: otherBot.getPerceivedTypeOf(bot),
                                       skn: bot.skin_i
                                     });
@@ -183,7 +183,7 @@ function tell_others_about(bot, sockId)
   });
 }
 
-function tell_about_others(bot, socket)
+function tell_about_others(bot)
 {
   G.robots.forEach(function(otherBot, otherId)
   {
@@ -197,7 +197,7 @@ function tell_about_others(bot, socket)
     if(bot.TYPE == Robot.prototype.TYPE_IMPOSTER && otherBot.infection)
       newBotData.sick = otherBot.infection;
 
-    socket.emit('newBot', newBotData);
+    connected[bot.id].emit('newBot', newBotData);
   });
 }
 
@@ -212,16 +212,6 @@ io.sockets.on('connection', function (socket)
   var pos = new V2();
   G.level.playable_area.randomWithin(pos);
   
-  // create robot -- place a new robot object at this position
-  
-  var sockBot = (sockId % 2) 
-                    ? new RobotImposter(sockId, pos) 
-                    : new RobotPolice(sockId, pos);
-  G.addRobot(sockBot);
-  
-  // tell OTHER PLAYERS about NEW PLAYER
-  tell_others_about(sockBot, sockId);
-  
   // attach an id to the socket
   connected[sockId] = socket;
   socket.set('id', sockId);
@@ -229,8 +219,17 @@ io.sockets.on('connection', function (socket)
   // tell NEW PLAYER to RESET
   socket.emit('reset');
   
+  // create robot -- place a new robot object at this position
+  var sockBot = (sockId % 2) 
+                    ? new RobotImposter(sockId, pos) 
+                    : new RobotPolice(sockId, pos);
+  G.addRobot(sockBot);
+  
+  // tell OTHER PLAYERS about NEW PLAYER
+  tell_others_about(sockBot);
+  
   // tell NEW PLAYER about OTHER PLAYERS
-  tell_about_others(sockBot, socket);
+  tell_about_others(sockBot);
 
   //! --------------------------------------------------------------------------
   //! MANAGE CONNECTION
