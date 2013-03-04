@@ -3,11 +3,11 @@ XX13: Pace-Breaker
 
 Backstory
 ------------------------------------
-The year is XX13, and robots rule... Humankind has been forced to live in hiding, 
+*The year is XX13, and robots rule... Humankind has been forced to live in hiding, 
 hunted by the cybernetic law enforcement agents. Just when all seems lost a group 
 of resistance members infiltrate the robot city, hiding in plain sight in a crowd
 of civilian cybernetics and deactivating as many as possible. The agents must 
-find and eliminate these rebels by listening out for tell-tale heartbeats...
+find and eliminate these rebels by listening out for tell-tale heartbeats...*
 
 How to play
 ------------------------------------
@@ -21,7 +21,7 @@ virus.
 
 To connect to the server
 ------------------------------------
-All you need to do is connect to '<host ip address>:1986' in your browser, 
+All you need to do is **connect to '<host ip address>:1986' in your browser**, 
 where '<host ip address>' is the
 server's ip address. You can figure this out using 'ipconfig' or 'ifconfig'. To
 connect to a server running on your own machine you can use 'localhost' instead
@@ -30,7 +30,7 @@ of an ip. We recommend Chrome, but the client should run on Firefox too.
 To run the server
 ------------------------------------
 Running the client is simple (you just need a browser), but to run the server 
-you'll need the Node.js interpretor (download it free from: http://nodejs.org/) 
+**you'll need the Node.js interpretor** (download it free from: http://nodejs.org/) 
 as well as
 the 'mime' and 'socket.io' packages installed for the server to work:
 
@@ -42,6 +42,7 @@ the 'mime' and 'socket.io' packages installed for the server to work:
 
 4. Run 'npm install socket.io' to install the socket.io package
 
-5. Run 'nodejs src/server.node.js' (or 'node src/server.node.js' depending on the version of Node)
+5. **Run 'nodejs src/server.node.js'** 
+(or 'node src/server.node.js' depending on the version of Node)
 
 
