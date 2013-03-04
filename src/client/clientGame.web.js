@@ -52,6 +52,9 @@ Game.prototype.unpackRobot = function(packet)
   if(packet.sick)
     newBot.infection = packet.sick;
   
+  // packet will contain a health value
+  newBot.health = packet.hp;
+  
   return this.addRobot(newBot);
 };
 

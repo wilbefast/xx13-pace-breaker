@@ -48,6 +48,8 @@ RobotImposter.prototype.isHumanControlled = true;
 RobotImposter.prototype.init = function(id_, position_, skin_i_)
 {
   Robot.prototype.init.call(this, id_, position_, skin_i_);
+  
+  this.hacker_corpse = true;
 }
 
 

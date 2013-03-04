@@ -217,7 +217,7 @@ Robot.prototype.setHealth = function(new_health)
         selected = null;
   
       // unlock Police from dead robots
-      if(local_bot.isPolice && local_bot.target.id == this.id)
+      if(local_bot.isPolice && local_bot.target && local_bot.target.id == this.id)
         local_bot.setTarget(null);
       
       //! ON DEATH
@@ -266,7 +266,8 @@ Robot.prototype.update = function(delta_t)
 
 Robot.prototype.getPerceivedTypeOf = function(otherBot)
 {
-  return (otherBot.TYPE == this.TYPE_IMPOSTER && this.TYPE != this.TYPE_IMPOSTER)
+  return (otherBot.TYPE == this.TYPE_IMPOSTER && this.TYPE != this.TYPE_IMPOSTER
+          && otherBot.isHealthy())
           ? this.TYPE_CIVILLIAN : otherBot.TYPE;
 }
 

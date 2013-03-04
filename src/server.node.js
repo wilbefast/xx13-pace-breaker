@@ -212,7 +212,9 @@ io.sockets.on('connection', function (socket)
     var newBotData = { pos: otherBot.position, 
                         id: otherId, 
                         typ: sockBot.getPerceivedTypeOf(otherBot),
-                        skn: otherBot.skin_i }
+                        skn: otherBot.skin_i,
+                        hp: otherBot.health
+    }
     // only tell hackers (imposters) about infection
     if(sockBot.TYPE == Robot.prototype.TYPE_IMPOSTER && otherBot.infection)
       newBotData.sick = otherBot.infection;
