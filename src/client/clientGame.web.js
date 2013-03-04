@@ -16,6 +16,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //!-----------------------------------------------------------------------------
+//! GAMEVIEW -- CONSTRUCTOR 
+//!-----------------------------------------------------------------------------
+
+GameView = function()
+{
+  this.reset();
+  
+  return this;
+}
+
+GameView.prototype.reset = function()
+{
+  this.draw_list = [];
+  this.special_effects = [];
+  selected = null;
+}
+
+
+//!-----------------------------------------------------------------------------
 //! CLIENT-SIDE GAME METHODS
 //!-----------------------------------------------------------------------------
 
@@ -23,7 +42,13 @@ Game.prototype.reset = function()
 {
   this.robots = [];
   this.n_civillians = this.n_hackers = this.n_police = 0;
+  this.view = new GameView();
 }
+
+Game.prototype.draw = function() 
+{ 
+  this.view.draw() 
+};
 
 Game.prototype.unpackRobot = function(packet)
 {
@@ -57,18 +82,6 @@ Game.prototype.unpackRobot = function(packet)
   
   return this.addRobot(newBot);
 };
-
-//!-----------------------------------------------------------------------------
-//! GAMEVIEW -- CONSTRUCTOR 
-//!-----------------------------------------------------------------------------
-
-GameView = function()
-{
-  this.draw_list = [];
-  this.special_effects = [];
-  
-  return this;
-}
 
 //!-----------------------------------------------------------------------------
 //! GAMEVIEW -- CONSTANTS 

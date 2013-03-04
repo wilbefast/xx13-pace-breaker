@@ -159,6 +159,48 @@ score = 0
 //! ADD NEW PLAYER TO THE GAME ON CONNECTION
 //! ----------------------------------------------------------------------------
 
+function tell_others_about(bot, sockId)
+{
+  connected.forEach(function(otherSocket)
+  {
+    otherSocket.get('id', function(err, otherId)
+    {
+      var otherBot = G.robots[otherId];
+      if(otherBot)
+      {
+        otherSocket.emit('newBot', { 
+                                      pos: bot.position, 
+                                      id: sockId, 
+                                      typ: otherBot.getPerceivedTypeOf(bot),
+                                      skn: bot.skin_i
+                                    });
+      }
+      else
+        //! FIXME -- should never happen
+        console.log("Can't find Robot number " + otherId); 
+        
+    });
+  });
+}
+
+function tell_about_others(bot, socket)
+{
+  G.robots.forEach(function(otherBot, otherId)
+  {
+    var newBotData = { pos: otherBot.position, 
+                        id: otherId, 
+                        typ: bot.getPerceivedTypeOf(otherBot),
+                        skn: otherBot.skin_i,
+                        hp: otherBot.health
+    }
+    // only tell hackers (imposters) about infection
+    if(bot.TYPE == Robot.prototype.TYPE_IMPOSTER && otherBot.infection)
+      newBotData.sick = otherBot.infection;
+
+    socket.emit('newBot', newBotData);
+  });
+}
+
 io.sockets.on('connection', function (socket) 
 {
   socket.set('challenge', false)
@@ -173,54 +215,22 @@ io.sockets.on('connection', function (socket)
   // create robot -- place a new robot object at this position
   
   var sockBot = (sockId % 2) 
-                    ? new RobotPolice(sockId, pos) 
-                    : new RobotImposter(sockId, pos);
+                    ? new RobotImposter(sockId, pos) 
+                    : new RobotPolice(sockId, pos);
   G.addRobot(sockBot);
   
   // tell OTHER PLAYERS about NEW PLAYER
-  connected.forEach(function(otherSocket)
-  {
-    otherSocket.get('id', function(err, otherId)
-    {
-      var otherBot = G.robots[otherId];
-      if(otherBot)
-      {
-        otherSocket.emit('newBot', { 
-                                      pos: sockBot.position, 
-                                      id: sockId, 
-                                      typ: otherBot.getPerceivedTypeOf(sockBot),
-                                      skn: sockBot.skin_i
-                                    });
-      }
-      else
-        //! FIXME -- should never happen
-        console.log("Can't find Robot number " + otherId); 
-        
-    });
-  });
+  tell_others_about(sockBot, sockId);
   
   // attach an id to the socket
   connected[sockId] = socket;
   socket.set('id', sockId);
   
-  // tell NEW PLAYER to REST
+  // tell NEW PLAYER to RESET
   socket.emit('reset');
   
   // tell NEW PLAYER about OTHER PLAYERS
-  G.robots.forEach(function(otherBot, otherId)
-  {
-    var newBotData = { pos: otherBot.position, 
-                        id: otherId, 
-                        typ: sockBot.getPerceivedTypeOf(otherBot),
-                        skn: otherBot.skin_i,
-                        hp: otherBot.health
-    }
-    // only tell hackers (imposters) about infection
-    if(sockBot.TYPE == Robot.prototype.TYPE_IMPOSTER && otherBot.infection)
-      newBotData.sick = otherBot.infection;
-
-    socket.emit('newBot', newBotData);
-  })
+  tell_about_others(sockBot, socket);
 
   //! --------------------------------------------------------------------------
   //! MANAGE CONNECTION
@@ -292,7 +302,8 @@ io.sockets.on('connection', function (socket)
       var lockonBot = G.robots[lockonId];
       
       // try to lock on to desired target
-      if(lockonBot.tryTarget(G.robots[lockonData ? lockonData.dest : null]))
+      if(lockonBot && 
+        lockonBot.tryTarget(G.robots[lockonData ? lockonData.dest : null]))
       {
         // if successful tell everyone!
         var packet = { src : lockonId };
@@ -337,12 +348,18 @@ reportFire = function(subject)
 
 reportCount = function(game)
 {  
-  connected.forEach(function(sock, receiver_id)
+  var packet = { civ : game.n_civillians, hax : game.n_hackers, pol : game.n_police }
+  
+  // END OF GAME ?
+  if(G.contains_imposter && G.contains_police && game.n_hackers == 0)
   {
-    sock.emit('count', { civ : game.n_civillians, 
-                          hax : game.n_hackers, 
-                          pol : game.n_police });
-  });
+    connected.forEach(function(sock, receiver_id) { sock.emit('gameover', packet); });
+    
+    G.reset();
+  }
+  
+  // SEND CURRENT TALLY ?
+  else connected.forEach(function(sock, receiver_id) { sock.emit('count', packet); });
 }
 
 setInterval(function()

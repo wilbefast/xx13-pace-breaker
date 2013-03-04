@@ -75,6 +75,13 @@ Game.prototype.toString = function()
 
 Game.prototype.addRobot = function(newBot)
 {
+  // full house?
+  if(newBot.isImposter)
+    this.contains_imposter = true;
+  else if(newBot.isPolice)
+    this.contains_police = true;
+  
+  
   this.robots[newBot.id] = newBot;
   if(this.view)
     this.view.addRobot(newBot);
