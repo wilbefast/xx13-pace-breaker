@@ -24,7 +24,6 @@ Game.prototype.reset = function()
   // reset
   this.robots = [];
   this.n_civillians = this.n_hackers = this.n_police = 0;
-  connected = [];
   
   // tell cliens to reset
   reportReset();
@@ -36,6 +35,26 @@ Game.prototype.reset = function()
     this.level.playable_area.randomWithin(spawn_pos);
     this.addRobot(new RobotCivillian(nextid(), spawn_pos));
   }
+}
+
+Game.prototype.new_player = function(id)
+{
+  // create robot -- generate random position
+  var pos = new V2();
+  G.level.playable_area.randomWithin(pos);
+
+  // create robot -- place a new robot object at this position
+  var player_character = (this.n_hackers < this.n_police)
+                    ? new RobotImposter(id, pos) 
+                    : new RobotPolice(id, pos);
+  G.addRobot(player_character);
+  
+  // tell OTHER PLAYERS about NEW PLAYER
+  tell_others_about(player_character);
+  
+  // tell NEW PLAYER about OTHER PLAYERS
+  tell_about_others(player_character);
+
 }
 
 Game.prototype.recountBotTypes = function()

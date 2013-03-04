@@ -20,6 +20,7 @@ require("./game/gamestate.js");
 
 require("./serverRobot.node.js");
 require("./serverGame.node.js");
+
 //require("lobby.node.js");
 require("./main.node.js");
 
@@ -159,7 +160,7 @@ score = 0
 //! ADD NEW PLAYER TO THE GAME ON CONNECTION
 //! ----------------------------------------------------------------------------
 
-function tell_others_about(bot)
+tell_others_about = function(bot)
 {
   connected.forEach(function(otherSocket)
   {
@@ -183,7 +184,7 @@ function tell_others_about(bot)
   });
 }
 
-function tell_about_others(bot)
+tell_about_others = function(bot)
 {
   G.robots.forEach(function(otherBot, otherId)
   {
@@ -208,10 +209,6 @@ io.sockets.on('connection', function (socket)
   // generate unique id or the player
   var sockId = nextid();
   
-  // create robot -- generate random position
-  var pos = new V2();
-  G.level.playable_area.randomWithin(pos);
-  
   // attach an id to the socket
   connected[sockId] = socket;
   socket.set('id', sockId);
@@ -219,18 +216,10 @@ io.sockets.on('connection', function (socket)
   // tell NEW PLAYER to RESET
   socket.emit('reset');
   
-  // create robot -- place a new robot object at this position
-  var sockBot = (sockId % 2) 
-                    ? new RobotImposter(sockId, pos) 
-                    : new RobotPolice(sockId, pos);
-  G.addRobot(sockBot);
+  // create player character
+  G.new_player(sockId);
   
-  // tell OTHER PLAYERS about NEW PLAYER
-  tell_others_about(sockBot);
   
-  // tell NEW PLAYER about OTHER PLAYERS
-  tell_about_others(sockBot);
-
   //! --------------------------------------------------------------------------
   //! MANAGE CONNECTION
   //! --------------------------------------------------------------------------
@@ -352,9 +341,20 @@ reportCount = function(game)
   // END OF GAME ?
   if(G.contains_imposter && G.contains_police && game.n_hackers == 0)
   {
-    connected.forEach(function(sock, receiver_id) { sock.emit('gameover', packet); });
-    
+    // send gameover message
+    connected.forEach(function(sock, id)
+    { 
+      sock.emit('gameover', packet); 
+    });
+  
+    // reset the game server-side
     G.reset();
+    
+    // create a new set of player characters and "reconnect" all the players
+    connected.forEach(function(sock, id)
+    { 
+      G.new_player(id);
+    });
   }
   
   // SEND CURRENT TALLY ?
@@ -378,3 +378,4 @@ reportReset = function()
     sock.emit('reset');
   });
 }
+
