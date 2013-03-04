@@ -33,10 +33,15 @@ Running the client is simple (you just need a browser), but to run the server
 you'll need the Node.js interpretor (download it free from: http://nodejs.org/) 
 as well as
 the 'mime' and 'socket.io' packages installed for the server to work:
+
 1. Open a terminal (in Windows run 'cmd')
+
 2. Place yourself in the game's directory (using 'cd')
+
 3. Run 'npm install mime' to install the mime package
+
 4. Run 'npm install socket.io' to install the socket.io package
+
 5. Run 'nodejs src/server.node.js' (or 'node src/server.node.js' depending on the version of Node)
 
 
