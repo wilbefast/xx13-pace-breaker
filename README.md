@@ -21,8 +21,8 @@ virus.
 
 To connect to the server
 ------------------------------------
-All you need to do is **connect to '<host ip address>:1986' in your browser**, 
-where '<host ip address>' is the
+All you need to do is **connect to 'ip:1986' in your browser**, 
+where 'ip' is the
 server's ip address. You can figure this out using 'ipconfig' or 'ifconfig'. To
 connect to a server running on your own machine you can use 'localhost' instead
 of an ip. We recommend Chrome, but the client should run on Firefox too. 
