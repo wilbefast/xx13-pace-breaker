@@ -83,6 +83,15 @@ function synchronise(synchData)
     
   // interact -- continue/start/stop (if no peer is specified => interact null)
   bot.forceInteractPeer(G.robots[synchData.peer]);
+  
+  // play heartbeat sounds
+  if(window.VolumeSample)
+  {
+    var sample_index = (local_bot.isPolice ? 0 : 1),
+        sample_volume = (synchData.hint > MAX_HINT_RANGE) 
+                              ? 0 : 1 - (synchData.hint / MAX_HINT_RANGE);
+    changeVolume(VolumeSample.gainNode[sample_index], sample_volume);   
+  }
 }
 socket.on('synch', synchronise);
 
@@ -158,20 +167,6 @@ socket.on('count', function(data)
   G.n_civillians = data.civ;
   G.n_hackers = data.hax;
   G.n_police = data.pol;
-});
-
-//! ----------------------------------------------------------------------------
-//! PLAY HEARTBEAT SOUND AT THE SPECIFIED VOLUME
-//! ----------------------------------------------------------------------------
-socket.on('hint', function(data)
-{
-  if(window.VolumeSample)
-  {
-    var sample_index = (local_bot.isPolice ? 0 : 1),
-        sample_volume = (data.dist > MAX_HINT_RANGE) 
-                              ? 0 : 1 - (data.dist / MAX_HINT_RANGE);
-    changeVolume(VolumeSample.gainNode[sample_index], sample_volume);   
-  }
 });
 
 //! ----------------------------------------------------------------------------

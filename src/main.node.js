@@ -12,9 +12,10 @@ main.init = function()
 {
 	G = new Game()
   
-  // synchronise a different Robot every 100th of a second (10ms)
+  // synchronise every 10th of a second
   this.synch_t = new Timer(100);
-  this.synch_i = 0;
+  this.N_SYNCH_BATCHES = 5;
+  this.synch_batch = 0;
   
 };
 
@@ -77,51 +78,49 @@ main.eventreg = function(event)
 
 main.synch = function()
 {
-  //! WHICH robot are we going to synchronise with clients?
-  //var synchBotId = this.synch_i, synchBot = G.robots[synchBotId];
-  //this.synch_i = (this.synch_i + 1) % G.robots.length;
-  
   //! FOREACH player (socket) connected to the server
   connected.forEach(function(listenSock, listenSockId)
   {
     // the Robot whose owner will be sent the synchronisation/hint messages
     var listenBot = G.robots[listenSockId];
+    if(!listenBot)
+      return;
     
     //! FOREACH robot in the game
     G.robots.forEach(function(synchBot, synchBotId)
     {
-      // obligatory packet data
+      // skip null
+      if(!synchBot)
+        return;
+      
+      // synch-packet: obligatory  data
       var synchData = 
       { 
-        id : synchBotId,
+        id : synchBot.id,
         x : Math.round(synchBot.position.x), 
         y : Math.round(synchBot.position.y)        
       };
       
-      // optional packet data --
-      // -- interaction
+      // optional -- interaction 
+      //! FIXME -- shouldn't be send each frame
       if(synchBot.interactPeer != undefined)
         synchData.peer = synchBot.interactPeer.id;
-      // -- infection: send only to the hacker/imposter team
-      if(synchBot.infection)
-      {
-        if(listenBot && listenBot.isImposter)
-          synchData.sick = synchBot.infection;
-      }
       
+      // optional -- infection: send only to the hacker/imposter team
+      if(synchBot.infection && listenBot.isImposter)
+        synchData.sick = synchBot.infection;
+      
+      // optional -- hint: distance to nearest foe
+      if(listenBot.nearestFoe && listenBot.nearestFoe.dist2 != Infinity)
+        synchData.hint = Math.round(Math.sqrt(listenBot.nearestFoe.dist2));
+        
       // send packet
       listenSock.volatile.emit('synch', synchData);
-      
     });
-    
-    if(listenBot && listenBot.nearestFoe && listenBot.nearestFoe.dist2 != Infinity)
-    {
-      listenSock.emit('hint', 
-      { 
-        dist: Math.round(Math.sqrt(listenBot.nearestFoe.dist2)) 
-      });
-    }
   });
+  
+  // move to next synch batch
+  this.synch_batch = (this.synch_batch + 1) % this.N_SYNCH_BATCHES;
 }
 
 main.treatInput = function(inputId, inputData)
