@@ -27,30 +27,39 @@ require("./main.node.js");
 var UPDATES_PER_SECOND = 20;
 var MILLISECONDS_PER_UPDATE = 1000 / UPDATES_PER_SECOND;
 
-gs.switchstate(main);
+//! ----------------------------------------------------------------------------
+//! INITIAL GAMESTATE IS LOBBY
+//! ----------------------------------------------------------------------------
+gs.switchstate(main); //! FIXME
 setInterval(function(){ gs.update(); }, MILLISECONDS_PER_UPDATE);
 
 
+//! ----------------------------------------------------------------------------
+//! SERVER DEBUG CONSOLE
+//! ----------------------------------------------------------------------------
 /**/
 repl = require('repl');
-rep = repl.start({
+rep = repl.start(
+{
   prompt: "server> ",
   input: process.stdin,
   output: process.stdout,
   useGlobal: true,
   ignoreUndefined: true
 });
-
-rep.on('exit', function () {
+rep.on('exit', function () 
+{
   console.log('Got "exit" event from repl!');
   process.exit();
 });
 /**/
 
-io.set('log level',1)
+io.set('log level', 1);
 
+//! ----------------------------------------------------------------------------
+//! SEND HTML 5 PAGE TO CLIENTS
+//! ----------------------------------------------------------------------------
 app.listen(1986);
-
 function handler (req, res) 
 {
   var filename = req.url;
@@ -71,64 +80,23 @@ function handler (req, res)
   });
 }
 
-var x = 0;
+//! ----------------------------------------------------------------------------
+//! GENERATE UNIQUE IDENTIFIERS
+//! ----------------------------------------------------------------------------
+var id = 0;
 nextid = function() 
 {
-  return x++;
+  return (id++);
 }
-
 connected = [];
 
+
+//! ----------------------------------------------------------------------------
+//! 10 TIMES PER SECOND
+//! ----------------------------------------------------------------------------
 setInterval(function()
 {
-  //! FOREACH player (socket) connected to the server
-  connected.forEach(function(listenSock, listenSockId)
-  {
-    // the Robot whose owner will be sent the synchronisation/hint messages
-    var listenBot = G.robots[listenSockId];
-    
-//! ----------------------------------------------------------------------------
-//! SYNCHRONISE CLIENT AND SERVER (SEND THE STATE OF EACH ROBOT)
-//! ----------------------------------------------------------------------------
-    
-    //! FOREACH robot in the game
-    G.robots.forEach(function(synchBot, synchBotId)
-    {
-      // obligatory packet data
-      var synchData = 
-      { 
-        id : synchBotId,
-        x : Math.round(synchBot.position.x), 
-        y : Math.round(synchBot.position.y)        
-      };
-      
-      // optional packet data --
-      // -- interaction
-      if(synchBot.interactPeer != undefined)
-        synchData.peer = synchBot.interactPeer.id;
-      // -- infection: send only to the hacker/imposter team
-      if(synchBot.infection)
-      {
-        if(listenBot && listenBot.isImposter)
-          synchData.sick = synchBot.infection;
-      }
-      
-      // send packet
-      listenSock.volatile.emit('synch', synchData);
-      
-    });
-    
-//! ----------------------------------------------------------------------------
-//! SEND EACH PLAYER A 'HINT' TELLING THEM HOW NEAR THE NEAREST ENEMY IS
-//! ----------------------------------------------------------------------------
-    
-    if(listenBot && listenBot.nearestFoe && listenBot.nearestFoe.dist2 != Infinity)
-    {
-      listenSock.emit('hint', { 
-          dist: Math.round(Math.sqrt(listenBot.nearestFoe.dist2)) 
-      });
-    }
-  });
+
 },100);
 
 //! ----------------------------------------------------------------------------
@@ -253,33 +221,7 @@ io.sockets.on('connection', function (socket)
   // -- client sending user input to server
   socket.on('input', function(inputData)
   {
-    socket.get('id', function(err, inputId)
-    {
-      //! MAKE SURE THE CLIENT CONTROLS A LIVING ROBOT
-      var inputBot = G.robots[inputId];
-      if(!inputBot || !inputBot.isHealthy())
-        return;
-      
-      // SET MOVEMENT
-      inputBot.trySetSpeed(inputData.x || 0, inputData.y || 0);
-      
-      // SET/MAINTAIN INTERACTION (if one is specified)
-      if (inputData.peer != undefined)
-      {
-        var interactTarget = G.robots[inputData.peer];
-        if (interactTarget && interactTarget.TYPE != Robot.TYPE_POLICE)
-        {
-          if (inputBot.position.dist2(inputBot.position) 
-              < inputBot.MAX_INTERACT_DISTANCE2)
-          {
-            inputBot.tryInteractPeer(interactTarget);
-          }
-        }
-      }
-      // CANCEL INTERACTION (if none is specified)
-      else
-        inputBot.forceInteractPeer(null);
-    });
+    gs.current.treatInput(sockId, inputData);
   });
   
   // -- client telling server that he wants to lock on

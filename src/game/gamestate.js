@@ -39,8 +39,8 @@ gs.update = function() {
 		// If the next state hasn't been initialised yet
 		if (!gs.next.initialised) {
 			// Initialise it
-			gs.next.initialised = true;
 			gs.next.init();
+      gs.next.initialised = true;
 		}
 
 		// Switch to the state

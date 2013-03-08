@@ -71,6 +71,7 @@ main.update = function()
 *
 *	event - object containing the event that occurred
 */
-main.eventreg = function(event) {
+main.eventreg = function(event) 
+{
 
 };

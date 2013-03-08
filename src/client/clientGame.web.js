@@ -45,6 +45,11 @@ Game.prototype.reset = function()
   this.view = new GameView();
 }
 
+Game.prototype.updateSpecial = function(delta_t)
+{
+  this.view.update(delta_t);
+}
+
 Game.prototype.draw = function() 
 { 
   this.view.draw() 

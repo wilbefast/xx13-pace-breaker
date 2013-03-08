@@ -91,8 +91,8 @@ Game.prototype.addRobot = function(newBot)
 Game.prototype.update = function(delta_t) 
 { 
   // special update for client/server
-  if(this.view)
-    this.view.update(delta_t);
+  if(this.updateSpecial)
+    this.updateSpecial(delta_t);
   
   // for each Robot id
 	for (bid in this.robots)
