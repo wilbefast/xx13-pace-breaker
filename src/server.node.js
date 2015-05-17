@@ -172,6 +172,9 @@ tell_about_others = function(bot)
 
 io.sockets.on('connection', function (socket) 
 {
+	socket.set = function(key, val) { socket[key] = val; }
+	socket.get = function(key) { return socket[key]; }
+
   socket.set('challenge', false)
   
   // generate unique id or the player
